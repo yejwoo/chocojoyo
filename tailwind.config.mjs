@@ -8,9 +8,10 @@ export default {
   theme: {
     extend: {
       colors: {
+        default: "#3D2505",
         brand: {
           100: "#FF6682",
-          200: "#3D2505",
+          200: "#FF375C",
         },
         chocolates: {
           green: {
@@ -19,7 +20,7 @@ export default {
           },
           milk: {
             100: "#894E00",
-            200: "#3D2505",
+            200: "#683E07",
           },
           dark: {
             100: "#533608",
@@ -38,16 +39,22 @@ export default {
             200: "#B52915",
           },
         },
-        grayscale: {
-          0: "#FFF",
-          50: "#D8D3BD",
-          100: "#C1BCB5",
-          200: "#90887D",
-          300: "#271B0B",
+        gray: {
+          warm: {
+            0: "#FFF",
+            50: "#D8D3BD",
+            100: "#C1BCB5",
+            200: "#90887D",
+            300: "#271B0B",
+          },
+          cool: {
+            50: "#BDBDBD",
+            100: "#9E9C9D"
+          }
         },
         popup: {
           100: "#FEF9E1",
-          200: "#F9EAA4",
+          200: "#F3E086",
         },
         boxes: {
           purple: {
