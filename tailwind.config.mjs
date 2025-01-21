@@ -15,6 +15,20 @@ export default {
           '0%, 100%': {transform: 'translateY(-15%)', animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)'},
           '50%': {transform: 'translateY(0)', animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)'},
         },
+        bounceUpOnce: {
+          '0%': {
+            transform: 'translate(-50%, 0%)',
+            animationTimingFunction: 'ease-in',
+          },
+          '30%': {
+            transform: 'translate(-50%, -30%)',
+            animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)',
+          },
+          '100%': {
+            transform: 'translate(-50%, 0%)',
+            animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)',
+          },
+        },
         bounceDown: {
           '0%, 100%': {transform: 'translate(-50%, 0)', animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)'},
           '50%': {transform: 'translate(-50%, -10%)', animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)'},
@@ -22,6 +36,7 @@ export default {
       },
       animation: {
         'bounce-up': 'bounceUp 2.5s linear infinite',
+        'bounce-up-once': 'bounceUpOnce 0.5s linear',
         'bounce-down': 'bounceDown 4s linear infinite'
       },
       colors: {
@@ -72,6 +87,10 @@ export default {
         popup: {
           100: "#FEF9E1",
           200: "#F3E086",
+        },
+        disabled: {
+          100: "#F0A7B4",
+          200: "#D27E8E"
         },
         boxes: {
           purple: {

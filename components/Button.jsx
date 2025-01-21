@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function Button({shape = "rectangle", message, color = "main", type = "arrow", size = "default"}) {
+export default function Button({shape = "rectangle", message, color = "main", type = "arrow", size = "default", onClick, disabled = false}) {
     const buttonShape = shape === "circle" ? "w-16 rounded-full" : "rounded-lg overflow-hidden";
     const buttonSizes = {
       half: "w-1/2",
@@ -23,7 +23,11 @@ export default function Button({shape = "rectangle", message, color = "main", ty
     };
 
     return (
-      <button type="button" className={`${color in buttonColors ? buttonColors[color] : buttonColors.main} ${buttonShape} ${shape === "rectangle" && size in buttonSizes ? buttonSizes[size] : buttonSizes.default} text-3xl border-4 border-default focus:scale-95`}>
+      <button type="button" onClick={onClick} disabled={disabled}
+      className={`${color in buttonColors ? buttonColors[color] : buttonColors.main} ${buttonShape}
+      ${shape === "rectangle" && size in buttonSizes ? buttonSizes[size] : buttonSizes.default}
+      text-3xl border-4 border-default focus:scale-95  ${disabled ? "text-disabled-200 disabled:bg-disabled-100 disabled:cursor-not-allowed" : ""}
+      `}>
         {
           shape === "circle" && (
             <div className="h-14 flex-shrink-0 flex justify-center">{type in buttonIcons ? buttonIcons[type] : buttonIcons.arrow}</div>
@@ -33,7 +37,7 @@ export default function Button({shape = "rectangle", message, color = "main", ty
           shape === "rectangle" && (
             <>
               <p className="h-12 flex justify-center items-center">{message}</p>
-              <div className={`${color in buttonShadowColors ? buttonShadowColors[color] : buttonShadowColors.main} w-full h-2`}></div>
+              <div className={`${disabled ? 'bg-disabled-200' : color in buttonShadowColors ? buttonShadowColors[color] : buttonShadowColors.main} w-full h-2`}></div>
             </>
           )
         }

@@ -1,6 +1,6 @@
 import Button from "./Button"
 
-export default function Modal({size = "sm", title, type = "card", children}) {
+export default function Modal({size = "sm", title, type = "card", children, value, onChange}) {
     const modalSize = size === "lg" ? "h-80" : "h-54";
     return (
         <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black bg-opacity-50">
@@ -34,9 +34,9 @@ export default function Modal({size = "sm", title, type = "card", children}) {
                                 type === "single" && (
                                     <>
                                         <div className="absolute bottom-0 right-0">
-                                            <span>0/10</span>
+                                            <span>{value.length}/10</span>
                                         </div>
-                                        <input type="text" name="" id="" className="w-full h-10 text-3xl bg-popup-100 absolute top-1/2 transform -translate-y-10" />
+                                        <input type="text" maxlength={10} value={value} onChange={onChange} className="w-full h-10 text-3xl bg-popup-100 absolute top-1/2 transform -translate-y-10" />
                                         <hr className="border-b-2 border-default absolute left-0 right-0 top-1/2 transform -translate-y-30" />
                                     </>
                                 )
