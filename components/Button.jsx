@@ -19,7 +19,7 @@ export default function Button({shape = "rectangle", message, color = "main", ty
     };
 
     return (
-      <button type="button" className={`${color in buttonColors ? buttonColors[color] : buttonColors.main} ${buttonShape} ${shape === "rectangle" && buttonSize} text-3xl border-4 border-default`}>
+      <button type="button" className={`${color in buttonColors ? buttonColors[color] : buttonColors.main} ${buttonShape} ${shape === "rectangle" && buttonSize} text-3xl border-4 border-default focus:scale-95`}>
         {
           shape === "circle" && (
             <div className="h-14 flex-shrink-0 flex justify-center">{type in buttonIcons ? buttonIcons[type] : buttonIcons.arrow}</div>

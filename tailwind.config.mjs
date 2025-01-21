@@ -6,7 +6,24 @@ export default {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    screens: {
+      'xs': '576px',
+    },
     extend: {
+      keyframes: {
+        bounceUp: {
+          '0%, 100%': {transform: 'translateY(-15%)', animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)'},
+          '50%': {transform: 'translateY(0)', animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)'},
+        },
+        bounceDown: {
+          '0%, 100%': {transform: 'translate(-50%, 0)', animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)'},
+          '50%': {transform: 'translate(-50%, -10%)', animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)'},
+        }
+      },
+      animation: {
+        'bounce-up': 'bounceUp 2.5s linear infinite',
+        'bounce-down': 'bounceDown 4s linear infinite'
+      },
       colors: {
         default: "#3D2505",
         brand: {
