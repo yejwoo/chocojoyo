@@ -7,7 +7,7 @@ export default {
   ],
   theme: {
     screens: {
-      'xs': '576px',
+      'xs': '400px',
     },
     extend: {
       keyframes: {

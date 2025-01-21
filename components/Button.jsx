@@ -2,7 +2,11 @@ import Image from "next/image";
 
 export default function Button({shape = "rectangle", message, color = "main", type = "arrow", size = "default"}) {
     const buttonShape = shape === "circle" ? "w-16 rounded-full" : "rounded-lg overflow-hidden";
-    const buttonSize = size === "half" ? "w-1/2" : "min-w-48";
+    const buttonSizes = {
+      half: "w-1/2",
+      full: "w-full",
+      default: "min-w-48"
+    };
     const buttonColors = {
       main: "bg-brand-100",
       secondary: "bg-popup-100",
@@ -19,7 +23,7 @@ export default function Button({shape = "rectangle", message, color = "main", ty
     };
 
     return (
-      <button type="button" className={`${color in buttonColors ? buttonColors[color] : buttonColors.main} ${buttonShape} ${shape === "rectangle" && buttonSize} text-3xl border-4 border-default focus:scale-95`}>
+      <button type="button" className={`${color in buttonColors ? buttonColors[color] : buttonColors.main} ${buttonShape} ${shape === "rectangle" && size in buttonSizes ? buttonSizes[size] : buttonSizes.default} text-3xl border-4 border-default focus:scale-95`}>
         {
           shape === "circle" && (
             <div className="h-14 flex-shrink-0 flex justify-center">{type in buttonIcons ? buttonIcons[type] : buttonIcons.arrow}</div>

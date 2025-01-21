@@ -1,7 +1,7 @@
 import Button from "./Button"
 
 export default function Modal({size = "sm", title, type = "card", children}) {
-    const modalSize = size === "lg" ? "h-80" : "h-60"; 
+    const modalSize = size === "lg" ? "h-80" : "h-54";
     return (
         <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black bg-opacity-50">
             {/* <div className="w-full h-full bg-black"></div> */}
