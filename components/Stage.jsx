@@ -20,7 +20,17 @@ export default function Stage() {
     type: null,
     message: ""
   })
+  // @TODO: 상태들 객체로 합치기
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [toolState, setToolState] = useState("off");
+  const [currentGuidePosition, setCurrentGuidePosition] = useState({
+    top: `${stageItems[stage.main].guides?.positions?.offset.top}px`,
+    right: `${stageItems[stage.main].guides?.positions?.offset.right}px`
+  });
+  const [currentToolPosition, setCurrentToolPosition] = useState({
+    top: `${stageItems[stage.main].tool?.positions?.offset.top}px`,
+    right: `${stageItems[stage.main].tool?.positions?.offset.right}px`
+  });
   const [completedStages, setCompletedStages] = useState([]);
   const [isTalkBubbleShow, setIsTalkBubbleShow] = useState(false);
   const [isShowButton, setIsShowButton] = useState(false);
@@ -82,7 +92,7 @@ export default function Stage() {
       }
     };
 
-    runSequence();
+    runSequence();    
     debug("Stage Info", stage, "blue");
   }, [stage]);
 
@@ -109,17 +119,30 @@ export default function Stage() {
 
   const handleNextMainStage = () => {
     const { main } = stage;
-    const nextMainStage = stageData[main]?.final?.nextMainStage;
-
-    if (nextMainStage && stageData[nextMainStage]?.init) {
+    const currentStageData = stageData[main];
+  
+    if (!currentStageData) {
+      console.error("현재 스테이지 데이터를 찾을 수 없습니다.");
+      return;
+    }
+  
+    const finalSubStageKey = Object.keys(currentStageData).find(
+      (key) => currentStageData[key].isFinal === true
+    );
+  
+    if (finalSubStageKey) {
+      const nextMainStage = currentStageData[finalSubStageKey]?.nextMainStage;
+      if (nextMainStage) {
         setStage({ main: nextMainStage, sub: "init" });
+      } else {
+        console.log("다음 메인 스테이지 없음");
+      }
     } else {
-        console.log('share page')
+      console.log("isFinal 서브스테이지를 찾을 수 없습니다.");
     }
 
     setCompletedStages((prev) => [...new Set([...prev, main])]);
-
-    setIsTalkBubbleShow(false);
+    setIsTalkBubbleShow(false);0
     setIsShowButton(false);
     setIsShowModal(false);
     setIsShowItems(false);
@@ -145,38 +168,66 @@ export default function Stage() {
     setIsSubmitEnabled(value.length > 0);
   };
 
-  const handleNextImage = () => {
-    if (currentIndex < iterable.length - 1) {
-        setCurrentIndex((prev) => prev + 1);
+  const handleSelect = (variant) => {
+    setChocolateInfo((prev) => {
+      const updatedShapes = prev.shapes.includes(variant)
+        ? prev.shapes.filter((item) => item !== variant)
+        : [...prev.shapes, variant];
+  
+      setIsCompleteEvent(updatedShapes.length > 0);
+      return { ...prev, shapes: updatedShapes };
+    });
+  };
+  
+  const handleChop = () => {
+    const currentToolOffset = stageItems[stage.main].tool.positions.offset;
+    const toolStep = stageItems[stage.main].tool.positions.step;
+    const currentGuidelOffset = stageItems[stage.main].guides.positions.offset;
+    const guideStep = stageItems[stage.main].guides.positions.step;
+  
+    if (currentIndex < stageItems[stage.main].items.length - 1) {
+      setCurrentIndex((prev) => prev + 1);
+      setCurrentToolPosition({
+        top: `${currentToolOffset.top}px`,
+        right: `${currentToolOffset.right + toolStep.right * (currentIndex + 1)}px`,
+      });
+      setCurrentGuidePosition({
+        top: `${currentGuidelOffset.top}px`,
+        right: `${currentGuidelOffset.right + guideStep.right * (currentIndex + 1)}px`,
+      });
     } else {
-        console.log("마지막 이미지");
+      setIsCompleteEvent(true);
     }
   };
 
-  const handleEvent = (type, variant, index) => {
-    switch (type) {
-        case "select":
-            setChocolateInfo((prev) => {
-                const updatedShapes = prev.shapes.includes(variant)
-                    ? prev.shapes.filter((item) => item !== variant) // 체크 해제
-                    : [...prev.shapes, variant]; // 체크 추가
-        
-                // updatedShapes의 길이에 따라 이벤트 상태를 업데이트
-                setIsCompleteEvent(updatedShapes.length > 0);
-        
-                return {
-                    ...prev,
-                    shapes: updatedShapes,
-                };
-            });
-            break;
-        default:
-            break;
-    }
+  const toggleToolState = () => {
+    setToolState((prev) => (prev === "off" ? "on" : "off"));
+  };  
 
-    // debug("Selected Item Info: ", index, "green");
-    // debug("Selected Item Info: ", type, "green");
-  }
+  const handleEvent = (type, variant) => {
+    switch (type) {
+      case "select":
+        handleSelect(variant);
+        break;
+      case "chop":
+        handleChop();
+        break;
+      default:
+        console.warn("Unhandled event type:", type);
+    }
+  };
+
+  const handleToolAction = () => {
+    const behavior = stageItems[stage.main].tool.action;
+  
+    if (behavior === "toggle") {
+      toggleToolState(); // on/off 전환
+    } else if (behavior === "move") {
+      // 이동 로직 추가
+      console.log("도구 이동!");
+    }
+  };
+  
 
   return (
     <StageLayout
@@ -222,13 +273,41 @@ export default function Stage() {
         isShowItems && (
             <div className="absolute bottom-[132px] left-1/2 w-[296px] -translate-x-1/2 flex gap-6 flex-wrap animate-bounce-up-once">
             {stage.main === "stage2" || stage.main === "stage3" ? (
-                <div className="border border-red-500">
-                <Image
-                    src={items[currentIndex].imgSrc}
-                    alt={items[currentIndex].alt}
-                />
-                <button onClick={handleNextImage}>다음</button>
-                </div>
+                <>
+                    <div className="relative">
+                        <div 
+                        style={currentToolPosition}
+                        className={`${toolState === "off" ? 'w-6' : 'w-8'} absolute`} onClick={()=>{
+                            toggleToolState();
+                            handleEvent(stageItems[stage.main].items[currentIndex].type, "_", currentIndex);
+                        }}>
+                          <Image
+                            src={
+                              toolState === "off"
+                                ? stageItems[stage.main].tool.off.imgSrc
+                                : stageItems[stage.main].tool.on.imgSrc
+                            }
+                            alt={
+                              toolState === "off"
+                                ? stageItems[stage.main].tool.off.alt
+                                : stageItems[stage.main].tool.on.alt
+                            }
+                          />
+                        </div>
+                        <div className="w-80">
+                            <Image
+                                src={stageItems[stage.main].items[currentIndex].imgSrc}
+                                alt={stageItems[stage.main].items[currentIndex].alt}
+                            />
+                        </div>
+                    </div>
+                    <div className="w-10 absolute" style={currentGuidePosition}>
+                        <Image
+                            src={stageItems[stage.main].guides.imgSrc}
+                            alt={stageItems[stage.main].guides.alt}
+                        />
+                    </div>
+                </>
             ) : (
                 stageItems[stage.main].items.map((item, index) => (
                 <div

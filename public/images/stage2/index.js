@@ -7,3 +7,4 @@ export { default as chocolate6 } from './chocolate6.png';
 export { default as chocolate7 } from './chocolate7.png';
 export { default as knifeDown } from './knife-down.png';
 export { default as knifeUp } from './knife-up.png';
+export { default as arrowDown } from './arrow-down.png';

@@ -36,7 +36,7 @@ export default function Modal({size = "sm", title, type = "card", children, valu
                                         <div className="absolute bottom-0 right-0">
                                             <span>{value.length}/{maxLength}</span>
                                         </div>
-                                        <input type="text" maxLength={maxLength} value={value} onChange={onChange} className="w-full h-10 text-3xl bg-popup-100 absolute top-1/2 transform -translate-y-10" />
+                                        <input type="text" maxLength={maxLength} value={value} onChange={onChange} className="text-center w-full h-10 text-3xl bg-popup-100 absolute top-1/2 transform -translate-y-10" />
                                         <hr className="border-b-2 border-default absolute left-0 right-0 top-1/2 transform -translate-y-30" />
                                     </>
                                 )
