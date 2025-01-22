@@ -79,9 +79,9 @@ export const stageData = {
         `,
       modalConfig: null,
       sequence: [{ type: "delay", value: 2000 }, { type: "nextSubStage" }],
-      nextSubStage: "description",
+      nextSubStage: "final",
     },
-    description: {
+    final: {
       imgSrc: yantoBlink,
       dialogue: `
             초콜릿 모양을 선택해주세요.<br/>
@@ -90,68 +90,83 @@ export const stageData = {
         `,
       modalConfig: null,
       sequence: [
-        { type: "showItems" },
+        { type: "delay", value: 1000 },
+        { type: "showItems" }, 
         { type: "showButton", value: {shape: "circle", type: "arrow", message: null}},
       ],
-      nextSubStage: "last",
-    },
-    last: {
-      imgSrc: yantoBlink,
-      dialogue: `
-          좋았어요!<br/>
-          다음 단계로 넘어가볼까요?
-      `,
-      modalConfig: null,
-      sequence: [{ type: "nextMainStage" }],
       nextSubStage: null,
       nextMainStage: "stage2",
     },
-    /**
+  },
+  /**
      *
      * =========================Stage 2=========================
      *
      */
-    stage2: {
-      last: {},
+  stage2: {
+    init: {
+      imgSrc: yantoThumb,
+      dialogue: `
+            ____님의 선택, <br/>
+            센스 만점인데요?
+        `,
+      modalConfig: null,
+      sequence: [
+        { type: "delay", value: 2000 },
+      ],
+      nextSubStage: "dummy",
     },
-    /**
-     *
-     * =========================Stage 3=========================
-     *
-     */
-    /**
-     *
-     * =========================Stage 4=========================
-     *
-     */
-    /**
-     *
-     * =========================Stage 5=========================
-     *
-     */
-    /**
-     *
-     * =========================Stage 6=========================
-     *
-     */
-    /**
-     *
-     * =========================Stage 7(Share)=========================
-     *
-     */
+    init: {
+      imgSrc: yantoBlink,
+      dialogue: `
+            이제 화살표 방향에 맞춰<br/>
+            칼로 초콜릿을 썰어주세요.
+        `,
+      modalConfig: null,
+      sequence: [
+        { type: "delay", value: 1000 },
+        { type: "showButton", value: {shape: "circle", type: "arrow", message: null}},
+      ],
+      nextSubStage: "dummy",
+    },
   },
+  /**
+   *
+   * =========================Stage 3=========================
+   *
+   */
+  /**
+   *
+   * =========================Stage 4=========================
+   *
+   */
+  /**
+   *
+   * =========================Stage 5=========================
+   *
+   */
+  /**
+   *
+   * =========================Stage 6=========================
+   *
+   */
+  /**
+   *
+   * =========================Stage 7(Share)=========================
+   *
+   */
 };
 
 export const stageItems = {
   stage1: {
     tools: null,
     items: [
-      { imgSrc: shapeCircle, alt: "원형 초콜릿", type: "select" },
-      { imgSrc: shapeHeart, alt: "하트 초콜릿", type: "select" },
-      { imgSrc: shapeSquare, alt: "사각형 초콜릿", type: "select" },
-      { imgSrc: shapeBear, alt: "곰 초콜릿", type: "select" },
-      { imgSrc: shapeRabbit, alt: "토끼 초콜릿", type: "select" },
-      { imgSrc: shapeCat, alt: "고양이 초콜릿", type: "select" },
+      { imgSrc: shapeCircle, alt: "원형 초콜릿", type: "select", variant: "circle" },
+      { imgSrc: shapeHeart, alt: "하트 초콜릿", type: "select", variant: "heart" },
+      { imgSrc: shapeSquare, alt: "사각형 초콜릿", type: "select", variant: "square" },
+      { imgSrc: shapeBear, alt: "곰 초콜릿", type: "select", variant: "bear" },
+      { imgSrc: shapeRabbit, alt: "토끼 초콜릿", type: "select", variant: "rabbit" },
+      { imgSrc: shapeCat, alt: "고양이 초콜릿", type: "select", variant: "cat" },
     ],
     guides: null,
   },
@@ -162,13 +177,13 @@ export const stageItems = {
     ],
     items: [
       [
-        { imgSrc: chocolate1, alt: "초콜릿 썰기", type: "repeated" },
-        { imgSrc: chocolate2, alt: "초콜릿 썰기", type: "repeated" },
-        { imgSrc: chocolate3, alt: "초콜릿 썰기", type: "repeated" },
-        { imgSrc: chocolate4, alt: "초콜릿 썰기", type: "repeated" },
-        { imgSrc: chocolate5, alt: "초콜릿 썰기", type: "repeated" },
-        { imgSrc: chocolate6, alt: "초콜릿 썰기", type: "repeated" },
-        { imgSrc: chocolate7, alt: "초콜릿 썰기", type: "repeated" },
+        { imgSrc: chocolate1, alt: "초콜릿 썰기", type: "repeated", variant: null },
+        { imgSrc: chocolate2, alt: "초콜릿 썰기", type: "repeated", variant: null },
+        { imgSrc: chocolate3, alt: "초콜릿 썰기", type: "repeated", variant: null },
+        { imgSrc: chocolate4, alt: "초콜릿 썰기", type: "repeated", variant: null },
+        { imgSrc: chocolate5, alt: "초콜릿 썰기", type: "repeated", variant: null },
+        { imgSrc: chocolate6, alt: "초콜릿 썰기", type: "repeated", variant: null },
+        { imgSrc: chocolate7, alt: "초콜릿 썰기", type: "repeated", variant: null },
       ],
     ],
     guides: null,
@@ -177,9 +192,9 @@ export const stageItems = {
     tools: [{ spatula: { imgSrc: spatula, alt: "스패츌라" } }],
     items: [
       [
-        { imgSrc: doubleBoiler1, alt: "초콜릿 중탕", type: "stir" },
-        { imgSrc: doubleBoiler2, alt: "초콜릿 중탕", type: "stir" },
-        { imgSrc: doubleBoiler3, alt: "초콜릿 중탕", type: "stir" },
+        { imgSrc: doubleBoiler1, alt: "초콜릿 중탕", type: "stir", variant: null },
+        { imgSrc: doubleBoiler2, alt: "초콜릿 중탕", type: "stir", variant: null },
+        { imgSrc: doubleBoiler3, alt: "초콜릿 중탕", type: "stir", variant: null },
       ],
     ],
     guides: [{ imgSrc: arrow, alt: "중탕 방향" }],

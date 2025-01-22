@@ -20,7 +20,7 @@ export default function Stage() {
     type: null,
     message: ""
   })
-  const [currentIndex, setCurrentIndex ] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [completedStages, setCompletedStages] = useState([]);
   const [isTalkBubbleShow, setIsTalkBubbleShow] = useState(false);
   const [isShowButton, setIsShowButton] = useState(false);
@@ -28,14 +28,28 @@ export default function Stage() {
   const [isShowItems, setIsShowItems] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [isSubmitEnabled, setIsSubmitEnabled] = useState(false);
+  const [isCompleteEvent, setIsCompleteEvent] = useState(false);
   const currentData = stageData[stage.main][stage.sub];
   const modalConfig = currentData.modalConfig;
+
+  const [chocolateInfo, setChocolateInfo] = useState({
+    shapes: [], 
+    colors: {}, 
+    drawings: {}, 
+    toppings: {}, 
+  });
+
+  const [formData, setFormData] = useState({
+    username: "",
+    card: "",
+    receiver: "",
+    chocolateName: ""
+  })
 
   const actionHandlers = {
     delay: async (value) => await delay(value),
     showButton: (value) => {
         setIsShowButton(true);
-        console.log(value);
         setButtonConfig({
             shape: value.shape,
             type: value.type,
@@ -72,6 +86,10 @@ export default function Stage() {
     debug("Stage Info", stage, "blue");
   }, [stage]);
 
+  useEffect(()=>{
+    console.log("chocolateInfo", chocolateInfo);
+  }, [chocolateInfo])
+
   const handleNextSubStage = () => {
     const { main, sub } = stage;
     const nextSubStage = stageData[main][sub]?.nextSubStage;
@@ -91,12 +109,12 @@ export default function Stage() {
 
   const handleNextMainStage = () => {
     const { main } = stage;
-    const nextMainStage = stageData[main]?.last?.nextMainStage;
+    const nextMainStage = stageData[main]?.final?.nextMainStage;
 
-    if (nextMainStage) {
-      setStage({ main: nextMainStage, sub: "init" });
+    if (nextMainStage && stageData[nextMainStage]?.init) {
+        setStage({ main: nextMainStage, sub: "init" });
     } else {
-      console.log("공유 페이지");
+        console.log('share page')
     }
 
     setCompletedStages((prev) => [...new Set([...prev, main])]);
@@ -105,6 +123,7 @@ export default function Stage() {
     setIsShowButton(false);
     setIsShowModal(false);
     setIsShowItems(false);
+    setIsCompleteEvent(false)
     setCurrentIndex(0);
     setButtonConfig({
         shape: "rectangle",
@@ -113,7 +132,12 @@ export default function Stage() {
     })
   };
 
-//   const handleCloseModal = () => {};
+    // @TODO: 인풋에 입력한 데이터 저장
+  const handleFormData = () => {
+    handleNextSubStage();
+  }
+
+    //   const handleCloseModal = () => {};
 
   const handleInputChange = (e) => {
     const value = e.target.value;
@@ -129,8 +153,29 @@ export default function Stage() {
     }
   };
 
-  const handleEvent = (type, index) => {
+  const handleEvent = (type, variant, index) => {
+    switch (type) {
+        case "select":
+            setChocolateInfo((prev) => {
+                const updatedShapes = prev.shapes.includes(variant)
+                    ? prev.shapes.filter((item) => item !== variant) // 체크 해제
+                    : [...prev.shapes, variant]; // 체크 추가
+        
+                // updatedShapes의 길이에 따라 이벤트 상태를 업데이트
+                setIsCompleteEvent(updatedShapes.length > 0);
+        
+                return {
+                    ...prev,
+                    shapes: updatedShapes,
+                };
+            });
+            break;
+        default:
+            break;
+    }
 
+    // debug("Selected Item Info: ", index, "green");
+    // debug("Selected Item Info: ", type, "green");
   }
 
   return (
@@ -151,7 +196,7 @@ export default function Stage() {
               message={"작성 완료"}
               size="full"
               disabled={!isSubmitEnabled}
-              onClick={handleNextSubStage}
+              onClick={handleFormData}
             />
           </Modal>
         )
@@ -179,20 +224,23 @@ export default function Stage() {
             {stage.main === "stage2" || stage.main === "stage3" ? (
                 <div className="border border-red-500">
                 <Image
-                    src={iterable[currentIndex].imgSrc}
-                    alt={iterable[currentIndex].alt}
+                    src={items[currentIndex].imgSrc}
+                    alt={items[currentIndex].alt}
                 />
                 <button onClick={handleNextImage}>다음</button>
                 </div>
             ) : (
                 stageItems[stage.main].items.map((item, index) => (
                 <div
-                    className="relative w-20 h-20 flex items-center justify-center"
+                    onClick={()=>{
+                        handleEvent(item.type, item.variant, index)
+                    }}
+                    className="relative w-20 h-20 flex items-center justify-center cursor-pointer"
                     key={index}
                 >
                     <Image className="" src={item.imgSrc} alt={`${item.alt}`} />
                     <Image
-                    className="hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                    className={`${chocolateInfo.shapes.includes(item.variant) ? "" : "hidden"} absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}
                     src={checkLg}
                     alt="완료"
                     />
@@ -202,12 +250,15 @@ export default function Stage() {
             </div>
         )
       }
-      {/* 버튼 타입에 따라 다른 버튼 보여주기 */}
-      {/* 가운데 버튼 / 다음 버튼(활성화/비활성화) / 서브 스테이지 또는 메인 스테이지로 넘어가는 기능을 한다. */}
       {/* 버튼 */}
       {isShowButton && (
-        <div className={`absolute ${stage.main === 'stage1' && stage.sub === 'init' ? "left-1/2 -translate-x-1/2 bottom-[25%] animate-bounce-up-once" : "right-10 bottom-10"}`}>
+        stage.main === 'stage1' && stage.sub === 'init' ? 
+        <div className="absolute left-1/2 -translate-x-1/2 bottom-[25%] animate-bounce-up-once">
           <Button onClick={handleNextSubStage} shape={buttonConfig.shape} type={buttonConfig.type} message={buttonConfig.message} />
+        </div>
+        : 
+        <div className="absolute right-10 bottom-10">
+            <Button disabled={!isCompleteEvent} onClick={handleNextMainStage} shape={buttonConfig.shape} type={buttonConfig.type} message={buttonConfig.message} />
         </div>
       )}
       {/* 상단 네비게이션 */}
