@@ -1,8 +1,7 @@
 'use client';
 
 import Main from "@/components/Main";
-import Navi from "@/components/Navi";
-import Stage1 from "@/components/Stage1";
+import Stage from "@/components/Stage";
 import { useState } from "react";
 
 export default function Home() {
@@ -12,8 +11,7 @@ export default function Home() {
   return (
     <>
       <Main onStart={() => setIsStarted(true)}/>
-      {isStarted && <Stage1 />}
-      {/* {isStarted && <Navi />} */}
+      {isStarted && <Stage />}
     </>    
   );
 }

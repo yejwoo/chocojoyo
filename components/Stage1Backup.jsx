@@ -8,8 +8,11 @@ import { talkBubbleBodySm, talkBubbleTail, bgCounterTop, checkLg } from "@/publi
 import { stageData } from "@/data/Stage";
 import { stage1Shapes } from "@/data/Stage";
 
-export default function Stage1() {
-    const [currentStage, setCurrentStage] = useState("intro"); 
+export default function Stage1({backgroundSrc, characterSrc, children}) {
+    const [stage, setStage] = useState({
+        main: "intro",  
+        sub: "init",    
+    });    
     const [isTalkBubbleShow, setIsTalkBubbleShow] = useState(false);
     const [isShowButton, setIsShowButton] = useState(false);
     const [isShowModal, setIsShowModal] = useState(false);
@@ -21,31 +24,46 @@ export default function Stage1() {
         const runSequence = async () => {
             await delay(1300);
             setIsTalkBubbleShow(true);
-            await delay(1300);
-            if (currentStage === 'intro') setIsShowButton(true);
-            if (currentStage === 'name1') setIsShowModal(true);
-            if (currentStage === 'name2') {
-                await delay(3000);
-                handleNextStage();
+    
+            const { main, sub } = stage;
+            const sequence = stageData[main][sub]?.sequence;
+    
+            if (sequence) {
+                for (let action of sequence) {
+                    if (action.type === "delay") {
+                        await delay(action.value);
+                    } else if (action.type === "showButton") {
+                        setIsShowButton(true);
+                    } else if (action.type === "showModal") {
+                        setIsShowModal(true);
+                    } else if (action.type === "nextStage") {
+                        handleNextStage();
+                    }
+                }
             }
-            if (currentStage === 'desc') {
-                setIsShowShapes(true);
-            }
-        }
+        };
+    
         runSequence();
-        console.log('@@@@@currentStage: ', currentStage);
-      }, [currentStage]);
+        console.log("Stage updated: ", stage);
+    }, [stage]);
+    
 
      
-    const handleNextStage = () => {
-        const nextStage = stageData[currentStage].nextStage;
-        if (nextStage) {
-            setCurrentStage(nextStage); 
-            setIsTalkBubbleShow(false); 
-            setIsShowButton(false); 
-            setIsShowModal(false);
-        }
+      const handleNextStage = () => {
+        const { main, sub } = stage;
+        const nextStage = stageData[main][sub]?.nextStage;
+        const nextSubStage = stageData[main][sub]?.nextSubStage;
+    
+        setStage({
+            main: nextStage || main,
+            sub: nextSubStage || "init",
+        });
+    
+        setIsTalkBubbleShow(false);
+        setIsShowButton(false);
+        setIsShowModal(false);
     };
+    
 
     const handleInputChange = (e) => {
         const value = e.target.value;
