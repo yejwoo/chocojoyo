@@ -1,11 +1,9 @@
-export { default as chocoPenDefault } from './chocopen-default.png';
-export { default as chocoPenOuline } from './chocopen-outline.png';
 export { default as chocoPenMilk } from './chocopen-milk.png';
 export { default as chocoPenDark } from './chocopen-dark.png';
-export { default as chocoPenGreenTea } from './chocopen-greentea.png';
+export { default as chocoPenYellow } from './chocopen-yellow.png';
 export { default as chocoPenRed } from './chocopen-red.png';
-export { default as chocoPenVanilla } from './chocopen-vanilla.png';
-export { default as chocoPenRuby } from './chocopen-ruby.png';
+export { default as chocoPenWhite } from './chocopen-white.png';
+export { default as chocoPenPink } from './chocopen-pink.png';
 export { default as toppingAlmond } from './topping-almond.png';
 export { default as toppingBlueberries } from './topping-blueberries.png';
 export { default as toppingChocolates } from './topping-chocolates.png';

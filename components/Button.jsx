@@ -21,23 +21,30 @@ export default function Button({shape = "rectangle", message, color = "main", ty
       arrow: <Image src="/icons/buttons/arrow.svg" width={32} height={32} alt="다음" />,
       close: <Image src="/icons/buttons/close.svg" width={32} height={32} alt="닫기" />
     };
+    const disalbedStyle = {
+      circle: "disabled:bg-gray-cool-50 disabled:cursor-not-allowed",
+      rectangle: "disabled:bg-gray-cool-50 disabled:cursor-not-allowed"
+    }
+    const isShapeRect = shape === "rectangle";
+    const isShapeCircle = shape === "circle";
 
     return (
       <button type="button" onClick={onClick} disabled={disabled}
       className={`${color in buttonColors ? buttonColors[color] : buttonColors.main} ${buttonShape}
-      ${shape === "rectangle" && size in buttonSizes ? buttonSizes[size] : buttonSizes.default}
-      text-3xl border-4 border-default focus:scale-95  ${disabled ? "text-disabled-200 disabled:bg-disabled-100 disabled:cursor-not-allowed" : ""}
+      ${isShapeRect && size in buttonSizes && buttonSizes[size]} text-3xl border-4 border-default focus:scale-95 
+      ${disabled && isShapeRect && disalbedStyle.rectangle}
+      ${disabled && isShapeCircle && disalbedStyle.circle}
       `}>
         {
-          shape === "circle" && (
-            <div className="h-14 flex-shrink-0 flex justify-center">{type in buttonIcons ? buttonIcons[type] : buttonIcons.arrow}</div>
+          isShapeCircle && (
+            <div className="h-14 flex-shrink-0 flex justify-center items-center">{type in buttonIcons ? buttonIcons[type] : buttonIcons.arrow}</div>
           )
         }
         {
-          shape === "rectangle" && (
+          isShapeRect && (
             <>
               <p className="h-12 flex justify-center items-center">{message}</p>
-              <div className={`${disabled ? 'bg-disabled-200' : color in buttonShadowColors ? buttonShadowColors[color] : buttonShadowColors.main} w-full h-2`}></div>
+              <div className={`${disabled ? 'bg-gray-cool-100' : color in buttonShadowColors ? buttonShadowColors[color] : buttonShadowColors.main} w-full h-2`}></div>
             </>
           )
         }
