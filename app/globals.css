@@ -9,8 +9,7 @@ body {
   padding: 0;
   font-size: 16px;
   color: #3D2505;
-  /* background: linear-gradient(#FFE3E1, #FFF5E4); */
-  background: #FFF5E4;
+  background: #fec4c4;
 }
 
 .no-scrollbar::-webkit-scrollbar {

@@ -6,7 +6,7 @@ import Stage1 from "@/components/Stage1";
 import { useState } from "react";
 
 export default function Home() {
-  const [isStarted, setIsStarted] = useState(true);
+  const [isStarted, setIsStarted] = useState(false);
   const [chocolates, setChocolates] = useState([]);
 
   return (
