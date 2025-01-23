@@ -9,6 +9,7 @@ body {
   padding: 0;
   font-size: 16px;
   color: #3D2505;
+  overscroll-behavior: none;
   background: #fec4c4;
 }
 

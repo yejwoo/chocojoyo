@@ -124,7 +124,7 @@ export const stageData = {
       isFinal: false
     },
     description: {
-      imgSrc: yantoSwing,
+      imgSrc: yantoBlink,
       dialogue: `
             이제 칼을 터치해서<br/>
             초콜릿을 썰어주세요.
@@ -149,13 +149,28 @@ export const stageData = {
     init: {
       imgSrc: yantoThumb,
       dialogue: `
-            현란한 칼 솜씨, 대단해요!<br/>
-            국자를 휘저어서<br/>
-            초콜릿을 녹여주세요.
+            현란한 칼 솜씨, 대단해요!
         `,
       modalConfig: null,
       sequence: [
+        { type: "nextSubStage" }
         // { type: "delay", value: 2000 }, { type: "nextSubStage" }
+      ],
+      nextSubStage: "description",
+      isFinal: false
+    },
+    description: {
+      imgSrc: yantoBlink,
+      dialogue: `
+            스패출러를 잡고<br/>
+            화살표 방향으로<br/>
+            초콜릿을 저어주세요.
+        `,
+      modalConfig: null,
+      sequence: [
+        { type: "delay", value: 1000 },
+        { type: "showItems" }, 
+        { type: "showButton", value: {shape: "circle", type: "arrow", message: null}},
       ],
       nextSubStage: "description",
       isFinal: false
@@ -226,19 +241,22 @@ export const stageItems = {
   },
   stage3: {
     tool: {
-      imgSrc: spatula,
+      off: { imgSrc: spatula, alt: "스패출라" },
+      on: null,
       alt: "스패츌라",
-      position: "absolute right-[20px] top-[50px]",
+      position: null,
       action: "move" 
     },
     items: [
-      [
         { imgSrc: doubleBoiler1, alt: "초콜릿 중탕", type: "stir", variant: null },
         { imgSrc: doubleBoiler2, alt: "초콜릿 중탕", type: "stir", variant: null },
         { imgSrc: doubleBoiler3, alt: "초콜릿 중탕", type: "stir", variant: null },
-      ],
     ],
-    guides: { imgSrc: arrow, alt: "중탕 방향" },
+    guides: {
+      imgSrc: arrow,
+      alt: "중탕 방향",
+      positions: null
+    },
   },
   // stage4: {
   //   tools: [
