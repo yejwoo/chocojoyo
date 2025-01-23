@@ -22,31 +22,43 @@ export default function Navi({ currentStage, completedStages }) {
     return (
         <nav className="fixed left-0 right-0 top-6">
             <ul className="flex items-center justify-center gap-4">
-                {stages.map((stage) => (
-                    <li 
-                        key={stage.id} 
-                        className={`stage${stage.id} relative w-10 h-10 flex-shrink-0`}
-                    >
-                        {/* Off 상태 */}
-                        <Image 
-                            src={stage.off} 
-                            alt={`${stage.id}단계`} 
-                            className={`${currentStage === stage.id ? "hidden" : ""}`} 
-                        />
-                        {/* On 상태 */}
-                        <Image 
-                            src={stage.on} 
-                            alt={`${stage.id}단계`} 
-                            className={`${currentStage === stage.id ? "" : "hidden"}`} 
-                        />
-                        {/* 완료 체크 */}
-                        <Image 
-                            src={checkSm} 
-                            alt="완료" 
-                            className={`${completedStages.includes(stage.id) ? "" : "hidden"} absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`} 
-                        />
-                    </li>
-                ))}
+                {stages.map((stage) => {
+                    const isCurrent = currentStage === stage.id;
+                    const isCompleted = completedStages.includes(stage.id);
+                    const showOff = !isCurrent && !isCompleted;
+                    const showOn = isCurrent || isCompleted;
+
+                    return (
+                        <li 
+                            key={stage.id} 
+                            className={`stage${stage.id} relative w-10 h-10 flex-shrink-0`}
+                        >
+                            {/* Off 상태 */}
+                            {showOff && (
+                                <Image 
+                                    src={stage.off} 
+                                    alt={`${stage.id}단계`} 
+                                />
+                            )}
+                            {/* On 상태 */}
+                            {showOn && (
+                                <Image 
+                                    src={stage.on} 
+                                    alt={`${stage.id}단계`} 
+                                    className={isCompleted && !isCurrent ? "opacity-70" : "opacity-100"} 
+                                />
+                            )}
+                            {/* 완료 체크 */}
+                            {isCompleted && (
+                                <Image 
+                                    src={checkSm} 
+                                    alt="완료" 
+                                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" 
+                                />
+                            )}
+                        </li>
+                    );
+                })}
             </ul>
         </nav>
     );
