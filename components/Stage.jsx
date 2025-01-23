@@ -17,7 +17,7 @@ import { stageData, stageItems } from "@/data/Stage";
 
 export default function Stage() {
   const [stage, setStage] = useState({
-    main: "stage3",
+    main: "stage1",
     sub: "init",
   });
   const [buttonConfig, setButtonConfig] = useState({
@@ -28,26 +28,22 @@ export default function Stage() {
   // @TODO: 상태들 객체로 합치기
   const [currentIndex, setCurrentIndex] = useState(0);
   const [toolState, setToolState] = useState("off");
-  const [currentGuidePosition, setCurrentGuidePosition] = useState({
-    top: `${stageItems[stage.main].guides?.positions?.offset.top}px`,
-    right: `${stageItems[stage.main].guides?.positions?.offset.right}px`,
-  });
-  const [currentToolPosition, setCurrentToolPosition] = useState({
-    top: `${stageItems[stage.main].tool?.positions?.offset.top}px`,
-    right: `${stageItems[stage.main].tool?.positions?.offset.right}px`,
-  });
+  const [currentGuidePosition, setCurrentGuidePosition] = useState({top: 40, right: 60});
+  const [currentToolPosition, setCurrentToolPosition] = useState({top: 90, right: 64});
   const [completedStages, setCompletedStages] = useState([]);
   const [isTalkBubbleShow, setIsTalkBubbleShow] = useState(false);
   const [isShowButton, setIsShowButton] = useState(false);
   const [isShowModal, setIsShowModal] = useState(false);
   const [isShowItems, setIsShowItems] = useState(false);
+  const [isShowNavi, setIsShowNavi] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [isSubmitEnabled, setIsSubmitEnabled] = useState(false);
   const [isCompleteEvent, setIsCompleteEvent] = useState(false);
   const currentData = stageData[stage.main][stage.sub];
-  const [position, setPosition] = useState({ x: 100, y: 120 }); 
-  const [isDragging, setIsDragging] = useState(false); 
-  const [shift, setShift] = useState({ x: 0, y: 0 }); 
+  const [position, setPosition] = useState({ x: 100, y: 120 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [shift, setShift] = useState({ x: 0, y: 0 });
+  const [stirCount, setStirCount] = useState(0);
   const modalConfig = currentData.modalConfig;
 
   const [chocolateInfo, setChocolateInfo] = useState({
@@ -88,6 +84,8 @@ export default function Stage() {
       const { main, sub } = stage;
       const sequence = stageData[main][sub]?.sequence;
 
+      if (stage.main === "stage1" && stage.sub === "description") setIsShowNavi(true);
+
       if (sequence) {
         for (let action of sequence) {
           const handler = actionHandlers[action.type];
@@ -108,7 +106,17 @@ export default function Stage() {
     console.log("💝chocolateInfo", chocolateInfo);
   }, [chocolateInfo]);
 
+  useEffect(() => {
+        if (stage.main === "stage3") {
+            document.body.classList.add("stage3");
+        } else {
+            document.body.classList.remove("stage3");
+        }
 
+        return () => {
+            document.body.classList.remove("stage3");
+        };
+    }, [stage.main]);
 
   const handleNextSubStage = () => {
     const { main, sub } = stage;
@@ -136,6 +144,12 @@ export default function Stage() {
       return;
     }
 
+    setCompletedStages((prev) => {
+      const updatedStages = [...prev, Number(main.split('stage')[1])];
+      console.log("업데이트된 completedStages: ", updatedStages);
+      return updatedStages;
+    });
+
     const finalSubStageKey = Object.keys(currentStageData).find(
       (key) => currentStageData[key].isFinal === true
     );
@@ -151,9 +165,7 @@ export default function Stage() {
       console.log("isFinal 서브스테이지를 찾을 수 없습니다.");
     }
 
-    setCompletedStages((prev) => [...new Set([...prev, main])]);
     setIsTalkBubbleShow(false);
-    0;
     setIsShowButton(false);
     setIsShowModal(false);
     setIsShowItems(false);
@@ -191,28 +203,21 @@ export default function Stage() {
   };
 
   const handleChop = () => {
-    const currentToolOffset = stageItems[stage.main].tool.positions.offset;
     const toolStep = stageItems[stage.main].tool.positions.step;
-    const currentGuidelOffset = stageItems[stage.main].guides.positions.offset;
     const guideStep = stageItems[stage.main].guides.positions.step;
-
+    
     if (currentIndex < stageItems[stage.main].items.length - 1) {
       setCurrentIndex((prev) => prev + 1);
       setCurrentToolPosition({
-        top: `${currentToolOffset.top}px`,
-        right: `${
-          currentToolOffset.right + toolStep.right * (currentIndex + 1)
-        }px`,
+        top: currentToolPosition.top,
+        right: currentToolPosition.right + toolStep.right,
       });
       setCurrentGuidePosition({
-        top: `${currentGuidelOffset.top}px`,
-        right: `${
-          currentGuidelOffset.right + guideStep.right * (currentIndex + 1)
-        }px`,
+        top: currentGuidePosition.top,
+        right: currentGuidePosition.right + guideStep.right,
       });
-    } else {
-      setIsCompleteEvent(true);
-    }
+    } 
+    if(currentIndex === stageItems[stage.main].items.length - 2) setIsCompleteEvent(true);
   };
 
   const toggleToolState = () => {
@@ -233,9 +238,9 @@ export default function Stage() {
   };
 
   /**
-   * 
+   *
    * 드래그 이벤트
-   * 
+   *
    */
   const handleStart = (e) => {
     e.preventDefault();
@@ -255,15 +260,14 @@ export default function Stage() {
   };
 
   const handleMove = (e) => {
-    if (!isDragging) return; 
+    if (!isDragging) return;
 
     const isTouchEvent = e.type === "touchmove";
     const clientX = isTouchEvent ? e.touches[0].clientX : e.clientX;
     const clientY = isTouchEvent ? e.touches[0].clientY : e.clientY;
 
     const parent = e.target.parentElement.getBoundingClientRect();
-    console.log(parent);
-    const imgWidth = 100; 
+    const imgWidth = 100;
     const imgHeight = 200;
 
     // 이동 가능한 범위 계산
@@ -280,8 +284,22 @@ export default function Stage() {
   };
 
   const handleEnd = () => {
-    setIsDragging(false); 
+    setIsDragging(false);
+    handleStir();
   };
+
+  const handleStir = () => {
+    const nextCount = stirCount + 1;
+  
+    if (nextCount <= 10) {
+      setStirCount(nextCount);
+    }
+  
+    if (nextCount === 10) {
+      setIsCompleteEvent(true);
+    }
+  };
+  
 
   return (
     <StageLayout
@@ -320,6 +338,11 @@ export default function Stage() {
           <div className="absolute bottom-[444px] right-[204px] w-7">
             <Image src={talkBubbleTail} alt="말풍선" />
           </div>
+          {/* 동적 대사 */}
+          {
+            isShowItems && stage.main === "stage3" && stage.sub === "description" &&
+            <p className="leading-6 text-2xl absolute right-[144px] bottom-[450px]">{stirCount} / 10</p>
+          }
         </>
       )}
       {/* 메인 아이템 */}
@@ -328,9 +351,26 @@ export default function Stage() {
           {stage.main === "stage2" ? (
             <>
               <div className="relative">
+                <div className="relative w-72 h-72">
+                {
+                  Array.from({length: stageItems[stage.main].items.length}, (_, i) => 
+                    <Image
+                    key={i}
+                    className={`${currentIndex === i ? "opacity-100 visible" : "opacity-0 invisible"} absolute bottom-0`}
+                    src={stageItems[stage.main].items[i].imgSrc}
+                    alt={stageItems[stage.main].items[i].alt}
+                    />
+                  )
+                }
+                </div>
                 <div
-                  style={currentToolPosition}
-                  className={`${toolState === "off" ? "w-6" : "w-8"} absolute`}
+                  style={{
+                    top: `${currentToolPosition.top}px`,
+                    right: `${currentToolPosition.right}px`
+                  }}
+                  className={`${toolState === "off" ? "w-6" : "w-8"} absolute cursor-pointer`}
+                  draggable={false}
+                  onDragStart={(e) => e.preventDefault()}
                   onClick={() => {
                     toggleToolState();
                     handleEvent(
@@ -340,27 +380,17 @@ export default function Stage() {
                     );
                   }}
                 >
-                  <Image
-                    src={
-                      toolState === "off"
-                        ? stageItems[stage.main].tool.off.imgSrc
-                        : stageItems[stage.main].tool.on.imgSrc
-                    }
-                    alt={
-                      toolState === "off"
-                        ? stageItems[stage.main].tool.off.alt
-                        : stageItems[stage.main].tool.on.alt
-                    }
-                  />
-                </div>
-                <div className="w-80">
-                  <Image
-                    src={stageItems[stage.main].items[currentIndex].imgSrc}
-                    alt={stageItems[stage.main].items[currentIndex].alt}
+                  <Image src={stageItems[stage.main].tool[toolState].imgSrc}
+                    alt={stageItems[stage.main].tool[toolState].alt}
                   />
                 </div>
               </div>
-              <div className="w-10 absolute" style={currentGuidePosition}>
+              <div className="w-10 absolute"
+               style={{
+                top: `${currentGuidePosition.top}px`,
+                right: `${currentGuidePosition.right}px`
+              }}
+              >
                 <Image
                   src={stageItems[stage.main].guides.imgSrc}
                   alt={stageItems[stage.main].guides.alt}
@@ -369,16 +399,33 @@ export default function Stage() {
             </>
           ) : stage.main === "stage3" ? (
             <>
-              <div className="w-20 absolute right-[-32px] top-[-10px]">
+              <div className="relative w-72 h-72">
                 <Image
-                  src={stageItems[stage.main].guides.imgSrc}
-                  alt={stageItems[stage.main].guides.alt}
+                  src={stageItems[stage.main].items[0].imgSrc}
+                  alt={stageItems[stage.main].items[0].alt}
+                  className={`absolute bottom-0 ${
+                    stirCount < 5
+                      ? "opacity-100 visible"
+                      : "opacity-0 invisible"
+                  }`}
                 />
-              </div>
-              <div className="w-72">
                 <Image
-                  src={stageItems[stage.main].items[currentIndex].imgSrc}
-                  alt={stageItems[stage.main].items[currentIndex].alt}
+                  src={stageItems[stage.main].items[1].imgSrc}
+                  alt={stageItems[stage.main].items[1].alt}
+                  className={`absolute bottom-0 ${
+                    stirCount >= 5 && stirCount < 10
+                      ? "opacity-100 visible"
+                      : "opacity-0 invisible"
+                  }`}
+                />                
+                <Image
+                  src={stageItems[stage.main].items[2].imgSrc}
+                  alt={stageItems[stage.main].items[2].alt}
+                  className={`absolute bottom-0 ${
+                    stirCount >= 10
+                      ? "opacity-100 visible"
+                      : "opacity-0 invisible"
+                  }`}
                 />
               </div>
               <div className="w-full h-96 bottom-[-20px] absolute">
@@ -389,17 +436,17 @@ export default function Stage() {
                     left: `${position.x}px`,
                     top: `${position.y}px`,
                     WebkitTouchCallout: "none",
-                    ouchAction: "none" 
+                    ouchAction: "none",
                   }}
                   className="w-32 cursor-pointer"
                   onMouseDown={handleStart}
                   onMouseMove={handleMove}
                   onMouseUp={handleEnd}
-                  onTouchStart={handleStart} 
-                  onTouchMove={handleMove} 
+                  onTouchStart={handleStart}
+                  onTouchMove={handleMove}
                   onTouchEnd={handleEnd}
                   draggable={false}
-                  onDragStart={e => e.preventDefault()}
+                  onDragStart={(e) => e.preventDefault()}
                   src={stageItems[stage.main].tool.off.imgSrc}
                   alt={stageItems[stage.main].tool.off.alt}
                 />
@@ -439,7 +486,7 @@ export default function Stage() {
             />
           </div>
         ) : (
-          <div className="absolute right-10 bottom-10">
+          <div className="absolute right-10 bottom-14">
             <Button
               disabled={!isCompleteEvent}
               onClick={handleNextMainStage}
@@ -450,10 +497,13 @@ export default function Stage() {
           </div>
         ))}
       {/* 상단 네비게이션 */}
-      <Navi
-        currentStage={extractStageNumber(stage.main)}
-        completedStages={completedStages}
-      />
+      {
+        isShowNavi &&        
+        <Navi
+          currentStage={extractStageNumber(stage.main)}
+          completedStages={completedStages}
+        />
+      }
     </StageLayout>
   );
 }

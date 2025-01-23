@@ -154,7 +154,6 @@ export const stageData = {
       modalConfig: null,
       sequence: [
         { type: "nextSubStage" }
-        // { type: "delay", value: 2000 }, { type: "nextSubStage" }
       ],
       nextSubStage: "description",
       isFinal: false
@@ -162,9 +161,44 @@ export const stageData = {
     description: {
       imgSrc: yantoBlink,
       dialogue: `
-            스패출러를 잡고<br/>
-            화살표 방향으로<br/>
-            초콜릿을 저어주세요.
+            초콜릿을 10번 저어주세요.<br/><br/>
+        `,
+      modalConfig: null,
+      sequence: [
+        { type: "delay", value: 1000 },
+        { type: "showItems" }, 
+        { type: "showButton", value: {shape: "circle", type: "arrow", message: null}},
+      ],
+      nextSubStage: "description",
+      nextMainStage: "stage4",
+      isFinal: true
+    },
+  },
+  /**
+   *
+   * =========================Stage 4=========================
+   *
+   */
+  stage4: {
+    init: {
+      imgSrc: yantoThumb,
+      dialogue: `
+            __________ 님의<br/>
+            따뜻한 마음이 더해져<br/>
+            초콜릿이 잘 녹았어요!
+        `,
+      modalConfig: null,
+      sequence: [
+        { type: "delay", value: 2000 }, { type: "nextSubStage" }
+      ],
+      nextSubStage: "description",
+      isFinal: false
+    },
+    description: {
+      imgSrc: yantoBlink,
+      dialogue: `
+            짤주머니를 꾹 눌러<br/>
+            틀에 초콜릿을 채워주세요.
         `,
       modalConfig: null,
       sequence: [
@@ -176,11 +210,6 @@ export const stageData = {
       isFinal: false
     },
   },
-  /**
-   *
-   * =========================Stage 4=========================
-   *
-   */
   /**
    *
    * =========================Stage 5=========================
@@ -216,7 +245,6 @@ export const stageItems = {
        off: { imgSrc: knifeUp, alt: "칼 올리기" },
        on: { imgSrc: knifeDown, alt: "칼 내리기" },
        positions: {
-         offset: { right: 80, top: 0 },
          step: { right: 20, top: 0 },
        },
        action: "toggle",
@@ -234,7 +262,6 @@ export const stageItems = {
       imgSrc: arrowDown,
       alt: "칼질 방향",
       positions: {
-        offset: { right: 46, top: -44 },
         step: { right: 20 },
       }
     },
