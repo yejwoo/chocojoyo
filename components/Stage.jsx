@@ -1,5 +1,5 @@
 import StageLayout from "./StageLayout";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Button from "./Button";
 import Modal from "./Modal";
@@ -28,8 +28,14 @@ export default function Stage() {
   // @TODO: 상태들 객체로 합치기
   const [currentIndex, setCurrentIndex] = useState(0);
   const [toolState, setToolState] = useState("off");
-  const [currentGuidePosition, setCurrentGuidePosition] = useState({top: 40, right: 60});
-  const [currentToolPosition, setCurrentToolPosition] = useState({top: 90, right: 64});
+  const [currentGuidePosition, setCurrentGuidePosition] = useState({
+    top: 40,
+    right: 60,
+  });
+  const [currentToolPosition, setCurrentToolPosition] = useState({
+    top: 90,
+    right: 64,
+  });
   const [completedStages, setCompletedStages] = useState([]);
   const [isTalkBubbleShow, setIsTalkBubbleShow] = useState(false);
   const [isShowButton, setIsShowButton] = useState(false);
@@ -45,7 +51,6 @@ export default function Stage() {
   const [shift, setShift] = useState({ x: 0, y: 0 });
   const [stirCount, setStirCount] = useState(0);
   const modalConfig = currentData.modalConfig;
-
   const [chocolateInfo, setChocolateInfo] = useState({
     shapes: [],
     colors: {},
@@ -84,7 +89,8 @@ export default function Stage() {
       const { main, sub } = stage;
       const sequence = stageData[main][sub]?.sequence;
 
-      if (stage.main === "stage1" && stage.sub === "description") setIsShowNavi(true);
+      if (stage.main === "stage1" && stage.sub === "description")
+        setIsShowNavi(true);
 
       if (sequence) {
         for (let action of sequence) {
@@ -107,16 +113,16 @@ export default function Stage() {
   }, [chocolateInfo]);
 
   useEffect(() => {
-        if (stage.main === "stage3") {
-            document.body.classList.add("stage3");
-        } else {
-            document.body.classList.remove("stage3");
-        }
+    if (stage.main === "stage3") {
+      document.body.classList.add("stage3");
+    } else {
+      document.body.classList.remove("stage3");
+    }
 
-        return () => {
-            document.body.classList.remove("stage3");
-        };
-    }, [stage.main]);
+    return () => {
+      document.body.classList.remove("stage3");
+    };
+  }, [stage.main]);
 
   const handleNextSubStage = () => {
     const { main, sub } = stage;
@@ -145,7 +151,7 @@ export default function Stage() {
     }
 
     setCompletedStages((prev) => {
-      const updatedStages = [...prev, Number(main.split('stage')[1])];
+      const updatedStages = [...prev, Number(main.split("stage")[1])];
       console.log("업데이트된 completedStages: ", updatedStages);
       return updatedStages;
     });
@@ -205,7 +211,7 @@ export default function Stage() {
   const handleChop = () => {
     const toolStep = stageItems[stage.main].tool.positions.step;
     const guideStep = stageItems[stage.main].guides.positions.step;
-    
+
     if (currentIndex < stageItems[stage.main].items.length - 1) {
       setCurrentIndex((prev) => prev + 1);
       setCurrentToolPosition({
@@ -216,8 +222,9 @@ export default function Stage() {
         top: currentGuidePosition.top,
         right: currentGuidePosition.right + guideStep.right,
       });
-    } 
-    if(currentIndex === stageItems[stage.main].items.length - 2) setIsCompleteEvent(true);
+    }
+    if (currentIndex === stageItems[stage.main].items.length - 2)
+      setIsCompleteEvent(true);
   };
 
   const toggleToolState = () => {
@@ -290,16 +297,15 @@ export default function Stage() {
 
   const handleStir = () => {
     const nextCount = stirCount + 1;
-  
+
     if (nextCount <= 10) {
       setStirCount(nextCount);
     }
-  
+
     if (nextCount === 10) {
       setIsCompleteEvent(true);
     }
   };
-  
 
   return (
     <StageLayout
@@ -339,10 +345,13 @@ export default function Stage() {
             <Image src={talkBubbleTail} alt="말풍선" />
           </div>
           {/* 동적 대사 */}
-          {
-            isShowItems && stage.main === "stage3" && stage.sub === "description" &&
-            <p className="leading-6 text-2xl absolute right-[144px] bottom-[450px]">{stirCount} / 10</p>
-          }
+          {isShowItems &&
+            stage.main === "stage3" &&
+            stage.sub === "description" && (
+              <p className="leading-6 text-2xl absolute right-[134px] bottom-[450px]">
+                {stirCount} / 10
+              </p>
+            )}
         </>
       )}
       {/* 메인 아이템 */}
@@ -352,23 +361,30 @@ export default function Stage() {
             <>
               <div className="relative">
                 <div className="relative w-72 h-72">
-                {
-                  Array.from({length: stageItems[stage.main].items.length}, (_, i) => 
-                    <Image
-                    key={i}
-                    className={`${currentIndex === i ? "opacity-100 visible" : "opacity-0 invisible"} absolute bottom-0`}
-                    src={stageItems[stage.main].items[i].imgSrc}
-                    alt={stageItems[stage.main].items[i].alt}
-                    />
-                  )
-                }
+                  {Array.from(
+                    { length: stageItems[stage.main].items.length },
+                    (_, i) => (
+                      <Image
+                        key={i}
+                        className={`${
+                          currentIndex === i
+                            ? "opacity-100 visible"
+                            : "opacity-0 invisible"
+                        } absolute bottom-0`}
+                        src={stageItems[stage.main].items[i].imgSrc}
+                        alt={stageItems[stage.main].items[i].alt}
+                      />
+                    )
+                  )}
                 </div>
                 <div
                   style={{
                     top: `${currentToolPosition.top}px`,
-                    right: `${currentToolPosition.right}px`
+                    right: `${currentToolPosition.right}px`,
                   }}
-                  className={`${toolState === "off" ? "w-6" : "w-8"} absolute cursor-pointer`}
+                  className={`${
+                    toolState === "off" ? "w-6" : "w-8"
+                  } absolute cursor-pointer`}
                   draggable={false}
                   onDragStart={(e) => e.preventDefault()}
                   onClick={() => {
@@ -380,16 +396,18 @@ export default function Stage() {
                     );
                   }}
                 >
-                  <Image src={stageItems[stage.main].tool[toolState].imgSrc}
+                  <Image
+                    src={stageItems[stage.main].tool[toolState].imgSrc}
                     alt={stageItems[stage.main].tool[toolState].alt}
                   />
                 </div>
               </div>
-              <div className="w-10 absolute"
-               style={{
-                top: `${currentGuidePosition.top}px`,
-                right: `${currentGuidePosition.right}px`
-              }}
+              <div
+                className="w-10 absolute"
+                style={{
+                  top: `${currentGuidePosition.top}px`,
+                  right: `${currentGuidePosition.right}px`,
+                }}
               >
                 <Image
                   src={stageItems[stage.main].guides.imgSrc}
@@ -417,7 +435,7 @@ export default function Stage() {
                       ? "opacity-100 visible"
                       : "opacity-0 invisible"
                   }`}
-                />                
+                />
                 <Image
                   src={stageItems[stage.main].items[2].imgSrc}
                   alt={stageItems[stage.main].items[2].alt}
@@ -461,14 +479,19 @@ export default function Stage() {
                 className="relative w-20 h-20 flex items-center justify-center cursor-pointer"
                 key={index}
               >
-                <Image className="" src={item.imgSrc} alt={`${item.alt}`} />
-                <Image
-                  className={`${
-                    chocolateInfo.shapes.includes(item.variant) ? "" : "hidden"
-                  } absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}
-                  src={checkLg}
-                  alt="완료"
-                />
+                  <Image
+                    src={item.imgSrc}
+                    alt={item.alt}
+                  />
+                  <Image
+                    className={`${
+                      chocolateInfo.shapes.includes(item.variant)
+                        ? ""
+                        : "hidden"
+                    } absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}
+                    src={checkLg}
+                    alt="완료"
+                  />
               </div>
             ))
           )}
@@ -497,13 +520,12 @@ export default function Stage() {
           </div>
         ))}
       {/* 상단 네비게이션 */}
-      {
-        isShowNavi &&        
+      {isShowNavi && (
         <Navi
           currentStage={extractStageNumber(stage.main)}
           completedStages={completedStages}
         />
-      }
+      )}
     </StageLayout>
   );
 }
