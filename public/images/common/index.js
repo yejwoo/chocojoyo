@@ -19,7 +19,6 @@ export { default as talkBubbleBodySm } from './talk-bubble-body-sm.png';
 export { default as talkBubbleBodyLg } from './talk-bubble-body-lg.png';
 export { default as talkBubbleTail } from './talk-bubble-tail.png';
 export { default as yantoBlink } from './yanto-blink.gif';
-export { default as yantoEat } from './yanto-eat.gif';
 export { default as yantoHello } from './yanto-hello.gif';
 export { default as yantoSwing } from './yanto-swing.gif';
 export { default as yantoThumb } from './yanto-thumb.gif';

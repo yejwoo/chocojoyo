@@ -328,14 +328,14 @@ export default function Stage() {
       {/* 말풍선 */}
       {isTalkBubbleShow && (
         <>
-          <div className="absolute bottom-[436px] right-5 w-48">
+          <div className="absolute bottom-[436px] right-3 w-48">
             <Image className="" src={talkBubbleBodySm} alt="말풍선" />
             <p
               className="absolute left-4 top-1/2 -translate-y-1/2 leading-6 text-xl"
               dangerouslySetInnerHTML={{ __html: currentData.dialogue }}
             />
           </div>
-          <div className="absolute bottom-[444px] right-[204px] w-7">
+          <div className="absolute bottom-[444px] right-[196px] w-7">
             <Image src={talkBubbleTail} alt="말풍선" />
           </div>
           {/* 동적 대사 */}
