@@ -14,12 +14,13 @@ import {
   bg,
 } from "@/public/images/common";
 import { stageData, stageItems } from "@/data/Stage";
-import Mold from "@/public/images/stage4/chocolate-mold.svg";
 import { Shapes } from "@/public/icons/shapes";
+import mold from "@/public/images/stage4/chocolate-mold.svg";
+import { PastryBag } from "@/public/images/stage4";
 
 export default function Stage() {
   const [stage, setStage] = useState({
-    main: "stage3",
+    main: "stage1",
     sub: "init",
   });
   const [buttonConfig, setButtonConfig] = useState({
@@ -54,12 +55,12 @@ export default function Stage() {
   const [stirCount, setStirCount] = useState(0);
   const modalConfig = currentData.modalConfig;
   const [chocolateInfo, setChocolateInfo] = useState({
-    shapes: ["heart", "circle"],
+    shapes: [],
     colors: {},
     drawings: {},
     toppings: {},
   });
-  const [shapes, setShapes] = useState([])
+  const [shapes, setShapes] = useState([]);
 
   const [formData, setFormData] = useState({
     username: "",
@@ -121,21 +122,19 @@ export default function Stage() {
     } else {
       document.body.classList.remove("stage3");
     }
-  
+
     if (stage.main === "stage4") {
       setShapes(
-        Array(6) 
+        Array(6)
           .fill(null)
           .map((_, i) => chocolateInfo.shapes[i % chocolateInfo.shapes.length]) // 순환 적용
       );
-      
     }
-  
+
     return () => {
       document.body.classList.remove("stage3");
     };
   }, [stage.main, chocolateInfo.shapes]);
-  
 
   const handleNextSubStage = () => {
     const { main, sub } = stage;
@@ -520,40 +519,41 @@ export default function Stage() {
           {/* Stage 4 렌더링 */}
 
           {stage.main === "stage4" && (
-            <div className="relative w-72 h-56">
-              <Image
-                src={Mold}
-                alt="초콜릿 틀"
-                width={280}
-                height={280}
-                className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2"
-              />
-              {/* 초콜릿들 */}
-              <div className="w-full flex justify-center items-center flex-wrap absolute gap-6 top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
-                {shapes.map((item, index) => {
-                  const shapeCount = chocolateInfo.shapes.length;
-                  const name = item[0].toUpperCase() + item.slice(1); 
-                  const ShapeComponent = Shapes[name]; 
+            <>
+              <div className="relative w-72 h-56">
+                <Image
+                  src={mold}
+                  alt="초콜릿 틀"
+                  width={280}
+                  height={280}
+                  className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2"
+                />
+                {/* 초콜릿들 */}
+                <div className="w-full flex justify-center items-center flex-wrap absolute gap-6 top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
+                  {shapes.map((item, index) => {
+                    const name = item[0].toUpperCase() + item.slice(1);
+                    const ShapeComponent = Shapes[name];
 
-                  return ShapeComponent ? (
-                    <ShapeComponent
-                      key={index}
-                      strokeColor="#9E9C9D"
-                      fillColor="#A9A9A9"
-                      width={64}
-                      height={56}
-                    />
-                  ) : (console.warn(`❌ '${name}'에 해당하는 Shape 컴포넌트가 없음.`) || null
-                  );
-                })}
-                {/* <Shapes.Bear strokeColor="#9E9C9D" fillColor="#A9A9A9" width={64} height={56} />
-                <Shapes.Cat strokeColor="#9E9C9D" fillColor="#A9A9A9" width={64} height={56} />
-                <Shapes.Square strokeColor="#9E9C9D" fillColor="#A9A9A9" width={64} height={56} />
-                <Shapes.Circle strokeColor="#9E9C9D" fillColor="#A9A9A9" width={64} height={56} />
-                <Shapes.Heart strokeColor="#9E9C9D" fillColor="#A9A9A9" width={64} height={56} />
-                <Shapes.Rabbit strokeColor="#9E9C9D" fillColor="#A9A9A9" width={64} height={56} /> */}
+                    return ShapeComponent ? (
+                      <ShapeComponent
+                        key={index}
+                        strokeColor="#9E9C9D"
+                        fillColor="#A9A9A9"
+                        width={64}
+                        height={56}
+                      />
+                    ) : (
+                      console.warn(
+                        `❌ '${name}'에 해당하는 Shape 컴포넌트가 없음.`
+                      ) || null
+                    );
+                  })}
+                </div>
               </div>
-            </div>
+              <div className="absolute top-0 left-1/2 -translate-x-1/2">
+                <PastryBag />
+              </div>
+            </>
           )}
 
           {/* Stage 5 렌더링 */}
@@ -585,7 +585,7 @@ export default function Stage() {
             />
           </div>
         ) : (
-          <div className="absolute right-10 bottom-14">
+          <div className="absolute right-10 bottom-20">
             <Button
               disabled={!isCompleteEvent}
               onClick={handleNextMainStage}
@@ -602,6 +602,21 @@ export default function Stage() {
           completedStages={completedStages}
         />
       )}
+      {/* 하단 네비게이션 */}
+      {isShowItems &&
+        stage.main === "stage4" &&
+        stage.sub === "description" && (
+          <div className="absolute bg-popup-100 left-0 right-0 h-16 bottom-0">
+            <div className="flex gap-7 justify-center items-center w-full h-full">
+              <div className="cursor-pointer rounded-full bg-chocolates-vanilla-100 border-2 border-chocolates-vanilla-200 w-8 h-8"></div>
+              <div className="cursor-pointer rounded-full bg-chocolates-milk-100 border-2 border-chocolates-milk-200 w-8 h-8"></div>
+              <div className="cursor-pointer rounded-full bg-chocolates-dark-100 border-2 border-chocolates-dark-200 w-8 h-8"></div>
+              <div className="cursor-pointer rounded-full bg-chocolates-ruby-100 border-2 border-chocolates-ruby-200 w-8 h-8"></div>
+              <div className="cursor-pointer rounded-full bg-chocolates-red-100 border-2 border-chocolates-red-200 w-8 h-8"></div>
+              <div className="cursor-pointer rounded-full bg-chocolates-greentea-100 border-2 border-chocolates-greentea-200 w-8 h-8"></div>
+            </div>
+          </div>
+        )}
     </StageLayout>
   );
 }

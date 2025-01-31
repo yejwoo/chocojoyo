@@ -46,7 +46,7 @@ export default {
           200: "#FF375C",
         },
         chocolates: {
-          green: {
+          greentea: {
             100: "#95C43D",
             200: "#72A90B",
           },

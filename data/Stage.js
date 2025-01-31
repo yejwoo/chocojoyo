@@ -26,6 +26,7 @@ import {
   doubleBoiler3,
   spatula,
 } from "@/public/images/stage3";
+import { pastryBag } from "@/public/images/stage4";
 
 // @TODO: 얀토 이미지 수정 후 imgSrc 전면 수정
 export const stageData = {
@@ -330,25 +331,38 @@ export const stageItems = {
       positions: null,
     },
   },
-  // stage4: {
-  //   tools: [
-  //     {chocolateDark : {imgSrc: chocolateDark, alt: "다크 초콜릿" }},
-  //     {chocolateRuby : {imgSrc: chocolateRuby, alt: "루비 초콜릿" }},
-  //     {chocolateMilk : {imgSrc: chocolateMilk, alt: "밀크 초콜릿" }},
-  //     {chocolateRed : {imgSrc: chocolateRed, alt: "레드 초콜릿" }},
-  //     {chocolateGreenTea : {imgSrc: chocolateGreenTea, alt: "녹차 초콜릿" }},
-  //     {chocolateVanilla : {imgSrc: chocolateVanilla, alt: "바닐라 초콜릿" }},
-  //   ],
-  //   items: [
-  //     [
-  //       { imgSrc: bearDark, alt: "초콜릿 중탕" },
-  //       { imgSrc: bearDefault, alt: "초콜릿 중탕" },
-  //       { imgSrc: bearGreenTea, alt: "초콜릿 중탕" },
-  //       { imgSrc: bearGreenTea, alt: "초콜릿 중탕" },
-  //       { imgSrc: bearGreenTea, alt: "초콜릿 중탕" },
-  //       { imgSrc: bearGreenTea, alt: "초콜릿 중탕" },
-  //     ]
-  //   ],
-  //   guides: [{ imgSrc: arrow, alt: "초콜릿 중탕" },]
-  // },
+  stage4: {
+    tool: {
+      off: { imgSrc: spatula, alt: "스패출라" },
+      on: null,
+      alt: "스패츌라",
+      position: null,
+      action: "move",
+    },
+    items: [
+      {
+        imgSrc: doubleBoiler1,
+        alt: "초콜릿 중탕",
+        type: "stir",
+        variant: null,
+      },
+      {
+        imgSrc: doubleBoiler2,
+        alt: "초콜릿 중탕",
+        type: "stir",
+        variant: null,
+      },
+      {
+        imgSrc: doubleBoiler3,
+        alt: "초콜릿 중탕",
+        type: "stir",
+        variant: null,
+      },
+    ],
+    guides: {
+      imgSrc: arrow,
+      alt: "중탕 방향",
+      positions: null,
+    },
+  },
 };
