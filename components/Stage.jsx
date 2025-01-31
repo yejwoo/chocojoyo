@@ -583,14 +583,26 @@ export default function Stage() {
                       <div
                         key={index}
                         onClick={() => handleChocolateClick(index)}
-                        className="cursor-pointer"
+                        className="flex-shrink-0 cursor-pointer relative w-16 h-14"
                       >
-                        <ShapeComponent
-                          strokeColor={chocolateColors[color].border}
-                          fillColor={chocolateColors[color].fill}
-                          width={64}
-                          height={56}
-                        />
+                        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+                          {/* 틀 */}
+                          <ShapeComponent
+                            strokeColor={chocolateColors.default.border}
+                            fillColor={chocolateColors.default.fill}
+                            width={64}
+                            height={56}
+                          />
+                        </div>
+                        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+                          {/* 실제 초콜릿 */}
+                          <ShapeComponent
+                            strokeColor={chocolateColors[color].border}
+                            fillColor={chocolateColors[color].fill}
+                            width={64}
+                            height={56}
+                          />
+                        </div>
                       </div>
                     ) : (
                       console.warn(`${name} 컴포넌트 없음`) || null
