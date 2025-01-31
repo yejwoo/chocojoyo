@@ -1,4 +1,4 @@
-import { shapeBear, shapeCircle, shapeHeart, shapeCat, shapeRabbit, shapeSquare } from "@/public/icons/shapes";
+// import { Shapes } from "@/public/icons/shapes";
 import {
   yantoBlink,
   yantoHello,
@@ -232,41 +232,41 @@ export const stageItems = {
     tool: null,
     items: [
       {
-        imgSrc: shapeCircle,
+        imgSrc: "./icons/shapes/shape-circle.svg",
         alt: "원형 초콜릿",
         type: "select",
         variant: "circle",
       },
-      // {
-      //   imgSrc: ShapeHeart,
-      //   alt: "하트 초콜릿",
-      //   type: "select",
-      //   variant: "heart",
-      // },
-      // {
-      //   imgSrc: ShapeSquare,
-      //   alt: "사각형 초콜릿",
-      //   type: "select",
-      //   variant: "square",
-      // },
-      // {
-      //   imgSrc: ShapeBear,
-      //   alt: "곰 초콜릿",
-      //   type: "select",
-      //   variant: "bear",
-      // },
-      // {
-      //   imgSrc: ShapeRabbit,
-      //   alt: "토끼 초콜릿",
-      //   type: "select",
-      //   variant: "rabbit",
-      // },
-      // {
-      //   imgSrc: ShapeCat,
-      //   alt: "고양이 초콜릿",
-      //   type: "select",
-      //   variant: "cat",
-      // },
+      {
+        imgSrc: "./icons/shapes/shape-heart.svg",
+        alt: "하트 초콜릿",
+        type: "select",
+        variant: "heart",
+      },
+      {
+        imgSrc: "./icons/shapes/shape-square.svg",
+        alt: "사각형 초콜릿",
+        type: "select",
+        variant: "square",
+      },
+      {
+        imgSrc: "./icons/shapes/shape-bear.svg",
+        alt: "곰 초콜릿",
+        type: "select",
+        variant: "bear",
+      },
+      {
+        imgSrc: "./icons/shapes/shape-rabbit.svg",
+        alt: "토끼 초콜릿",
+        type: "select",
+        variant: "rabbit",
+      },
+      {
+        imgSrc: "./icons/shapes/shape-cat.svg",
+        alt: "고양이 초콜릿",
+        type: "select",
+        variant: "cat",
+      },
     ],
     guides: null,
   },

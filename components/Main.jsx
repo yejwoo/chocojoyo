@@ -1,7 +1,6 @@
 import Image from "next/image"
 import Button from "./Button"
 import { logo, yanto, bg } from "@/public/images/main"
-import { ShapeBear } from "@/public/icons/shapes"
 
 export default function Main({onStart}) {
     return (
@@ -13,7 +12,6 @@ export default function Main({onStart}) {
                 <div className="absolute left-1/2 -translate-x-1/2 bottom-[10%]">
                     <Button message={"시작해요"} onClick={onStart}/>
                 </div>
-                <ShapeBear/>
             </div>
         </main>
     )

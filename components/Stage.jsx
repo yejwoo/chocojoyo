@@ -14,10 +14,12 @@ import {
   bg,
 } from "@/public/images/common";
 import { stageData, stageItems } from "@/data/Stage";
+import Mold from "@/public/images/stage4/chocolate-mold.svg";
+import { Shapes } from "@/public/icons/shapes";
 
 export default function Stage() {
   const [stage, setStage] = useState({
-    main: "stage1",
+    main: "stage3",
     sub: "init",
   });
   const [buttonConfig, setButtonConfig] = useState({
@@ -52,11 +54,12 @@ export default function Stage() {
   const [stirCount, setStirCount] = useState(0);
   const modalConfig = currentData.modalConfig;
   const [chocolateInfo, setChocolateInfo] = useState({
-    shapes: [],
+    shapes: ["heart", "circle"],
     colors: {},
     drawings: {},
     toppings: {},
   });
+  const [shapes, setShapes] = useState([])
 
   const [formData, setFormData] = useState({
     username: "",
@@ -118,11 +121,21 @@ export default function Stage() {
     } else {
       document.body.classList.remove("stage3");
     }
-
+  
+    if (stage.main === "stage4") {
+      setShapes(
+        Array(6) 
+          .fill(null)
+          .map((_, i) => chocolateInfo.shapes[i % chocolateInfo.shapes.length]) // 순환 적용
+      );
+      
+    }
+  
     return () => {
       document.body.classList.remove("stage3");
     };
-  }, [stage.main]);
+  }, [stage.main, chocolateInfo.shapes]);
+  
 
   const handleNextSubStage = () => {
     const { main, sub } = stage;
@@ -354,28 +367,57 @@ export default function Stage() {
             )}
         </>
       )}
-      {/* 메인 아이템 */}
+      {/* 스테이지별 메인 아이템 */}
       {isShowItems && (
         <div className="absolute bottom-[132px] left-1/2 w-[296px] -translate-x-1/2 flex justify-center gap-6 flex-wrap animate-bounce-up-once">
-          {stage.main === "stage2" ? (
+          {/* Stage 1 렌더링 */}
+          {stage.main === "stage1" && (
+            <>
+              {stageItems[stage.main].items.map((item, index) => (
+                <div
+                  onClick={() => {
+                    handleEvent(item.type, item.variant, index);
+                  }}
+                  className="relative w-20 h-20 flex items-center justify-center cursor-pointer"
+                  key={index}
+                >
+                  <Image
+                    src={item.imgSrc}
+                    width={80}
+                    height={80}
+                    alt={item.alt}
+                  />
+                  <Image
+                    className={`${
+                      chocolateInfo.shapes.includes(item.variant)
+                        ? ""
+                        : "hidden"
+                    } absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}
+                    src={checkLg}
+                    alt="완료"
+                  />
+                </div>
+              ))}
+            </>
+          )}
+
+          {/* Stage 2 렌더링 */}
+          {stage.main === "stage2" && (
             <>
               <div className="relative">
                 <div className="relative w-72 h-72">
-                  {Array.from(
-                    { length: stageItems[stage.main].items.length },
-                    (_, i) => (
-                      <Image
-                        key={i}
-                        className={`${
-                          currentIndex === i
-                            ? "opacity-100 visible"
-                            : "opacity-0 invisible"
-                        } absolute bottom-0`}
-                        src={stageItems[stage.main].items[i].imgSrc}
-                        alt={stageItems[stage.main].items[i].alt}
-                      />
-                    )
-                  )}
+                  {stageItems[stage.main].items.map((item, i) => (
+                    <Image
+                      key={i}
+                      className={`${
+                        currentIndex === i
+                          ? "opacity-100 visible"
+                          : "opacity-0 invisible"
+                      } absolute bottom-0`}
+                      src={item.imgSrc}
+                      alt={item.alt}
+                    />
+                  ))}
                 </div>
                 <div
                   style={{
@@ -415,7 +457,10 @@ export default function Stage() {
                 />
               </div>
             </>
-          ) : stage.main === "stage3" ? (
+          )}
+
+          {/* Stage 3 렌더링 */}
+          {stage.main === "stage3" && (
             <>
               <div className="relative w-72 h-72">
                 <Image
@@ -470,30 +515,61 @@ export default function Stage() {
                 />
               </div>
             </>
-          ) : (
-            stageItems[stage.main].items.map((item, index) => (
-              <div
-                onClick={() => {
-                  handleEvent(item.type, item.variant, index);
-                }}
-                className="relative w-20 h-20 flex items-center justify-center cursor-pointer"
-                key={index}
-              >
-                  <Image
-                    src={item.imgSrc}
-                    alt={item.alt}
-                  />
-                  <Image
-                    className={`${
-                      chocolateInfo.shapes.includes(item.variant)
-                        ? ""
-                        : "hidden"
-                    } absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}
-                    src={checkLg}
-                    alt="완료"
-                  />
+          )}
+
+          {/* Stage 4 렌더링 */}
+
+          {stage.main === "stage4" && (
+            <div className="relative w-72 h-56">
+              <Image
+                src={Mold}
+                alt="초콜릿 틀"
+                width={280}
+                height={280}
+                className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2"
+              />
+              {/* 초콜릿들 */}
+              <div className="w-full flex justify-center items-center flex-wrap absolute gap-6 top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
+                {shapes.map((item, index) => {
+                  const shapeCount = chocolateInfo.shapes.length;
+                  const name = item[0].toUpperCase() + item.slice(1); 
+                  const ShapeComponent = Shapes[name]; 
+
+                  return ShapeComponent ? (
+                    <ShapeComponent
+                      key={index}
+                      strokeColor="#9E9C9D"
+                      fillColor="#A9A9A9"
+                      width={64}
+                      height={56}
+                    />
+                  ) : (console.warn(`❌ '${name}'에 해당하는 Shape 컴포넌트가 없음.`) || null
+                  );
+                })}
+                {/* <Shapes.Bear strokeColor="#9E9C9D" fillColor="#A9A9A9" width={64} height={56} />
+                <Shapes.Cat strokeColor="#9E9C9D" fillColor="#A9A9A9" width={64} height={56} />
+                <Shapes.Square strokeColor="#9E9C9D" fillColor="#A9A9A9" width={64} height={56} />
+                <Shapes.Circle strokeColor="#9E9C9D" fillColor="#A9A9A9" width={64} height={56} />
+                <Shapes.Heart strokeColor="#9E9C9D" fillColor="#A9A9A9" width={64} height={56} />
+                <Shapes.Rabbit strokeColor="#9E9C9D" fillColor="#A9A9A9" width={64} height={56} /> */}
               </div>
-            ))
+            </div>
+          )}
+
+          {/* Stage 5 렌더링 */}
+          {stage.main === "stage5" && (
+            <div className="relative">
+              {/* Stage5 관련 UI 추가 */}
+              <p>Stage 5 Content</p>
+            </div>
+          )}
+
+          {/* Stage 6 렌더링 */}
+          {stage.main === "stage6" && (
+            <div className="relative">
+              {/* Stage6 관련 UI 추가 */}
+              <p>Stage 6 Content</p>
+            </div>
           )}
         </div>
       )}
