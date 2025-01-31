@@ -1,3 +1,4 @@
+import tailwindConfig from "../tailwind.config.mjs";
 import StageLayout from "./StageLayout";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
@@ -20,7 +21,7 @@ import { PastryBag } from "@/public/images/stage4";
 
 export default function Stage() {
   const [stage, setStage] = useState({
-    main: "stage1",
+    main: "stage4",
     sub: "init",
   });
   const [buttonConfig, setButtonConfig] = useState({
@@ -54,14 +55,46 @@ export default function Stage() {
   const [shift, setShift] = useState({ x: 0, y: 0 });
   const [stirCount, setStirCount] = useState(0);
   const modalConfig = currentData.modalConfig;
+  const chocolatColorsConfig = tailwindConfig.theme.extend.colors.chocolates;
+  const chocolateColors = {
+    default: {
+      fill: "#A9A9A9",
+      border: "#9E9C9D",
+    },
+    vanilla: {
+      fill: chocolatColorsConfig.vanilla[100],
+      border: chocolatColorsConfig.vanilla[200],
+    },
+    greentea: {
+      fill: chocolatColorsConfig.greentea[100],
+      border: chocolatColorsConfig.greentea[200],
+    },
+    dark: {
+      fill: chocolatColorsConfig.dark[100],
+      border: chocolatColorsConfig.dark[200],
+    },
+    ruby: {
+      fill: chocolatColorsConfig.ruby[100],
+      border: chocolatColorsConfig.ruby[200],
+    },
+    milk: {
+      fill: chocolatColorsConfig.milk[100],
+      border: chocolatColorsConfig.milk[200],
+    },
+    red: {
+      fill: chocolatColorsConfig.red[100],
+      border: chocolatColorsConfig.red[200],
+    },
+  };
+
+  const [selectedColor, setSelectedColor] = useState("vanilla");
   const [chocolateInfo, setChocolateInfo] = useState({
-    shapes: [],
-    colors: {},
+    shapes: ["heart"],
+    colors: Array(6).fill("default"),
     drawings: {},
     toppings: {},
   });
   const [shapes, setShapes] = useState([]);
-
   const [formData, setFormData] = useState({
     username: "",
     card: "",
@@ -135,6 +168,10 @@ export default function Stage() {
       document.body.classList.remove("stage3");
     };
   }, [stage.main, chocolateInfo.shapes]);
+
+  useEffect(() => {
+    console.log(chocolateColors[selectedColor].fill);
+  }, [selectedColor]);
 
   const handleNextSubStage = () => {
     const { main, sub } = stage;
@@ -241,6 +278,14 @@ export default function Stage() {
 
   const toggleToolState = () => {
     setToolState((prev) => (prev === "off" ? "on" : "off"));
+  };
+
+  const handleChocolateClick = (index) => {
+    setChocolateInfo((prev) => {
+      const updatedColors = [...prev.colors];
+      updatedColors[index] = selectedColor;
+      return { ...prev, colors: updatedColors };
+    });
   };
 
   const handleEvent = (type, variant) => {
@@ -517,7 +562,6 @@ export default function Stage() {
           )}
 
           {/* Stage 4 렌더링 */}
-
           {stage.main === "stage4" && (
             <>
               <div className="relative w-72 h-56">
@@ -533,25 +577,29 @@ export default function Stage() {
                   {shapes.map((item, index) => {
                     const name = item[0].toUpperCase() + item.slice(1);
                     const ShapeComponent = Shapes[name];
+                    const color = chocolateInfo.colors[index];
 
                     return ShapeComponent ? (
-                      <ShapeComponent
+                      <div
                         key={index}
-                        strokeColor="#9E9C9D"
-                        fillColor="#A9A9A9"
-                        width={64}
-                        height={56}
-                      />
+                        onClick={() => handleChocolateClick(index)}
+                        className="cursor-pointer"
+                      >
+                        <ShapeComponent
+                          strokeColor={chocolateColors[color].border}
+                          fillColor={chocolateColors[color].fill}
+                          width={64}
+                          height={56}
+                        />
+                      </div>
                     ) : (
-                      console.warn(
-                        `❌ '${name}'에 해당하는 Shape 컴포넌트가 없음.`
-                      ) || null
+                      console.warn(`${name} 컴포넌트 없음`) || null
                     );
                   })}
                 </div>
               </div>
-              <div className="absolute top-0 left-1/2 -translate-x-1/2">
-                <PastryBag />
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 cursor-pointer">
+                <PastryBag fillColor={chocolateColors[selectedColor].fill} />
               </div>
             </>
           )}
@@ -608,12 +656,16 @@ export default function Stage() {
         stage.sub === "description" && (
           <div className="absolute bg-popup-100 left-0 right-0 h-16 bottom-0">
             <div className="flex gap-7 justify-center items-center w-full h-full">
-              <div className="cursor-pointer rounded-full bg-chocolates-vanilla-100 border-2 border-chocolates-vanilla-200 w-8 h-8"></div>
-              <div className="cursor-pointer rounded-full bg-chocolates-milk-100 border-2 border-chocolates-milk-200 w-8 h-8"></div>
-              <div className="cursor-pointer rounded-full bg-chocolates-dark-100 border-2 border-chocolates-dark-200 w-8 h-8"></div>
-              <div className="cursor-pointer rounded-full bg-chocolates-ruby-100 border-2 border-chocolates-ruby-200 w-8 h-8"></div>
-              <div className="cursor-pointer rounded-full bg-chocolates-red-100 border-2 border-chocolates-red-200 w-8 h-8"></div>
-              <div className="cursor-pointer rounded-full bg-chocolates-greentea-100 border-2 border-chocolates-greentea-200 w-8 h-8"></div>
+              {Object.keys(chocolateColors)
+                .filter((item) => item !== "default")
+                .map((item) => (
+                  <div
+                    key={item}
+                    onClick={() => setSelectedColor(item)}
+                    className={`cursor-pointer rounded-full border-2 w-8 h-8 bg-chocolates-${item}-100 border-chocolates-${item}-200
+                  ${selectedColor === item ? "ring-4 ring-brand-200" : ""}`}
+                  ></div>
+                ))}
             </div>
           </div>
         )}

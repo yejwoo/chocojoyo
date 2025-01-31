@@ -1,4 +1,4 @@
-export const PastryBag = (fillColor = "#FFF1AC") => (
+export const PastryBag = ({fillColor = "#FFF1AC"}) => (
   <svg
     width="80"
     height="160"
@@ -15,7 +15,7 @@ export const PastryBag = (fillColor = "#FFF1AC") => (
     />
     <path
       d="M3.06467 59.1387C6.08673 37.0886 23.2932 34.2344 31.4668 34.2344C39.9268 34.2344 57.3856 37.322 59.8066 59.1387C62.8328 86.4095 52.0503 132.964 31.4668 131.753C11.2837 131.753 -0.712906 86.7012 3.06467 59.1387Z"
-      fill="#FFF1AC"
+      fill={fillColor}
       stroke="#3D2505"
       strokeWidth="3"
       strokeLinejoin="round"
