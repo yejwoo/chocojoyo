@@ -54,13 +54,9 @@ export default function Stage() {
   const [isDragging, setIsDragging] = useState(false);
   const [shift, setShift] = useState({ x: 0, y: 0 });
   const [stirCount, setStirCount] = useState(0);
-
-  // Stage 4
-  // 0 ~ 2 / x -> + 90
-  // 3 ~ 5 /
   const [pastryBagPosition, setPastryBagPosition] = useState({ x: 54, y: 72 });
   const [currentChocolateIndex, setCurrentChocolateIndex] = useState(0);
-  const [isPressing, setIsPressing] = useState(false);
+  const [isPastryBagHidden, setIsPastryBagHidden] = useState(false); // 짤주머니 숨김 여부
   const hasMovedRef = useRef(new Set());
   const chocolatePositions = [
     { x: 54, y: 72 },
@@ -400,7 +396,7 @@ export default function Stage() {
     if (index !== currentChocolateIndex) return; // 순서대로만 진행
 
     handleChocolateClick(index);
-    setIsPressing(true);
+    // setIsPressing(true);
 
     const growthInterval = 100;
     let interval;
@@ -417,7 +413,7 @@ export default function Stage() {
 
     const stopGrowing = () => {
       clearInterval(interval);
-      setIsPressing(false);
+      // setIsPressing(false);
     };
 
     window.addEventListener("mouseup", stopGrowing);
@@ -446,11 +442,9 @@ export default function Stage() {
   }, [currentChocolateIndex]);
 
   useEffect(() => {
-    if (
-      chocolateInfo.sizes.every((size) => size >= 100) && // 모든 초콜릿이 100%이면
-      !isCompleteEvent // 이미 완료 이벤트가 발생하지 않았다면
-    ) {
+    if (chocolateInfo.sizes.every((size) => size >= 100)) {
       setIsCompleteEvent(true); // Next 버튼 활성화
+      setIsPastryBagHidden(true); // 짤주머니 숨김
     }
   }, [chocolateInfo.sizes]);
 
@@ -737,6 +731,7 @@ export default function Stage() {
               >
                 <PastryBag
                   fillColor={chocolateColors[selectedColor].fill}
+                  className={`${isPastryBagHidden ? "hidden" : ""}`} // 모든 초콜릿 채우면 숨김
                   style={{
                     position: "absolute",
                     cursor: "grab",
