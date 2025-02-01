@@ -188,7 +188,7 @@ export const stageData = {
             초콜릿이 잘 녹았어요!
         `,
       modalConfig: null,
-      sequence: [{ type: "delay", value: 2000 }, { type: "nextSubStage" }],
+      sequence: [ { type: "nextSubStage" }],
       nextSubStage: "description",
       isFinal: false,
     },

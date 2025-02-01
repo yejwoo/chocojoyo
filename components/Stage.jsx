@@ -1,6 +1,6 @@
 import tailwindConfig from "../tailwind.config.mjs";
 import StageLayout from "./StageLayout";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Button from "./Button";
 import Modal from "./Modal";
@@ -54,6 +54,23 @@ export default function Stage() {
   const [isDragging, setIsDragging] = useState(false);
   const [shift, setShift] = useState({ x: 0, y: 0 });
   const [stirCount, setStirCount] = useState(0);
+
+  // Stage 4
+  // 0 ~ 2 / x -> + 90
+  // 3 ~ 5 /
+  const [pastryBagPosition, setPastryBagPosition] = useState({ x: 54, y: 72 });
+  const [currentChocolateIndex, setCurrentChocolateIndex] = useState(0);
+  const [isPressing, setIsPressing] = useState(false);
+  const hasMovedRef = useRef(new Set());
+  const chocolatePositions = [
+    { x: 54, y: 72 },
+    { x: 144, y: 72 },
+    { x: 233, y: 72 },
+    { x: 54, y: 154 },
+    { x: 144, y: 154 },
+    { x: 233, y: 154 },
+  ];
+
   const modalConfig = currentData.modalConfig;
   const chocolatColorsConfig = tailwindConfig.theme.extend.colors.chocolates;
   const chocolateColors = {
@@ -65,9 +82,9 @@ export default function Stage() {
       fill: chocolatColorsConfig.vanilla[100],
       border: chocolatColorsConfig.vanilla[200],
     },
-    greentea: {
-      fill: chocolatColorsConfig.greentea[100],
-      border: chocolatColorsConfig.greentea[200],
+    milk: {
+      fill: chocolatColorsConfig.milk[100],
+      border: chocolatColorsConfig.milk[200],
     },
     dark: {
       fill: chocolatColorsConfig.dark[100],
@@ -77,13 +94,13 @@ export default function Stage() {
       fill: chocolatColorsConfig.ruby[100],
       border: chocolatColorsConfig.ruby[200],
     },
-    milk: {
-      fill: chocolatColorsConfig.milk[100],
-      border: chocolatColorsConfig.milk[200],
-    },
     red: {
       fill: chocolatColorsConfig.red[100],
       border: chocolatColorsConfig.red[200],
+    },
+    greentea: {
+      fill: chocolatColorsConfig.greentea[100],
+      border: chocolatColorsConfig.greentea[200],
     },
   };
 
@@ -91,6 +108,7 @@ export default function Stage() {
   const [chocolateInfo, setChocolateInfo] = useState({
     shapes: ["heart"],
     colors: Array(6).fill("default"),
+    sizes: Array(6).fill(0),
     drawings: {},
     toppings: {},
   });
@@ -150,13 +168,14 @@ export default function Stage() {
   }, [chocolateInfo]);
 
   useEffect(() => {
-    if (stage.main === "stage3") {
-      document.body.classList.add("stage3");
+    const mainStage = Number(stage.main.split("stage")[1]);
+    if (mainStage >= 3) {
+      document.body.classList.add("block-scroll");
     } else {
-      document.body.classList.remove("stage3");
+      document.body.classList.remove("block-scroll");
     }
 
-    if (stage.main === "stage4") {
+    if (mainStage === 4) {
       setShapes(
         Array(6)
           .fill(null)
@@ -165,7 +184,7 @@ export default function Stage() {
     }
 
     return () => {
-      document.body.classList.remove("stage3");
+      document.body.classList.remove("block-scroll");
     };
   }, [stage.main, chocolateInfo.shapes]);
 
@@ -284,6 +303,8 @@ export default function Stage() {
     setChocolateInfo((prev) => {
       const updatedColors = [...prev.colors];
       updatedColors[index] = selectedColor;
+
+      console.log("📌 변경된 초콜릿 색상:", updatedColors); // 디버깅 로그
       return { ...prev, colors: updatedColors };
     });
   };
@@ -306,9 +327,10 @@ export default function Stage() {
    * 드래그 이벤트
    *
    */
+
   const handleStart = (e) => {
     e.preventDefault();
-    setIsDragging(true); // 드래그 시작
+    setIsDragging(true);
 
     // 이벤트 타입에 따라 좌표 가져오기
     const isTouchEvent = e.type === "touchstart";
@@ -329,10 +351,15 @@ export default function Stage() {
     const isTouchEvent = e.type === "touchmove";
     const clientX = isTouchEvent ? e.touches[0].clientX : e.clientX;
     const clientY = isTouchEvent ? e.touches[0].clientY : e.clientY;
+    const isStage4 = stage.main === "stage4";
 
-    const parent = e.target.parentElement.getBoundingClientRect();
-    const imgWidth = 100;
-    const imgHeight = 200;
+    const parent = isStage4
+      ? document.querySelector(".pastry-bag-area")?.getBoundingClientRect()
+      : e.target.parentElement.getBoundingClientRect();
+    if (!parent) return;
+
+    const imgWidth = isStage4 ? 114 : 100;
+    const imgHeight = isStage4 ? 155 : 200;
 
     // 이동 가능한 범위 계산
     const minX = 0;
@@ -363,6 +390,58 @@ export default function Stage() {
       setIsCompleteEvent(true);
     }
   };
+
+  /**
+   *
+   * 초콜릿 짜기 이벤트
+   *
+   */
+
+  const handleChocolatePress = (index) => {
+    if (index !== currentChocolateIndex) return; // 순서대로만 진행
+
+    handleChocolateClick(index);
+    setIsPressing(true);
+
+    const growthInterval = 100;
+    let interval;
+
+    interval = setInterval(() => {
+      setChocolateInfo((prev) => {
+        const updatedSizes = [...prev.sizes];
+        if (updatedSizes[index] < 100) {
+          updatedSizes[index] += 10;
+        }
+        return { ...prev, sizes: updatedSizes };
+      });
+    }, growthInterval);
+
+    const stopGrowing = () => {
+      clearInterval(interval);
+      setIsPressing(false);
+    };
+
+    window.addEventListener("mouseup", stopGrowing);
+    window.addEventListener("touchend", stopGrowing);
+  };
+
+  // 초콜릿이 100% 채워지면 다음 초콜릿으로 이동
+  useEffect(() => {
+    if (chocolateInfo.sizes[currentChocolateIndex] >= 100 && !hasMovedRef.current.has(currentChocolateIndex)) {
+      hasMovedRef.current.add(currentChocolateIndex); // 현재 인덱스 저장 (중복 실행 방지)
+  
+      setTimeout(() => {
+        if (currentChocolateIndex < chocolatePositions.length - 1) {
+          setCurrentChocolateIndex((prev) => prev + 1);
+        }
+      }, 300); // 0.3초 후 이동
+    }
+  }, [chocolateInfo.sizes, currentChocolateIndex]);
+
+  // 짤주머니 위치 업데이트
+  useEffect(() => {
+    setPastryBagPosition(chocolatePositions[currentChocolateIndex]);
+  }, [currentChocolateIndex]);
 
   return (
     <StageLayout
@@ -583,6 +662,10 @@ export default function Stage() {
                       <div
                         key={index}
                         onClick={() => handleChocolateClick(index)}
+                        onMouseDown={() => handleChocolatePress(index)}
+                        onTouchStart={() => handleChocolatePress(index)}
+                        onDragStart={(e) => e.preventDefault()}
+                        draggable={false}
                         className="flex-shrink-0 cursor-pointer relative w-16 h-14"
                       >
                         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -599,8 +682,12 @@ export default function Stage() {
                           <ShapeComponent
                             strokeColor={chocolateColors[color].border}
                             fillColor={chocolateColors[color].fill}
-                            width={64}
-                            height={56}
+                            width={
+                              (64 * (chocolateInfo.sizes[index] || 0)) / 100
+                            }
+                            height={
+                              (56 * (chocolateInfo.sizes[index] || 0)) / 100
+                            }
                           />
                         </div>
                       </div>
@@ -610,8 +697,31 @@ export default function Stage() {
                   })}
                 </div>
               </div>
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 cursor-pointer">
-                <PastryBag fillColor={chocolateColors[selectedColor].fill} />
+              <div
+                className="w-[343px] h-96 bottom-[-20px] pastry-bag-area absolute"
+                style={{ pointerEvents: "none" }}
+              >
+                <PastryBag
+                  fillColor={chocolateColors[selectedColor].fill}
+                  style={{
+                    position: "absolute",
+                    cursor: "grab",
+                    left: `${pastryBagPosition.x}px`,
+                    top: `${pastryBagPosition.y}px`,
+                    WebkitTouchCallout: "none",
+                    ouchAction: "none",
+                    pointerEvents: "auto",
+                  }}
+                  onClick={() => handleChocolateClick(currentChocolateIndex)}
+                  onMouseDown={() =>
+                    handleChocolatePress(currentChocolateIndex)
+                  }
+                  onTouchStart={() =>
+                    handleChocolatePress(currentChocolateIndex)
+                  }
+                  draggable={false}
+                  onDragStart={(e) => e.preventDefault()}
+                />
               </div>
             </>
           )}

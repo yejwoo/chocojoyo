@@ -12,7 +12,7 @@ body {
   background: #fec4c4;
 }
 
-body.stage3 {
+body.block-scroll {
   overscroll-behavior: none;
   overflow: hidden;
 }
