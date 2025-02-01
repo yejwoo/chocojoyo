@@ -37,32 +37,25 @@ export const stageData = {
    */
   stage1: {
     init: {
-      imgSrc: yantoBlink,
+      imgSrc: yantoHello,
       dialogue: `
-            안녕하세요, 얀토예요!<br/>
-            저와 함께 달콤한 초콜릿을<br/>
-            만들어볼까요?<br/>
+            안녕하세요!<br/>
+            저는 얀토예요.<br/>
         `,
       modalConfig: null,
-      sequence: [
-        { type: "delay", value: 1000 },
-        {
-          type: "showButton",
-          value: { shape: "rectangle", type: null, message: "좋아요!" },
-        },
-      ],
+      sequence: [{ type: "delay", value: 1500 }, { type: "nextSubStage" }],
       nextSubStage: "namePrompt",
       isFinal: false,
     },
     namePrompt: {
-      imgSrc: yantoThumb,
+      imgSrc: yantoBlink,
       dialogue: `
-            좋아요! 시작하기에 앞서<br/>
-            이름을 알려주세요.
+          어떤 이름으로<br/>
+          초콜릿을 전해드릴까요?
         `,
-      sequence: [{ type: "delay", value: 1000 }, { type: "showModal" }],
+      sequence: [{ type: "delay", value: 1200 }, { type: "showModal" }],
       modalConfig: {
-        title: "이름 입력",
+        title: "내 이름은...",
         type: "single",
         maxLength: 10,
       },
@@ -70,11 +63,10 @@ export const stageData = {
       isFinal: false,
     },
     message: {
-      imgSrc: yantoBlink,
+      imgSrc: yantoThumb,
       dialogue: `
-            _____님,<br/>
-            멋진 이름이네요.<br/>
-            초콜릿도 멋지게 만들어봐요!
+            멋진 이름이에요!<br/>
+            이제 시작해볼까요?
         `,
       modalConfig: null,
       sequence: [{ type: "delay", value: 2000 }, { type: "nextSubStage" }],
@@ -84,9 +76,8 @@ export const stageData = {
     description: {
       imgSrc: yantoBlink,
       dialogue: `
-            초콜릿 모양을 선택해주세요.<br/>
-            최소 1개 ~ 최대 6개까지<br/>
-            선택 가능합니다.
+            초콜릿 모양을<br/>
+            선택해주세요.
         `,
       modalConfig: null,
       sequence: [
@@ -110,19 +101,16 @@ export const stageData = {
   stage2: {
     init: {
       imgSrc: yantoThumb,
-      dialogue: `
-            _____님의 선택, <br/>
-            센스 만점인데요?
-        `,
+      dialogue: null,
       modalConfig: null,
-      sequence: [{ type: "delay", value: 2000 }, { type: "nextSubStage" }],
+      sequence: [{ type: "nextSubStage" }],
       nextSubStage: "description",
       isFinal: false,
     },
     description: {
       imgSrc: yantoBlink,
       dialogue: `
-            이제 칼을 터치해서<br/>
+            이제 칼을 눌러서<br/>
             초콜릿을 썰어주세요.
         `,
       modalConfig: null,
@@ -147,18 +135,16 @@ export const stageData = {
   stage3: {
     init: {
       imgSrc: yantoThumb,
-      dialogue: `
-            현란한 칼 솜씨, 대단해요!
-        `,
+      dialogue: null,
       modalConfig: null,
-      sequence: [{ type: "delay", value: 2000 }, { type: "nextSubStage" }],
+      sequence: [{ type: "nextSubStage" }],
       nextSubStage: "description",
       isFinal: false,
     },
     description: {
       imgSrc: yantoBlink,
       dialogue: `
-            초콜릿을 10번 저어주세요.<br/><br/>
+            초콜릿을 저어주세요.<br/><br/>
         `,
       modalConfig: null,
       sequence: [
@@ -169,7 +155,7 @@ export const stageData = {
           value: { shape: "circle", type: "arrow", message: null },
         },
       ],
-      nextSubStage: "description",
+      nextSubStage: null,
       nextMainStage: "stage4",
       isFinal: true,
     },
@@ -182,21 +168,17 @@ export const stageData = {
   stage4: {
     init: {
       imgSrc: yantoThumb,
-      dialogue: `
-            __________ 님의<br/>
-            따뜻한 마음이 더해져<br/>
-            초콜릿이 잘 녹았어요!
-        `,
+      dialogue: null,
       modalConfig: null,
-      sequence: [ { type: "nextSubStage" }],
+      sequence: [{ type: "nextSubStage" }],
       nextSubStage: "description",
       isFinal: false,
     },
     description: {
-      imgSrc: yantoBlink,
+      imgSrc: yantoSwing,
       dialogue: `
             짤주머니를 꾹 눌러<br/>
-            틀에 초콜릿을 채워주세요.
+            초콜릿을 채워주세요.
         `,
       modalConfig: null,
       sequence: [
@@ -207,8 +189,9 @@ export const stageData = {
           value: { shape: "circle", type: "arrow", message: null },
         },
       ],
-      nextSubStage: "description",
-      isFinal: false,
+      nextSubStage: null,
+      nextMainStage: "stage5",
+      isFinal: true,
     },
   },
   /**
@@ -216,11 +199,69 @@ export const stageData = {
    * =========================Stage 5=========================
    *
    */
+  stage5: {
+    init: {
+      imgSrc: yantoThumb,
+      dialogue: "",
+      modalConfig: null,
+      sequence: [{ type: "nextSubStage" }],
+      nextSubStage: "description",
+      isFinal: false,
+    },
+    description: {
+      imgSrc: yantoSwing,
+      dialogue: `
+            거의 다 왔어요.<br/>
+            초콜릿을 꾸며주세요.
+        `,
+      modalConfig: null,
+      sequence: [
+        { type: "delay", value: 1000 },
+        { type: "showItems" },
+        {
+          type: "showButton",
+          value: { shape: "circle", type: "arrow", message: null },
+        },
+      ],
+      nextSubStage: null,
+      nextMainStage: "stage6",
+      isFinal: true,
+    },
+  },
   /**
    *
    * =========================Stage 6=========================
    *
    */
+  stage6: {
+    init: {
+      imgSrc: yantoThumb,
+      dialogue: "",
+      modalConfig: null,
+      sequence: [{ type: "nextSubStage" }],
+      nextSubStage: "description",
+      isFinal: false,
+    },
+    description: {
+      imgSrc: yantoSwing,
+      dialogue: `
+            마지막이에요.<br/>
+            상자를 꾸며주세요.
+        `,
+      modalConfig: null,
+      sequence: [
+        { type: "delay", value: 1000 },
+        { type: "showItems" },
+        {
+          type: "showButton",
+          value: { shape: "circle", type: "arrow", message: null },
+        },
+      ],
+      nextSubStage: null,
+      nextMainStage: "stage7",
+      isFinal: true,
+    },
+  },
   /**
    *
    * =========================Stage 7(Share)=========================
@@ -269,7 +310,6 @@ export const stageItems = {
         variant: "cat",
       },
     ],
-    guides: null,
   },
   stage2: {
     tool: {
@@ -289,13 +329,6 @@ export const stageItems = {
       { imgSrc: chocolate6, alt: "초콜릿 썰기", type: "chop", variant: null },
       { imgSrc: chocolate7, alt: "초콜릿 썰기", type: "chop", variant: null },
     ],
-    guides: {
-      imgSrc: arrowDown,
-      alt: "칼질 방향",
-      positions: {
-        step: { right: 20 },
-      },
-    },
   },
   stage3: {
     tool: {
@@ -325,44 +358,5 @@ export const stageItems = {
         variant: null,
       },
     ],
-    guides: {
-      imgSrc: arrow,
-      alt: "중탕 방향",
-      positions: null,
-    },
-  },
-  stage4: {
-    tool: {
-      off: { imgSrc: spatula, alt: "스패출라" },
-      on: null,
-      alt: "스패츌라",
-      position: null,
-      action: "move",
-    },
-    items: [
-      {
-        imgSrc: doubleBoiler1,
-        alt: "초콜릿 중탕",
-        type: "stir",
-        variant: null,
-      },
-      {
-        imgSrc: doubleBoiler2,
-        alt: "초콜릿 중탕",
-        type: "stir",
-        variant: null,
-      },
-      {
-        imgSrc: doubleBoiler3,
-        alt: "초콜릿 중탕",
-        type: "stir",
-        variant: null,
-      },
-    ],
-    guides: {
-      imgSrc: arrow,
-      alt: "중탕 방향",
-      positions: null,
-    },
-  },
+  }
 };

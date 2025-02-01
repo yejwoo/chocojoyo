@@ -17,11 +17,12 @@ import {
 import { stageData, stageItems } from "@/data/Stage";
 import { Shapes } from "@/public/icons/shapes";
 import mold from "@/public/images/stage4/chocolate-mold.svg";
+import box from "@/public/images/stage5/box.svg";
 import { PastryBag } from "@/public/images/stage4";
 
 export default function Stage() {
   const [stage, setStage] = useState({
-    main: "stage4",
+    main: "stage1",
     sub: "init",
   });
   const [buttonConfig, setButtonConfig] = useState({
@@ -32,10 +33,6 @@ export default function Stage() {
   // @TODO: 상태들 객체로 합치기
   const [currentIndex, setCurrentIndex] = useState(0);
   const [toolState, setToolState] = useState("off");
-  const [currentGuidePosition, setCurrentGuidePosition] = useState({
-    top: 40,
-    right: 60,
-  });
   const [currentToolPosition, setCurrentToolPosition] = useState({
     top: 90,
     right: 64,
@@ -102,7 +99,7 @@ export default function Stage() {
 
   const [selectedColor, setSelectedColor] = useState("vanilla");
   const [chocolateInfo, setChocolateInfo] = useState({
-    shapes: ["heart"],
+    shapes: [],
     colors: Array(6).fill("default"),
     sizes: Array(6).fill(0),
     drawings: {},
@@ -134,7 +131,7 @@ export default function Stage() {
 
   useEffect(() => {
     const runSequence = async () => {
-      await delay(1500);
+      await delay(1200);
       setIsTalkBubbleShow(true);
 
       const { main, sub } = stage;
@@ -236,7 +233,9 @@ export default function Stage() {
     setIsShowModal(false);
     setIsShowItems(false);
     setIsCompleteEvent(false);
+    setIsPastryBagHidden(false);
     setCurrentIndex(0);
+    setCurrentChocolateIndex(0);
     setButtonConfig({
       shape: "rectangle",
       type: null,
@@ -270,17 +269,12 @@ export default function Stage() {
 
   const handleChop = () => {
     const toolStep = stageItems[stage.main].tool.positions.step;
-    const guideStep = stageItems[stage.main].guides.positions.step;
 
     if (currentIndex < stageItems[stage.main].items.length - 1) {
       setCurrentIndex((prev) => prev + 1);
       setCurrentToolPosition({
         top: currentToolPosition.top,
         right: currentToolPosition.right + toolStep.right,
-      });
-      setCurrentGuidePosition({
-        top: currentGuidePosition.top,
-        right: currentGuidePosition.right + guideStep.right,
       });
     }
     if (currentIndex === stageItems[stage.main].items.length - 2)
@@ -478,7 +472,7 @@ export default function Stage() {
           <div className="absolute bottom-[436px] right-3 w-48">
             <Image className="" src={talkBubbleBodySm} alt="말풍선" />
             <p
-              className="absolute left-4 top-1/2 -translate-y-1/2 leading-6 text-xl"
+              className="absolute left-4 top-1/2 -translate-y-1/2  text-2xl"
               dangerouslySetInnerHTML={{ __html: currentData.dialogue }}
               onDragStart={(e) => e.preventDefault()}
               draggable={false}
@@ -573,18 +567,6 @@ export default function Stage() {
                     alt={stageItems[stage.main].tool[toolState].alt}
                   />
                 </div>
-              </div>
-              <div
-                className="w-10 absolute"
-                style={{
-                  top: `${currentGuidePosition.top}px`,
-                  right: `${currentGuidePosition.right}px`,
-                }}
-              >
-                <Image
-                  src={stageItems[stage.main].guides.imgSrc}
-                  alt={stageItems[stage.main].guides.alt}
-                />
               </div>
             </>
           )}
@@ -758,10 +740,94 @@ export default function Stage() {
 
           {/* Stage 5 렌더링 */}
           {stage.main === "stage5" && (
-            <div className="relative">
-              {/* Stage5 관련 UI 추가 */}
-              <p>Stage 5 Content</p>
-            </div>
+            <>
+              <div className="relative w-72 h-56">
+                <Image
+                  src={box}
+                  alt="초콜릿 틀"
+                  width={280}
+                  height={280}
+                  className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2"
+                  onDragStart={(e) => e.preventDefault()}
+                  draggable={false}
+                  style={{
+                    pointerEvents: "none",
+                    WebkitTouchCallout: "none",
+                    TouchAction: "none",
+                  }}
+                />
+                {/* 초콜릿들 */}
+                <div className="w-full flex justify-center items-center flex-wrap absolute gap-x-2 gap-y-2 top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
+                  {shapes.map((item, index) => {
+                    const name = item[0].toUpperCase() + item.slice(1);
+                    const ShapeComponent = Shapes[name];
+                    const color = chocolateInfo.colors[index];
+
+                    return ShapeComponent ? (
+                      <div
+                        key={index}
+                        onClick={() => handleChocolateClick(index)}
+                        onMouseDown={() => handleChocolatePress(index)}
+                        onTouchStart={() => handleChocolatePress(index)}
+                        onDragStart={(e) => e.preventDefault()}
+                        draggable={false}
+                        className="flex-shrink-0 cursor-pointer relative w-[80px] h-[76px] bg-gray-warm-300 rounded-xl"
+                        style={{
+                          pointerEvents: "none",
+                          WebkitTouchCallout: "none",
+                          TouchAction: "none",
+                        }}
+                      >
+                        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+                          <ShapeComponent
+                            draggable={false}
+                            onDragStart={(e) => e.preventDefault()}
+                            strokeColor={chocolateColors[color].border}
+                            fillColor={chocolateColors[color].fill}
+                            width={
+                              (64 * (chocolateInfo.sizes[index] || 0)) / 100
+                            }
+                            height={
+                              (56 * (chocolateInfo.sizes[index] || 0)) / 100
+                            }
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      console.warn(`${name} 컴포넌트 없음`) || null
+                    );
+                  })}
+                </div>
+              </div>
+              {/* <div
+                className="w-[343px] h-96 bottom-[-20px] pastry-bag-area absolute"
+                style={{ pointerEvents: "none" }}
+              >
+                <PastryBag
+                  fillColor={chocolateColors[selectedColor].fill}
+                  className={`${isPastryBagHidden ? "hidden" : ""}`} // 모든 초콜릿 채우면 숨김
+                  style={{
+                    position: "absolute",
+                    cursor: "grab",
+                    left: `${pastryBagPosition.x}px`,
+                    top: `${pastryBagPosition.y}px`,
+                    WebkitTouchCallout: "none",
+                    TouchAction: "none",
+                    pointerEvents: "auto",
+                    userSelect: "none",
+                  }}
+                  onClick={() => handleChocolateClick(currentChocolateIndex)}
+                  onMouseDown={() =>
+                    handleChocolatePress(currentChocolateIndex)
+                  }
+                  onTouchStart={() =>
+                    handleChocolatePress(currentChocolateIndex)
+                  }
+                  draggable={false}
+                  onDragStart={(e) => e.preventDefault()}
+                />
+              </div> */}
+            </>
           )}
 
           {/* Stage 6 렌더링 */}
@@ -774,27 +840,17 @@ export default function Stage() {
         </div>
       )}
       {/* 버튼 */}
-      {isShowButton &&
-        (stage.main === "stage1" && stage.sub === "init" ? (
-          <div className="absolute left-1/2 -translate-x-1/2 bottom-[25%] animate-bounce-up-once">
-            <Button
-              onClick={handleNextSubStage}
-              shape={buttonConfig.shape}
-              type={buttonConfig.type}
-              message={buttonConfig.message}
-            />
-          </div>
-        ) : (
-          <div className="absolute right-10 bottom-20">
-            <Button
-              disabled={!isCompleteEvent}
-              onClick={handleNextMainStage}
-              shape={buttonConfig.shape}
-              type={buttonConfig.type}
-              message={buttonConfig.message}
-            />
-          </div>
-        ))}
+      {isShowButton && (
+        <div className="absolute right-10 bottom-16">
+          <Button
+            disabled={!isCompleteEvent}
+            onClick={handleNextMainStage}
+            shape={buttonConfig.shape}
+            type={buttonConfig.type}
+            message={buttonConfig.message}
+          />
+        </div>
+      )}
       {/* 상단 네비게이션 */}
       {isShowNavi && (
         <Navi
@@ -804,9 +860,13 @@ export default function Stage() {
       )}
       {/* 하단 네비게이션 */}
       {isShowItems &&
-        stage.main === "stage4" &&
+        Number(stage.main.split("stage")[1]) >= 4 &&
         stage.sub === "description" && (
-          <div className="absolute bg-popup-100 left-0 right-0 h-16 bottom-0">
+          <div
+            className={`absolute bg-popup-100 left-0 right-0 h-16 bottom-0 ${
+              isPastryBagHidden ? "hidden" : ""
+            }`}
+          >
             <div className="flex gap-7 justify-center items-center w-full h-full">
               {Object.keys(chocolateColors)
                 .filter((item) => item !== "default")
