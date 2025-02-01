@@ -10,6 +10,11 @@ body {
   font-size: 16px;
   color: #3D2505;
   background: #fec4c4;
+  -webkit-touch-callout: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none; 
+  -ms-user-select: none; 
 }
 
 body.block-scroll {

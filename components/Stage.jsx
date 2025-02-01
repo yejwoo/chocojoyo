@@ -188,10 +188,6 @@ export default function Stage() {
     };
   }, [stage.main, chocolateInfo.shapes]);
 
-  useEffect(() => {
-    console.log(chocolateColors[selectedColor].fill);
-  }, [selectedColor]);
-
   const handleNextSubStage = () => {
     const { main, sub } = stage;
     const nextSubStage = stageData[main][sub]?.nextSubStage;
@@ -302,9 +298,12 @@ export default function Stage() {
   const handleChocolateClick = (index) => {
     setChocolateInfo((prev) => {
       const updatedColors = [...prev.colors];
-      updatedColors[index] = selectedColor;
 
-      console.log("📌 변경된 초콜릿 색상:", updatedColors); // 디버깅 로그
+      // 이미 100% 채워진 초콜릿은 색상 변경 불가
+      if (prev.sizes[index] < 100) {
+        updatedColors[index] = selectedColor;
+      }
+
       return { ...prev, colors: updatedColors };
     });
   };
@@ -427,9 +426,12 @@ export default function Stage() {
 
   // 초콜릿이 100% 채워지면 다음 초콜릿으로 이동
   useEffect(() => {
-    if (chocolateInfo.sizes[currentChocolateIndex] >= 100 && !hasMovedRef.current.has(currentChocolateIndex)) {
+    if (
+      chocolateInfo.sizes[currentChocolateIndex] >= 100 &&
+      !hasMovedRef.current.has(currentChocolateIndex)
+    ) {
       hasMovedRef.current.add(currentChocolateIndex); // 현재 인덱스 저장 (중복 실행 방지)
-  
+
       setTimeout(() => {
         if (currentChocolateIndex < chocolatePositions.length - 1) {
           setCurrentChocolateIndex((prev) => prev + 1);
@@ -442,6 +444,15 @@ export default function Stage() {
   useEffect(() => {
     setPastryBagPosition(chocolatePositions[currentChocolateIndex]);
   }, [currentChocolateIndex]);
+
+  useEffect(() => {
+    if (
+      chocolateInfo.sizes.every((size) => size >= 100) && // 모든 초콜릿이 100%이면
+      !isCompleteEvent // 이미 완료 이벤트가 발생하지 않았다면
+    ) {
+      setIsCompleteEvent(true); // Next 버튼 활성화
+    }
+  }, [chocolateInfo.sizes]);
 
   return (
     <StageLayout
@@ -475,6 +486,8 @@ export default function Stage() {
             <p
               className="absolute left-4 top-1/2 -translate-y-1/2 leading-6 text-xl"
               dangerouslySetInnerHTML={{ __html: currentData.dialogue }}
+              onDragStart={(e) => e.preventDefault()}
+              draggable={false}
             />
           </div>
           <div className="absolute bottom-[444px] right-[196px] w-7">
@@ -622,7 +635,7 @@ export default function Stage() {
                     left: `${position.x}px`,
                     top: `${position.y}px`,
                     WebkitTouchCallout: "none",
-                    ouchAction: "none",
+                    TouchAction: "none",
                   }}
                   className="w-32 cursor-pointer"
                   onMouseDown={handleStart}
@@ -650,6 +663,13 @@ export default function Stage() {
                   width={280}
                   height={280}
                   className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2"
+                  onDragStart={(e) => e.preventDefault()}
+                  draggable={false}
+                  style={{
+                    pointerEvents: "none",
+                    WebkitTouchCallout: "none",
+                    TouchAction: "none",
+                  }}
                 />
                 {/* 초콜릿들 */}
                 <div className="w-full flex justify-center items-center flex-wrap absolute gap-6 top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
@@ -667,19 +687,33 @@ export default function Stage() {
                         onDragStart={(e) => e.preventDefault()}
                         draggable={false}
                         className="flex-shrink-0 cursor-pointer relative w-16 h-14"
+                        style={{
+                          pointerEvents: "none",
+                          WebkitTouchCallout: "none",
+                          TouchAction: "none",
+                        }}
                       >
                         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
                           {/* 틀 */}
                           <ShapeComponent
+                            style={{
+                              pointerEvents: "none",
+                              WebkitTouchCallout: "none",
+                              TouchAction: "none",
+                            }}
                             strokeColor={chocolateColors.default.border}
                             fillColor={chocolateColors.default.fill}
                             width={64}
                             height={56}
+                            draggable={false}
+                            onDragStart={(e) => e.preventDefault()}
                           />
                         </div>
                         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
                           {/* 실제 초콜릿 */}
                           <ShapeComponent
+                            draggable={false}
+                            onDragStart={(e) => e.preventDefault()}
                             strokeColor={chocolateColors[color].border}
                             fillColor={chocolateColors[color].fill}
                             width={
@@ -709,8 +743,9 @@ export default function Stage() {
                     left: `${pastryBagPosition.x}px`,
                     top: `${pastryBagPosition.y}px`,
                     WebkitTouchCallout: "none",
-                    ouchAction: "none",
+                    TouchAction: "none",
                     pointerEvents: "auto",
+                    userSelect: "none",
                   }}
                   onClick={() => handleChocolateClick(currentChocolateIndex)}
                   onMouseDown={() =>
@@ -784,8 +819,12 @@ export default function Stage() {
                   <div
                     key={item}
                     onClick={() => setSelectedColor(item)}
-                    className={`cursor-pointer rounded-full border-2 w-8 h-8 bg-chocolates-${item}-100 border-chocolates-${item}-200
+                    className={`cursor-pointer rounded-full border-2 w-8 h-8
                   ${selectedColor === item ? "ring-4 ring-brand-200" : ""}`}
+                    style={{
+                      backgroundColor: chocolateColors[item].fill,
+                      borderColor: chocolateColors[item].border,
+                    }}
                   ></div>
                 ))}
             </div>
