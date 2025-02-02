@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { bottomNaviData } from "@/data/Stage";
 
-const ChocolateCanvas = ({ isSelected, strokeColor = "vanilla", onSave }) => {
+const Canvas = ({ isSelected, isZoomMode, strokeColor = "vanilla", onSave }) => {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -17,12 +17,10 @@ const ChocolateCanvas = ({ isSelected, strokeColor = "vanilla", onSave }) => {
 
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
-    ctx.lineWidth = 4;
-
+    ctx.lineWidth = 2;
     contextRef.current = ctx;
   }, []);
 
-  // 초코펜 색상 변경
   useEffect(() => {
     if (contextRef.current) {
       contextRef.current.strokeStyle =
@@ -30,18 +28,42 @@ const ChocolateCanvas = ({ isSelected, strokeColor = "vanilla", onSave }) => {
     }
   }, [strokeColor]);
 
+ const getCoordinates = (e) => {
+  if (!canvasRef.current) return { x: 0, y: 0 };
+
+  const rect = canvasRef.current.getBoundingClientRect();
+  const scaleX = canvasRef.current.width / rect.width;  // 스케일 비율
+  const scaleY = canvasRef.current.height / rect.height;
+
+  let clientX, clientY;
+  if (e.touches) {
+    clientX = e.touches[0].clientX;
+    clientY = e.touches[0].clientY;
+  } else {
+    clientX = e.clientX;
+    clientY = e.clientY;
+  }
+
+  return {
+    x: (clientX - rect.left) * scaleX,
+    y: (clientY - rect.top) * scaleY,
+  };
+};
+
+
   const startDrawing = (e) => {
     e.preventDefault();
-    const { offsetX, offsetY } = getTouchPos(e);
+    const { x, y } = getCoordinates(e);
     contextRef.current.beginPath();
-    contextRef.current.moveTo(offsetX, offsetY);
+    contextRef.current.moveTo(x, y);
     setIsDrawing(true);
   };
 
   const draw = (e) => {
     if (!isDrawing) return;
-    const { offsetX, offsetY } = getTouchPos(e);
-    contextRef.current.lineTo(offsetX, offsetY);
+    e.preventDefault();
+    const { x, y } = getCoordinates(e);
+    contextRef.current.lineTo(x, y);
     contextRef.current.stroke();
   };
 
@@ -55,35 +77,23 @@ const ChocolateCanvas = ({ isSelected, strokeColor = "vanilla", onSave }) => {
     }
   };
 
-  const getTouchPos = (e) => {
-    if (e.touches) {
-      const rect = canvasRef.current.getBoundingClientRect();
-      return {
-        offsetX: e.touches[0].clientX - rect.left,
-        offsetY: e.touches[0].clientY - rect.top,
-      };
-    }
-    return e.nativeEvent;
-  };
-
   return (
     <canvas
       ref={canvasRef}
+      className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 ${
+        isSelected && isZoomMode ? "scale-[2] transition duration-200 ease-in-out" : ""
+      }`}
+      width={64}
+      height={56}
+      onTouchStart={startDrawing}
+      onTouchMove={draw}
+      onTouchEnd={stopDrawing}
       onMouseDown={startDrawing}
       onMouseMove={draw}
       onMouseUp={stopDrawing}
       onMouseLeave={stopDrawing}
-      onTouchStart={startDrawing}
-      onTouchMove={draw}
-      onTouchEnd={stopDrawing}
-      className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 border-none"
-      width={64}
-      height={56}
-      //   style={{
-      //     display: isSelected ? "block" : "none", // 선택된 초콜릿에서만 캔버스 표시
-      //   }}
     />
   );
 };
 
-export default ChocolateCanvas;
+export default Canvas;

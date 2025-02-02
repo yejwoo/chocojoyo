@@ -1,6 +1,13 @@
 export const Shapes = {
-  Bear: ({ strokeColor = "#3D2505", fillColor = "#894E00", width = 200, height = 180 }) => (
+  Bear: ({
+    strokeColor = "#3D2505",
+    fillColor = "#894E00",
+    width = 200,
+    height = 180,
+    className = "",
+  }) => (
     <svg
+      className={className}
       width={width}
       height={height}
       xmlns="http://www.w3.org/2000/svg"
@@ -26,8 +33,15 @@ export const Shapes = {
       ></path>
     </svg>
   ),
-  Cat: ({ strokeColor = "#3D2505", fillColor = "#894E00", width = 200, height = 180 }) => (
+  Cat: ({
+    strokeColor = "#3D2505",
+    fillColor = "#894E00",
+    width = 200,
+    height = 180,
+    className = "",
+  }) => (
     <svg
+      className={className}
       width={width}
       height={height}
       xmlns="http://www.w3.org/2000/svg"
@@ -45,8 +59,15 @@ export const Shapes = {
       />
     </svg>
   ),
-  Circle: ({ strokeColor = "#3D2505", fillColor = "#894E00", width = 200, height = 180 }) => (
+  Circle: ({
+    strokeColor = "#3D2505",
+    fillColor = "#894E00",
+    width = 200,
+    height = 180,
+    className = "",
+  }) => (
     <svg
+      className={className}
       width={width}
       height={height}
       viewBox="0 0 191 181"
@@ -60,8 +81,15 @@ export const Shapes = {
       />
     </svg>
   ),
-  Heart: ({ strokeColor = "#3D2505", fillColor = "#894E00", width = 200, height = 180 }) => (
+  Heart: ({
+    strokeColor = "#3D2505",
+    fillColor = "#894E00",
+    width = 200,
+    height = 180,
+    className = "",
+  }) => (
     <svg
+      className={className}
       width={width}
       height={height}
       viewBox="0 0 211 182"
@@ -79,8 +107,15 @@ export const Shapes = {
       />
     </svg>
   ),
-  Rabbit: ({ strokeColor = "#3D2505", fillColor = "#894E00", width = 200, height = 180 }) => (
+  Rabbit: ({
+    strokeColor = "#3D2505",
+    fillColor = "#894E00",
+    width = 200,
+    height = 180,
+    className = "",
+  }) => (
     <svg
+      className={className}
       width={width}
       height={height}
       viewBox="0 0 201 187"
@@ -106,8 +141,15 @@ export const Shapes = {
       />
     </svg>
   ),
-  Square: ({ strokeColor = "#3D2505", fillColor = "#894E00", width = 200, height = 180 }) => (
+  Square: ({
+    strokeColor = "#3D2505",
+    fillColor = "#894E00",
+    width = 200,
+    height = 180,
+    className = "",
+  }) => (
     <svg
+      className={className}
       width={width}
       height={height}
       viewBox="0 0 191 181"

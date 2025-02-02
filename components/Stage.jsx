@@ -33,33 +33,35 @@ export default function Stage() {
   });
   // @TODO: 상태들 객체로 합치기
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [toolState, setToolState] = useState("off");
-  const [currentToolPosition, setCurrentToolPosition] = useState({
-    top: 90,
-    right: 64,
-  });
   const [completedStages, setCompletedStages] = useState([]);
+
+  const [isPastryBagHidden, setIsPastryBagHidden] = useState(false); // 짤주머니 숨김 여부
+
+  // ref
+  const hasMovedRef = useRef(new Set());
+  const moldRef = useRef(null);
+
+  // 불리언 데이터
+  const [toolState, setToolState] = useState("off");
   const [isTalkBubbleShow, setIsTalkBubbleShow] = useState(false);
   const [isShowButton, setIsShowButton] = useState(false);
   const [isShowModal, setIsShowModal] = useState(false);
   const [isShowItems, setIsShowItems] = useState(false);
   const [isShowNavi, setIsShowNavi] = useState(false);
-  const [inputValue, setInputValue] = useState("");
-  const [isSubmitEnabled, setIsSubmitEnabled] = useState(false);
   const [isCompleteEvent, setIsCompleteEvent] = useState(false);
-  const [position, setPosition] = useState({ x: 100, y: 120 });
   const [isDragging, setIsDragging] = useState(false);
-  const [shift, setShift] = useState({ x: 0, y: 0 });
+  const [isSubmitEnabled, setIsSubmitEnabled] = useState(false);
+  const [isZoomMode, setIsZoomMode] = useState(false);
   const [stirCount, setStirCount] = useState(0);
-  const [pastryBagPosition, setPastryBagPosition] = useState({ x: 54, y: 72 });
 
   // current 데이터
   const currentData = stageData[stage.main][stage.sub];
-  const [currentChocolateIndex, setCurrentChocolateIndex] = useState(0);
+  const [currentChocolateIndex, setCurrentChocolateIndex] = useState(null);
   const [currentTabIndex, setCurrentTabIndex] = useState(0);
+  const [selectedColor, setSelectedColor] = useState("vanilla");
 
-  const [isPastryBagHidden, setIsPastryBagHidden] = useState(false); // 짤주머니 숨김 여부
-  const hasMovedRef = useRef(new Set());
+  // 위치 데이터
+  const [penPosition, setPenPosition] = useState({ x: 100, y: 300 });
   const chocolatePositions = [
     { x: 54, y: 72 },
     { x: 144, y: 72 },
@@ -68,8 +70,16 @@ export default function Stage() {
     { x: 144, y: 154 },
     { x: 233, y: 154 },
   ];
+  const [currentToolPosition, setCurrentToolPosition] = useState({
+    top: 90,
+    right: 64,
+  });
+  const [position, setPosition] = useState({ x: 100, y: 120 });
+  const [shift, setShift] = useState({ x: 0, y: 0 });
+  const [pastryBagPosition, setPastryBagPosition] = useState({ x: 54, y: 72 });
+
   const modalConfig = currentData.modalConfig;
-  const [selectedColor, setSelectedColor] = useState("vanilla");
+
   // const [chocolateInfo, setChocolateInfo] = useState({
   //   shapes: [],
   //   colors: Array(6).fill("default"),
@@ -85,11 +95,12 @@ export default function Stage() {
     toppings: {}, // 토핑 저장 (초기에는 빈 객체)
   });
   const [shapes, setShapes] = useState([]);
+
+  // 폼 정보
+  const [inputValue, setInputValue] = useState("");
   const [formData, setFormData] = useState({
     username: "",
     card: "",
-    receiver: "",
-    chocolateName: "",
   });
 
   const actionHandlers = {
@@ -214,7 +225,7 @@ export default function Stage() {
     setIsCompleteEvent(false);
     setIsPastryBagHidden(false);
     setCurrentIndex(0);
-    setCurrentChocolateIndex(0);
+    setCurrentChocolateIndex(main === "stage5" ? null : 0);
     setSelectedColor("vanilla");
     setButtonConfig({
       shape: "rectangle",
@@ -396,6 +407,8 @@ export default function Stage() {
 
   // 초콜릿이 100% 채워지면 다음 초콜릿으로 이동
   useEffect(() => {
+    if (stage.main !== "stage4") return;
+
     if (
       chocolateInfo.sizes[currentChocolateIndex] >= 100 &&
       !hasMovedRef.current.has(currentChocolateIndex)
@@ -434,6 +447,29 @@ export default function Stage() {
         [currentChocolateIndex]: imageData,
       },
     }));
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (moldRef.current && !moldRef.current.contains(event.target)) {
+        setCurrentChocolateIndex(null); // 초콜릿 영역 외 클릭 시 원상복귀
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, []);
+
+  const handleChocolateDoubleClick = (index) => {
+    setCurrentChocolateIndex((prevIndex) => {
+      if (prevIndex === index) return prevIndex; // 이미 선택된 상태면 그대로 유지
+      return index;
+    });
   };
 
   return (
@@ -743,7 +779,10 @@ export default function Stage() {
           {/* Stage 5 렌더링 */}
           {stage.main === "stage5" && (
             <>
-              <div className="relative w-72 h-56">
+                {/* <div
+                className={`transition-transform duration-300 ${isZoomMode ? "scale-[2] overflow-scroll" : ""} relative w-72 h-56`}
+                ref */}
+              <div className="relative w-72 h-56 transition-transform duration-300" ref={moldRef}>
                 <Image
                   src={box}
                   alt="초콜릿 틀"
@@ -764,22 +803,27 @@ export default function Stage() {
                     const name = item[0].toUpperCase() + item.slice(1);
                     const ShapeComponent = Shapes[name];
                     const color = chocolateInfo.colors[index];
+                    const isSelected = currentChocolateIndex === index;
 
                     return ShapeComponent ? (
                       <div
                         key={index}
-                        onClick={() => setCurrentChocolateIndex(index)}
+                        onMouseOver={()=>setCurrentChocolateIndex(index)}
+                        onMouseLeave={()=>setCurrentChocolateIndex(null)}
                         onDragStart={(e) => e.preventDefault()}
                         draggable={false}
-                        className="flex-shrink-0 cursor-pointer relative w-[80px] h-[76px] bg-gray-warm-300 rounded-xl"
+                        className="flex-shrink-0 cursor-chocopen relative w-[80px] h-[76px] bg-gray-warm-300 rounded-xl"
                         style={{
                           WebkitTouchCallout: "none",
                           TouchAction: "none",
                         }}
                       >
-                        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+                        <div
+                          className={`${isZoomMode && isSelected ? "z-10" : ""} absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2`}
+                        >
                           <ShapeComponent
                             draggable={false}
+                            className={isZoomMode && isSelected ? 'scale-[2] transition duration-200 ease-in-out' : ''}
                             onDragStart={(e) => e.preventDefault()}
                             strokeColor={
                               bottomNaviData.stage4[0].data[color].border
@@ -796,7 +840,8 @@ export default function Stage() {
                           />
                         </div>
                         <Canvas
-                          isSelected={currentChocolateIndex === index}
+                          isSelected={isSelected}
+                          isZoomMode={isZoomMode}
                           strokeColor={selectedColor}
                           onSave={handleSaveDrawing}
                         />
@@ -806,37 +851,17 @@ export default function Stage() {
                     );
                   })}
                 </div>
-               
               </div>
-              <div
-                className="w-[343px] h-96 bottom-[-20px] pastry-bag-area absolute"
-                style={{ pointerEvents: "none" }}
-              >
-                <ChocoPen
-                  fillColor={bottomNaviData.stage5[0].data[selectedColor].fill}
-                  // className={`${isPastryBagHidden ? "hidden" : ""}`} // 모든 초콜릿 채우면 숨김
-                  // style={{
-                  //   position: "absolute",
-                  //   cursor: "grab",
-                  //   left: `${pastryBagPosition.x}px`,
-                  //   top: `${pastryBagPosition.y}px`,
-                  //   WebkitTouchCallout: "none",
-                  //   TouchAction: "none",
-                  //   pointerEvents: "auto",
-                  //   userSelect: "none",
-                  // }}
-                  // onClick={() => handleChocolateClick(currentChocolateIndex)}
-                  // onMouseDown={() =>
-                  //   handleChocolatePress(currentChocolateIndex)
-                  // }
-                  // onTouchStart={() =>
-                  //   handleChocolatePress(currentChocolateIndex)
-                  // }
-                  draggable={false}
-                  onDragStart={(e) => e.preventDefault()}
-                />
-              </div>
-
+              {/* <ChocoPen
+                className="absolute pointer-events-none "
+                id="chocoPen"
+                style={{
+                  transform: "translate(-50%, -90%)", // 중심을 아래쪽으로 맞춤
+                  left: "50%",
+                  top: "50%",
+                  opacity: 0,
+                }}
+              /> */}
             </>
           )}
 
@@ -851,7 +876,7 @@ export default function Stage() {
       )}
       {/* 버튼 */}
       {isShowButton && (
-        <div className="absolute right-10 bottom-16">
+        <div className="absolute right-4 top-[46%]">
           <Button
             disabled={!isCompleteEvent}
             onClick={handleNextMainStage}
@@ -965,7 +990,14 @@ export default function Stage() {
                 })}
               </div>
             </div>
+          <button
+          onClick={() => setIsZoomMode((prev) => !prev)}
+          className={`absolute p-3 right-4 bottom-16 ${isZoomMode ? "bg-blue-700" : "bg-blue-300"}`}
+        >
+          🔍 돋보기
+        </button>
           </div>
+        
         )}
     </StageLayout>
   );
