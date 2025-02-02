@@ -31,63 +31,40 @@ export default function Stage() {
     type: null,
     message: "",
   });
-  // @TODO: 상태들 객체로 합치기
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [completedStages, setCompletedStages] = useState([]);
 
-  const [isPastryBagHidden, setIsPastryBagHidden] = useState(false); // 짤주머니 숨김 여부
-
-  // ref
-  const hasMovedRef = useRef(new Set());
-  const moldRef = useRef(null);
-
-  // 불리언 데이터
-  const [toolState, setToolState] = useState("off");
-  const [isTalkBubbleShow, setIsTalkBubbleShow] = useState(false);
-  const [isShowButton, setIsShowButton] = useState(false);
-  const [isShowModal, setIsShowModal] = useState(false);
-  const [isShowItems, setIsShowItems] = useState(false);
-  const [isShowNavi, setIsShowNavi] = useState(false);
-  const [isCompleteEvent, setIsCompleteEvent] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
-  const [isSubmitEnabled, setIsSubmitEnabled] = useState(false);
-  const [isZoomMode, setIsZoomMode] = useState(false);
-  const [stirCount, setStirCount] = useState(0);
-
-  // current 데이터
-  const currentData = stageData[stage.main][stage.sub];
-  const [currentChocolateIndex, setCurrentChocolateIndex] = useState(null);
-  const [currentTabIndex, setCurrentTabIndex] = useState(0);
-  const [currentColor, setCurrentColor] = useState("vanilla");
-  const [currentTopping, setCurrentTopping] = useState("");
-
-  // 위치 데이터
-  const [penPosition, setPenPosition] = useState({ x: 100, y: 300 });
-  const chocolatePositions = [
-    { x: 54, y: 72 },
-    { x: 144, y: 72 },
-    { x: 233, y: 72 },
-    { x: 54, y: 154 },
-    { x: 144, y: 154 },
-    { x: 233, y: 154 },
-  ];
-  const [currentToolPosition, setCurrentToolPosition] = useState({
-    top: 90,
-    right: 64,
+  // 💝 UI 상태
+  const [uiState, setUIState] = useState({
+    isTalkBubbleShow: false,
+    isShowButton: false,
+    isShowModal: false,
+    isShowItems: false,
+    isShowNavi: false,
+    isCompleteEvent: false,
+    isDragging: false,
+    isSubmitEnabled: false,
+    isZoomMode: false,
   });
-  const [position, setPosition] = useState({ x: 100, y: 120 });
-  const [shift, setShift] = useState({ x: 0, y: 0 });
-  const [pastryBagPosition, setPastryBagPosition] = useState({ x: 54, y: 72 });
 
-  const modalConfig = currentData.modalConfig;
+  // 💝 현재 선택 관련 상태
+  const [selectionState, setSelectionState] = useState({
+    currentChocolateIndex: null,
+    currentTabIndex: 0,
+    currentColor: "vanilla",
+    currentTopping: "",
+  });
 
-  // const [chocolateInfo, setChocolateInfo] = useState({
-  //   shapes: [],
-  //   colors: Array(6).fill("default"),
-  //   sizes: Array(6).fill(0),
-  //   drawings: {},
-  //   toppings: {},
-  // });
+  const currentData = stageData[stage.main][stage.sub];
+
+  // 💝 위치 관련 상태
+  const [positionState, setPositionState] = useState({
+    penPosition: { x: 100, y: 300 },
+    currentToolPosition: { top: 90, right: 64 },
+    position: { x: 100, y: 120 },
+    shift: { x: 0, y: 0 },
+    pastryBagPosition: { x: 54, y: 72 },
+  });
+
+  // 💝 초콜릿 정보
   const [chocolateInfo, setChocolateInfo] = useState({
     shapes: ["rabbit", "bear", "cat", "circle", "circle", "circle"], // 6개 추가
     colors: ["ruby", "vanilla", "milk", "dark", "greentea", "red"], // 각 초콜릿의 색상 지정
@@ -95,14 +72,24 @@ export default function Stage() {
     drawings: [],
     toppings: {}, // 토핑 저장 (초기에는 빈 객체)
   });
-  const [shapes, setShapes] = useState([]);
 
-  // 폼 정보
-  const [inputValue, setInputValue] = useState("");
-  const [formData, setFormData] = useState({
+  // 💝 게임 진행 상태
+  const [gameState, setGameState] = useState({
+    currentIndex: 0,
+    completedStages: [],
+    stirCount: 0,
+  });
+
+  // 💝 폼 관련 정보
+  const [formState, setFormState] = useState({
+    inputValue: "",
     username: "",
     card: "",
   });
+
+  // 💝 ref 관련 정보
+  const hasMovedRef = useRef(new Set());
+  const moldRef = useRef(null);
 
   const actionHandlers = {
     delay: async (value) => await delay(value),
@@ -453,7 +440,6 @@ export default function Stage() {
       },
     }));
   };
-
 
   // useEffect(() => {
   //   const handleClickOutside = (event) => {
@@ -806,7 +792,7 @@ export default function Stage() {
                     const ShapeComponent = Shapes[name];
                     const color = chocolateInfo.colors[index];
                     const isSelected = currentChocolateIndex === index;
-                    const isChocoPenMode = currentTabIndex === 0; 
+                    const isChocoPenMode = currentTabIndex === 0;
 
                     return ShapeComponent ? (
                       <div
@@ -815,7 +801,9 @@ export default function Stage() {
                         // onMouseLeave={() => setCurrentChocolateIndex(null)}
                         onDragStart={(e) => e.preventDefault()}
                         draggable={false}
-                        className={`flex-shrink-0 cursor-${isChocoPenMode ? 'chocopen' : currentTopping} relative w-[80px] h-[76px] bg-gray-warm-300 rounded-xl`}
+                        className={`flex-shrink-0 cursor-${
+                          isChocoPenMode ? "chocopen" : currentTopping
+                        } relative w-[80px] h-[76px] bg-gray-warm-300 rounded-xl`}
                         style={{
                           WebkitTouchCallout: "none",
                           TouchAction: "none",
