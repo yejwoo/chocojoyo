@@ -58,7 +58,8 @@ export default function Stage() {
   const currentData = stageData[stage.main][stage.sub];
   const [currentChocolateIndex, setCurrentChocolateIndex] = useState(null);
   const [currentTabIndex, setCurrentTabIndex] = useState(0);
-  const [selectedColor, setSelectedColor] = useState("vanilla");
+  const [currentColor, setCurrentColor] = useState("vanilla");
+  const [currentTopping, setCurrentTopping] = useState("");
 
   // 위치 데이터
   const [penPosition, setPenPosition] = useState({ x: 100, y: 300 });
@@ -91,7 +92,7 @@ export default function Stage() {
     shapes: ["rabbit", "bear", "cat", "circle", "circle", "circle"], // 6개 추가
     colors: ["ruby", "vanilla", "milk", "dark", "greentea", "red"], // 각 초콜릿의 색상 지정
     sizes: [100, 100, 100, 100, 100, 100], // 초콜릿 크기를 100%로 설정
-    drawings: {}, // 캔버스 그림 저장 (초기에는 빈 객체)
+    drawings: [],
     toppings: {}, // 토핑 저장 (초기에는 빈 객체)
   });
   const [shapes, setShapes] = useState([]);
@@ -226,7 +227,7 @@ export default function Stage() {
     setIsPastryBagHidden(false);
     setCurrentIndex(0);
     setCurrentChocolateIndex(main === "stage5" ? null : 0);
-    setSelectedColor("vanilla");
+    setCurrentColor("vanilla");
     setButtonConfig({
       shape: "rectangle",
       type: null,
@@ -282,7 +283,7 @@ export default function Stage() {
 
       // 이미 100% 채워진 초콜릿은 색상 변경 불가
       if (prev.sizes[index] < 100) {
-        updatedColors[index] = selectedColor;
+        updatedColors[index] = currentColor;
       }
 
       return { ...prev, colors: updatedColors };
@@ -439,6 +440,10 @@ export default function Stage() {
     debug("current chocolate index", currentChocolateIndex);
   }, [currentChocolateIndex]);
 
+  useEffect(() => {
+    debug("current tab index", currentTabIndex);
+  }, [currentTabIndex]);
+
   const handleSaveDrawing = (imageData) => {
     setChocolateInfo((prev) => ({
       ...prev,
@@ -449,28 +454,22 @@ export default function Stage() {
     }));
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (moldRef.current && !moldRef.current.contains(event.target)) {
-        setCurrentChocolateIndex(null); // 초콜릿 영역 외 클릭 시 원상복귀
-      }
-    };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("touchstart", handleClickOutside);
+  // useEffect(() => {
+  //   const handleClickOutside = (event) => {
+  //     if (!isZoomMode && moldRef.current && !moldRef.current.contains(event.target)) {
+  //       setCurrentChocolateIndex(null); // 초콜릿 영역 외 클릭 시 원상복귀
+  //     }
+  //   };
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("touchstart", handleClickOutside);
-    };
-  }, []);
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   document.addEventListener("touchstart", handleClickOutside);
 
-  const handleChocolateDoubleClick = (index) => {
-    setCurrentChocolateIndex((prevIndex) => {
-      if (prevIndex === index) return prevIndex; // 이미 선택된 상태면 그대로 유지
-      return index;
-    });
-  };
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //     document.removeEventListener("touchstart", handleClickOutside);
+  //   };
+  // }, [isZoomMode]);
 
   return (
     <StageLayout
@@ -750,7 +749,7 @@ export default function Stage() {
                 style={{ pointerEvents: "none" }}
               >
                 <PastryBag
-                  fillColor={bottomNaviData.stage4[0].data[selectedColor].fill}
+                  fillColor={bottomNaviData.stage4[0].data[currentColor].fill}
                   className={`${isPastryBagHidden ? "hidden" : ""}`} // 모든 초콜릿 채우면 숨김
                   style={{
                     position: "absolute",
@@ -779,10 +778,13 @@ export default function Stage() {
           {/* Stage 5 렌더링 */}
           {stage.main === "stage5" && (
             <>
-                {/* <div
+              {/* <div
                 className={`transition-transform duration-300 ${isZoomMode ? "scale-[2] overflow-scroll" : ""} relative w-72 h-56`}
                 ref */}
-              <div className="relative w-72 h-56 transition-transform duration-300" ref={moldRef}>
+              <div
+                className="relative w-72 h-56 transition-transform duration-300"
+                ref={moldRef}
+              >
                 <Image
                   src={box}
                   alt="초콜릿 틀"
@@ -804,26 +806,33 @@ export default function Stage() {
                     const ShapeComponent = Shapes[name];
                     const color = chocolateInfo.colors[index];
                     const isSelected = currentChocolateIndex === index;
+                    const isChocoPenMode = currentTabIndex === 0; 
 
                     return ShapeComponent ? (
                       <div
                         key={index}
-                        onMouseOver={()=>setCurrentChocolateIndex(index)}
-                        onMouseLeave={()=>setCurrentChocolateIndex(null)}
+                        onMouseOver={() => setCurrentChocolateIndex(index)}
+                        // onMouseLeave={() => setCurrentChocolateIndex(null)}
                         onDragStart={(e) => e.preventDefault()}
                         draggable={false}
-                        className="flex-shrink-0 cursor-chocopen relative w-[80px] h-[76px] bg-gray-warm-300 rounded-xl"
+                        className={`flex-shrink-0 cursor-${isChocoPenMode ? 'chocopen' : currentTopping} relative w-[80px] h-[76px] bg-gray-warm-300 rounded-xl`}
                         style={{
                           WebkitTouchCallout: "none",
                           TouchAction: "none",
                         }}
                       >
                         <div
-                          className={`${isZoomMode && isSelected ? "z-10" : ""} absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2`}
+                          className={`${
+                            isZoomMode && isSelected ? "z-10" : ""
+                          } absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2`}
                         >
                           <ShapeComponent
                             draggable={false}
-                            className={isZoomMode && isSelected ? 'scale-[2] transition duration-200 ease-in-out' : ''}
+                            className={
+                              isZoomMode && isSelected
+                                ? "scale-[2] transition duration-200 ease-in-out"
+                                : ""
+                            }
                             onDragStart={(e) => e.preventDefault()}
                             strokeColor={
                               bottomNaviData.stage4[0].data[color].border
@@ -842,7 +851,7 @@ export default function Stage() {
                         <Canvas
                           isSelected={isSelected}
                           isZoomMode={isZoomMode}
-                          strokeColor={selectedColor}
+                          strokeColor={currentColor}
                           onSave={handleSaveDrawing}
                         />
                       </div>
@@ -932,9 +941,9 @@ export default function Stage() {
                         .map((item, subIndex) => (
                           <div
                             key={`${stage.main}-${type}-${item}-${subIndex}`}
-                            onClick={() => setSelectedColor(item)}
+                            onClick={() => setCurrentColor(item)}
                             className={`cursor-pointer flex-shrink-0 rounded-full border-2 w-8 h-8 ${
-                              selectedColor === item
+                              currentColor === item
                                 ? "ring-4 ring-brand-200"
                                 : ""
                             } 
@@ -954,18 +963,23 @@ export default function Stage() {
                       return (
                         <div
                           key={`${stage.main}-${type}-${index}`}
-                          className={`flex gap-4  ${
+                          className={`flex gap-7  ${
                             currentTabIndex === index
                               ? "opacity-100 visible"
                               : "opacity-0 invisible absolute"
                           }`}
                         >
                           {naviData.data.map((item, subIndex) => (
-                            <img
-                              key={`${stage.main}-${type}-${subIndex}-${item.imgSrc}`} // 유니크한 key 보장
+                            <Image
+                              key={`${stage.main}-${type}-${subIndex}-${item.imgSrc}`}
                               src={item.imgSrc}
                               alt={item.alt || "토핑 이미지"}
-                              className="w-8 h-8 cursor-pointer"
+                              onClick={() => setCurrentTopping(item.name)}
+                              className={`w-8 h-8 cursor-pointer rounded-sm ${
+                                currentTopping === item.name
+                                  ? "ring-4 ring-brand-200"
+                                  : ""
+                              }`}
                             />
                           ))}
                         </div>
@@ -990,14 +1004,15 @@ export default function Stage() {
                 })}
               </div>
             </div>
-          <button
-          onClick={() => setIsZoomMode((prev) => !prev)}
-          className={`absolute p-3 right-4 bottom-16 ${isZoomMode ? "bg-blue-700" : "bg-blue-300"}`}
-        >
-          🔍 돋보기
-        </button>
+            <button
+              onClick={() => setIsZoomMode((prev) => !prev)}
+              className={`absolute p-3 right-4 bottom-16 ${
+                isZoomMode ? "bg-blue-700" : "bg-blue-300"
+              }`}
+            >
+              🔍 돋보기
+            </button>
           </div>
-        
         )}
     </StageLayout>
   );

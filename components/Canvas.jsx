@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { bottomNaviData } from "@/data/Stage";
 
-const Canvas = ({ isSelected, isZoomMode, strokeColor = "vanilla", onSave }) => {
+const Canvas = ({ isSelected, isZoomMode, strokeColor = "vanilla", onSave, className }) => {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -80,9 +80,7 @@ const Canvas = ({ isSelected, isZoomMode, strokeColor = "vanilla", onSave }) => 
   return (
     <canvas
       ref={canvasRef}
-      className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 ${
-        isSelected && isZoomMode ? "scale-[2] transition duration-200 ease-in-out" : ""
-      }`}
+      className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 ${className} ${isSelected && isZoomMode ? "scale-[2] transition duration-200 ease-in-out" : ""}`}
       width={64}
       height={56}
       onTouchStart={startDrawing}

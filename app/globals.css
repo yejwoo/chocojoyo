@@ -50,12 +50,36 @@ hr {
   border: 2px solid #3D2505;
 }
 
-.cursor-chocopen {
-  cursor: url('/images/stage5/chocopen-milk.png') 10 114, auto;
-}
-
 .overflow-scroll {
   overflow: auto;
   touch-action: pan-x pan-y;
   -webkit-overflow-scrolling: touch;
+}
+
+.cursor-chocopen {
+  cursor: url('/images/stage5/chocopen-milk.png') 10 114, auto;
+}
+
+.cursor-sprinkle {
+  cursor: url('/images/stage5/topping-sprinkle-cursor.svg') 16 16, auto;
+}
+
+.cursor-strawberry {
+  cursor: url('/images/stage5/topping-strawberry-cursor.svg') 16 16, auto;
+}
+
+.cursor-blueberries {
+  cursor: url('/images/stage5/topping-blueberries-cursor.svg') 16 16, auto;
+}
+
+.cursor-almond {
+  cursor: url('/images/stage5/topping-almond-cursor.svg') 16 16, auto;
+}
+
+.cursor-heart {
+  cursor: url('/images/stage5/topping-heart-cursor.svg') 16 16, auto;
+}
+
+.cursor-coffeebean {
+  cursor: url('/images/stage5/topping-coffeebean-cursor.svg') 16 16, auto;
 }

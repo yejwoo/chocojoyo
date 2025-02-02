@@ -27,9 +27,11 @@ import {
   doubleBoiler3,
   spatula,
 } from "@/public/images/stage3";
+
 const chocolateColorsConfig = tailwindConfig.theme.extend.colors.chocolates;
 const chocopenColorsConfig = tailwindConfig.theme.extend.colors.chocopens;
 import { pastryBag } from "@/public/images/stage4";
+import { toppingAlmond, toppingBlueberries, toppingCoffeeBean, toppingHeart, toppingSprinkle, toppingStrawberry } from "@/public/images/stage5";
 
 // @TODO: 얀토 이미지 수정 후 imgSrc 전면 수정
 export const stageData = {
@@ -436,12 +438,34 @@ export const bottomNaviData = {
       type: "image",
       data: [
         {
-          imgSrc: 'test',
-          alt: '',
+          imgSrc: toppingSprinkle,
+          name: "sprinkle",
+          alt: '스프링클 토핑',
         },
         {
-          imgSrc: 'test',
-          alt: '',
+          imgSrc: toppingHeart,
+          name: "heart",
+          alt: '하트 토핑',
+        },
+        {
+          imgSrc: toppingBlueberries,
+          name: "blueberries",
+          alt: '블루베리 토핑',
+        },
+        {
+          imgSrc: toppingAlmond,
+          name: "almond",
+          alt: '아몬드 토핑',
+        },
+        {
+          imgSrc: toppingCoffeeBean,
+          name: "coffeebean",
+          alt: '커피콩 토핑',
+        },
+        {
+          imgSrc: toppingStrawberry,
+          name: "strawberry",
+          alt: '딸기 토핑',
         },
       ],
       title: "토핑",
