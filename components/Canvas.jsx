@@ -1,5 +1,5 @@
+import { bottomNaviConfig, stageData } from "@/data/Stage";
 import React, { useRef, useEffect, useState } from "react";
-import { bottomNaviData } from "@/data/Stage";
 
 const Canvas = ({ isSelected, isZoomMode, strokeColor = "vanilla", onSave, className }) => {
   const canvasRef = useRef(null);
@@ -23,33 +23,31 @@ const Canvas = ({ isSelected, isZoomMode, strokeColor = "vanilla", onSave, class
 
   useEffect(() => {
     if (contextRef.current) {
-      contextRef.current.strokeStyle =
-        chocoPenColors[strokeColor]?.fill || "#fff";
+      contextRef.current.strokeStyle = chocoPenColors[strokeColor]?.fill || "#fff";
     }
   }, [strokeColor]);
 
- const getCoordinates = (e) => {
-  if (!canvasRef.current) return { x: 0, y: 0 };
+  const getCoordinates = (e) => {
+    if (!canvasRef.current) return { x: 0, y: 0 };
 
-  const rect = canvasRef.current.getBoundingClientRect();
-  const scaleX = canvasRef.current.width / rect.width;  // 스케일 비율
-  const scaleY = canvasRef.current.height / rect.height;
+    const rect = canvasRef.current.getBoundingClientRect();
+    const scaleX = canvasRef.current.width / rect.width; // 스케일 비율
+    const scaleY = canvasRef.current.height / rect.height;
 
-  let clientX, clientY;
-  if (e.touches) {
-    clientX = e.touches[0].clientX;
-    clientY = e.touches[0].clientY;
-  } else {
-    clientX = e.clientX;
-    clientY = e.clientY;
-  }
+    let clientX, clientY;
+    if (e.touches) {
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    } else {
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
 
-  return {
-    x: (clientX - rect.left) * scaleX,
-    y: (clientY - rect.top) * scaleY,
+    return {
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY,
+    };
   };
-};
-
 
   const startDrawing = (e) => {
     e.preventDefault();
@@ -80,7 +78,9 @@ const Canvas = ({ isSelected, isZoomMode, strokeColor = "vanilla", onSave, class
   return (
     <canvas
       ref={canvasRef}
-      className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 ${className} ${isSelected && isZoomMode ? "scale-[2] transition duration-200 ease-in-out" : ""}`}
+      className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 ${className} ${
+        isSelected && isZoomMode ? "scale-[2] transition duration-200 ease-in-out" : ""
+      }`}
       width={64}
       height={56}
       onTouchStart={startDrawing}

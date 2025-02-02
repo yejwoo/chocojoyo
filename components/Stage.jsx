@@ -7,23 +7,21 @@ import Navi from "./Navi";
 import { delay } from "@/utils/delay";
 import { extractStageNumber } from "@/utils/extractStageNumber";
 import { debug } from "@/utils/debug";
-import {
-  talkBubbleBodySm,
-  talkBubbleTail,
-  checkLg,
-  bg,
-} from "@/public/images/common";
-import { bottomNaviData, stageData, stageItems } from "@/data/Stage";
+import { checkLg, bg } from "@/public/images/common";
+import { bottomNaviConfig, stageData } from "@/data/Stage";
 import { Shapes } from "@/public/icons/shapes";
 import mold from "@/public/images/stage4/chocolate-mold.svg";
 import box from "@/public/images/stage5/box.svg";
 import { PastryBag } from "@/public/images/stage4";
 import { ChocoPen } from "@/public/images/stage5/chocopen";
 import Canvas from "./Canvas";
+import TalkBubble from "./TalkBubble";
+import { BottomNavi, BottomNaviItem } from "./BottomNavi";
+import StageItems from "./StageItems";
 
 export default function Stage() {
   const [stage, setStage] = useState({
-    main: "stage5",
+    main: "stage1",
     sub: "init",
   });
   const [buttonConfig, setButtonConfig] = useState({
@@ -34,16 +32,16 @@ export default function Stage() {
 
   // 💝 UI 상태
   const [uiState, setUIState] = useState({
-  isTalkBubbleShow: false,
-  isShowButton: false,
-  isShowModal: false,
-  isShowItems: false,
-  isShowNavi: false,
-  isCompleteEvent: false,
-  isDragging: false,
-  isSubmitEnabled: false,
-  isZoomMode: false,
-  })
+    isTalkBubbleShow: false,
+    isShowButton: false,
+    isShowModal: false,
+    isShowItems: false,
+    isShowNavi: false,
+    isCompleteEvent: false,
+    isDragging: false,
+    isSubmitEnabled: false,
+    isZoomMode: false,
+  });
 
   // 💝 현재 선택 관련 상태
   const [selectionState, setSelectionState] = useState({
@@ -53,7 +51,6 @@ export default function Stage() {
     currentTopping: "",
   });
 
-  
   const currentData = stageData[stage.main][stage.sub];
 
   // 💝 위치 관련 상태
@@ -89,36 +86,58 @@ export default function Stage() {
   });
 
   // 💝 ref 관련 정보
-const hasMovedRef = useRef(new Set());
-const moldRef = useRef(null);
-
+  const hasMovedRef = useRef(new Set());
+  const moldRef = useRef(null);
 
   const actionHandlers = {
     delay: async (value) => await delay(value),
+
     showButton: (value) => {
-      setIsShowButton(true);
+      setUIState((prev) => ({
+        ...prev,
+        isShowButton: true,
+      }));
+
       setButtonConfig({
         shape: value.shape,
         type: value.type,
         message: value.message,
       });
     },
-    showModal: () => setIsShowModal(true),
-    showItems: () => setIsShowItems(true),
+
+    showModal: () =>
+      setUIState((prev) => ({
+        ...prev,
+        isShowModal: true,
+      })),
+
+    showItems: () =>
+      setUIState((prev) => ({
+        ...prev,
+        isShowItems: true,
+      })),
+
     nextSubStage: () => handleNextSubStage(),
-    nextManiStage: () => handleNextMainStage(),
+    nextMainStage: () => handleNextMainStage(),
   };
 
   useEffect(() => {
     const runSequence = async () => {
       await delay(1200);
-      setIsTalkBubbleShow(true);
+      setUIState((prev) => ({
+        ...prev,
+        isTalkBubbleShow: true,
+      }));
 
       const { main, sub } = stage;
       const sequence = stageData[main][sub]?.sequence;
 
-      if (stage.main === "stage1" && stage.sub === "description")
-        setIsShowNavi(true);
+      if (stage.main === "stage1" && stage.sub === "description") {
+        setUIState((prev) => ({
+          ...prev,
+          isShowNavi: true,
+        }));
+      }
 
       if (sequence) {
         for (let action of sequence) {
@@ -137,29 +156,8 @@ const moldRef = useRef(null);
   }, [stage]);
 
   useEffect(() => {
-    console.log("💝chocolateInfo", chocolateInfo);
+    console.log("💝 chocolateInfo", chocolateInfo);
   }, [chocolateInfo]);
-
-  useEffect(() => {
-    const mainStage = Number(stage.main.split("stage")[1]);
-    if (mainStage >= 3) {
-      document.body.classList.add("block-scroll");
-    } else {
-      document.body.classList.remove("block-scroll");
-    }
-
-    if (mainStage === 4) {
-      setShapes(
-        Array(6)
-          .fill(null)
-          .map((_, i) => chocolateInfo.shapes[i % chocolateInfo.shapes.length]) // 순환 적용
-      );
-    }
-
-    return () => {
-      document.body.classList.remove("block-scroll");
-    };
-  }, [stage.main, chocolateInfo.shapes]);
 
   const handleNextSubStage = () => {
     const { main, sub } = stage;
@@ -171,11 +169,18 @@ const moldRef = useRef(null);
       handleNextMainStage();
     }
 
-    setIsTalkBubbleShow(false);
-    setIsShowButton(false);
-    setIsShowModal(false);
-    setIsShowItems(false);
-    setCurrentIndex(0);
+    setUIState((prev) => ({
+      ...prev,
+      isTalkBubbleShow: false,
+      isShowButton: false,
+      isShowModal: false,
+      isShowItems: false,
+    }));
+
+    setGameState((prev) => ({
+      ...prev,
+      currentIndex: 0,
+    }));
   };
 
   const handleNextMainStage = () => {
@@ -187,15 +192,13 @@ const moldRef = useRef(null);
       return;
     }
 
-    setCompletedStages((prev) => {
-      const updatedStages = [...prev, Number(main.split("stage")[1])];
+    setGameState((prev) => {
+      const updatedStages = [...prev.completedStages, Number(main.split("stage")[1])];
       console.log("업데이트된 completedStages: ", updatedStages);
-      return updatedStages;
+      return { ...prev, completedStages: updatedStages };
     });
 
-    const finalSubStageKey = Object.keys(currentStageData).find(
-      (key) => currentStageData[key].isFinal === true
-    );
+    const finalSubStageKey = Object.keys(currentStageData).find((key) => currentStageData[key].isFinal === true);
 
     if (finalSubStageKey) {
       const nextMainStage = currentStageData[finalSubStageKey]?.nextMainStage;
@@ -208,241 +211,243 @@ const moldRef = useRef(null);
       console.log("isFinal 서브스테이지를 찾을 수 없습니다.");
     }
 
-    setIsTalkBubbleShow(false);
-    setIsShowButton(false);
-    setIsShowModal(false);
-    setIsShowItems(false);
-    setIsCompleteEvent(false);
-    setIsPastryBagHidden(false);
-    setCurrentIndex(0);
-    setCurrentChocolateIndex(main === "stage5" ? null : 0);
-    setCurrentColor("vanilla");
+    setUIState((prev) => ({
+      ...prev,
+      isTalkBubbleShow: false,
+      isShowButton: false,
+      isShowModal: false,
+      isShowItems: false,
+      isCompleteEvent: false,
+    }));
+
+    setSelectionState((prev) => ({
+      ...prev,
+      currentChocolateIndex: main === "stage5" ? null : 0,
+      currentColor: "vanilla",
+    }));
+
     setButtonConfig({
       shape: "rectangle",
       type: null,
       message: "",
     });
-  };
 
-  // @TODO: 인풋에 입력한 데이터 저장
-  const handleFormData = () => {
-    handleNextSubStage();
-  };
-
-  //   const handleCloseModal = () => {};
-
-  const handleInputChange = (e) => {
-    const value = e.target.value;
-    setInputValue(value);
-    setIsSubmitEnabled(value.length > 0);
-  };
-
-  const handleSelect = (variant) => {
-    setChocolateInfo((prev) => {
-      const updatedShapes = prev.shapes.includes(variant)
-        ? prev.shapes.filter((item) => item !== variant)
-        : [...prev.shapes, variant];
-
-      setIsCompleteEvent(updatedShapes.length > 0);
-      return { ...prev, shapes: updatedShapes };
-    });
-  };
-
-  const handleChop = () => {
-    const toolStep = stageItems[stage.main].tool.positions.step;
-
-    if (currentIndex < stageItems[stage.main].items.length - 1) {
-      setCurrentIndex((prev) => prev + 1);
-      setCurrentToolPosition({
-        top: currentToolPosition.top,
-        right: currentToolPosition.right + toolStep.right,
-      });
-    }
-    if (currentIndex === stageItems[stage.main].items.length - 2)
-      setIsCompleteEvent(true);
-  };
-
-  const toggleToolState = () => {
-    setToolState((prev) => (prev === "off" ? "on" : "off"));
-  };
-
-  const handleChocolateClick = (index) => {
-    setChocolateInfo((prev) => {
-      const updatedColors = [...prev.colors];
-
-      // 이미 100% 채워진 초콜릿은 색상 변경 불가
-      if (prev.sizes[index] < 100) {
-        updatedColors[index] = currentColor;
-      }
-
-      return { ...prev, colors: updatedColors };
-    });
-  };
-
-  const handleEvent = (type, variant) => {
-    switch (type) {
-      case "select":
-        handleSelect(variant);
-        break;
-      case "chop":
-        handleChop();
-        break;
-      default:
-        console.warn("Unhandled event type:", type);
-    }
-  };
-
-  /**
-   *
-   * 드래그 이벤트
-   *
-   */
-
-  const handleStart = (e) => {
-    e.preventDefault();
-    setIsDragging(true);
-
-    // 이벤트 타입에 따라 좌표 가져오기
-    const isTouchEvent = e.type === "touchstart";
-    const clientX = isTouchEvent ? e.touches[0].clientX : e.clientX;
-    const clientY = isTouchEvent ? e.touches[0].clientY : e.clientY;
-
-    // 이미지와 터치/마우스의 상대적 위치 계산
-    const img = e.target.getBoundingClientRect();
-    setShift({
-      x: clientX - img.left,
-      y: clientY - img.top,
-    });
-  };
-
-  const handleMove = (e) => {
-    if (!isDragging) return;
-
-    const isTouchEvent = e.type === "touchmove";
-    const clientX = isTouchEvent ? e.touches[0].clientX : e.clientX;
-    const clientY = isTouchEvent ? e.touches[0].clientY : e.clientY;
-    const isStage4 = stage.main === "stage4";
-
-    const parent = isStage4
-      ? document.querySelector(".pastry-bag-area")?.getBoundingClientRect()
-      : e.target.parentElement.getBoundingClientRect();
-    if (!parent) return;
-
-    const imgWidth = isStage4 ? 114 : 100;
-    const imgHeight = isStage4 ? 155 : 200;
-
-    // 이동 가능한 범위 계산
-    const minX = 0;
-    const maxX = parent.width - imgWidth;
-    const minY = 0;
-    const maxY = parent.height - imgHeight;
-
-    // 새로운 위치 계산
-    const newX = Math.min(Math.max(clientX - parent.x - shift.x, minX), maxX);
-    const newY = Math.min(Math.max(clientY - parent.y - shift.y, minY), maxY);
-
-    setPosition({ x: newX, y: newY });
-  };
-
-  const handleEnd = () => {
-    setIsDragging(false);
-    handleStir();
-  };
-
-  const handleStir = () => {
-    const nextCount = stirCount + 1;
-
-    if (nextCount <= 10) {
-      setStirCount(nextCount);
-    }
-
-    if (nextCount === 10) {
-      setIsCompleteEvent(true);
-    }
-  };
-
-  /**
-   *
-   * 초콜릿 짜기 이벤트
-   *
-   */
-
-  const handleChocolatePress = (index) => {
-    if (index !== currentChocolateIndex) return; // 순서대로만 진행
-
-    handleChocolateClick(index);
-    // setIsPressing(true);
-
-    const growthInterval = 100;
-    let interval;
-
-    interval = setInterval(() => {
-      setChocolateInfo((prev) => {
-        const updatedSizes = [...prev.sizes];
-        if (updatedSizes[index] < 100) {
-          updatedSizes[index] += 10;
-        }
-        return { ...prev, sizes: updatedSizes };
-      });
-    }, growthInterval);
-
-    const stopGrowing = () => {
-      clearInterval(interval);
-      // setIsPressing(false);
-    };
-
-    window.addEventListener("mouseup", stopGrowing);
-    window.addEventListener("touchend", stopGrowing);
-  };
-
-  // 초콜릿이 100% 채워지면 다음 초콜릿으로 이동
-  useEffect(() => {
-    if (stage.main !== "stage4") return;
-
-    if (
-      chocolateInfo.sizes[currentChocolateIndex] >= 100 &&
-      !hasMovedRef.current.has(currentChocolateIndex)
-    ) {
-      hasMovedRef.current.add(currentChocolateIndex); // 현재 인덱스 저장 (중복 실행 방지)
-
-      setTimeout(() => {
-        if (currentChocolateIndex < chocolatePositions.length - 1) {
-          setCurrentChocolateIndex((prev) => prev + 1);
-        }
-      }, 300); // 0.3초 후 이동
-    }
-  }, [chocolateInfo.sizes, currentChocolateIndex]);
-
-  // 짤주머니 위치 업데이트
-  useEffect(() => {
-    setPastryBagPosition(chocolatePositions[currentChocolateIndex]);
-  }, [currentChocolateIndex]);
-
-  useEffect(() => {
-    if (chocolateInfo.sizes.every((size) => size >= 100)) {
-      setIsCompleteEvent(true); // Next 버튼 활성화
-      setIsPastryBagHidden(true); // 짤주머니 숨김
-    }
-  }, [chocolateInfo.sizes]);
-
-  useEffect(() => {
-    debug("current chocolate index", currentChocolateIndex);
-  }, [currentChocolateIndex]);
-
-  useEffect(() => {
-    debug("current tab index", currentTabIndex);
-  }, [currentTabIndex]);
-
-  const handleSaveDrawing = (imageData) => {
-    setChocolateInfo((prev) => ({
+    setGameState((prev) => ({
       ...prev,
-      drawings: {
-        ...prev.drawings,
-        [currentChocolateIndex]: imageData,
-      },
+      currentIndex: 0,
     }));
   };
 
+  // // @TODO: 인풋에 입력한 데이터 저장
+  // const handleFormData = () => {
+  //   handleNextSubStage();
+  // };
+
+  // //   const handleCloseModal = () => {};
+
+  // const handleInputChange = (e) => {
+  //   const value = e.target.value;
+  //   setInputValue(value);
+  //   setIsSubmitEnabled(value.length > 0);
+  // };
+
+  // const handleSelect = (variant) => {
+  //   setChocolateInfo((prev) => {
+  //     const updatedShapes = prev.shapes.includes(variant) ? prev.shapes.filter((item) => item !== variant) : [...prev.shapes, variant];
+
+  //     setIsCompleteEvent(updatedShapes.length > 0);
+  //     return { ...prev, shapes: updatedShapes };
+  //   });
+  // };
+
+  // const handleChop = () => {
+  //   const toolStep = stageItems[stage.main].tool.positions.step;
+
+  //   if (currentIndex < stageItems[stage.main].items.length - 1) {
+  //     setCurrentIndex((prev) => prev + 1);
+  //     setCurrentToolPosition({
+  //       top: currentToolPosition.top,
+  //       right: currentToolPosition.right + toolStep.right,
+  //     });
+  //   }
+  //   if (currentIndex === stageItems[stage.main].items.length - 2) setIsCompleteEvent(true);
+  // };
+
+  // const toggleToolState = () => {
+  //   setToolState((prev) => (prev === "off" ? "on" : "off"));
+  // };
+
+  // const handleChocolateClick = (index) => {
+  //   setChocolateInfo((prev) => {
+  //     const updatedColors = [...prev.colors];
+
+  //     // 이미 100% 채워진 초콜릿은 색상 변경 불가
+  //     if (prev.sizes[index] < 100) {
+  //       updatedColors[index] = currentColor;
+  //     }
+
+  //     return { ...prev, colors: updatedColors };
+  //   });
+  // };
+
+  // const handleEvent = (type, variant) => {
+  //   switch (type) {
+  //     case "select":
+  //       handleSelect(variant);
+  //       break;
+  //     case "chop":
+  //       handleChop();
+  //       break;
+  //     default:
+  //       console.warn("Unhandled event type:", type);
+  //   }
+  // };
+
+  // /**
+  //  *
+  //  * 드래그 이벤트
+  //  *
+  //  */
+
+  // const handleStart = (e) => {
+  //   e.preventDefault();
+  //   setIsDragging(true);
+
+  //   // 이벤트 타입에 따라 좌표 가져오기
+  //   const isTouchEvent = e.type === "touchstart";
+  //   const clientX = isTouchEvent ? e.touches[0].clientX : e.clientX;
+  //   const clientY = isTouchEvent ? e.touches[0].clientY : e.clientY;
+
+  //   // 이미지와 터치/마우스의 상대적 위치 계산
+  //   const img = e.target.getBoundingClientRect();
+  //   setShift({
+  //     x: clientX - img.left,
+  //     y: clientY - img.top,
+  //   });
+  // };
+
+  // const handleMove = (e) => {
+  //   if (!isDragging) return;
+
+  //   const isTouchEvent = e.type === "touchmove";
+  //   const clientX = isTouchEvent ? e.touches[0].clientX : e.clientX;
+  //   const clientY = isTouchEvent ? e.touches[0].clientY : e.clientY;
+  //   const isStage4 = stage.main === "stage4";
+
+  //   const parent = isStage4 ? document.querySelector(".pastry-bag-area")?.getBoundingClientRect() : e.target.parentElement.getBoundingClientRect();
+  //   if (!parent) return;
+
+  //   const imgWidth = isStage4 ? 114 : 100;
+  //   const imgHeight = isStage4 ? 155 : 200;
+
+  //   // 이동 가능한 범위 계산
+  //   const minX = 0;
+  //   const maxX = parent.width - imgWidth;
+  //   const minY = 0;
+  //   const maxY = parent.height - imgHeight;
+
+  //   // 새로운 위치 계산
+  //   const newX = Math.min(Math.max(clientX - parent.x - shift.x, minX), maxX);
+  //   const newY = Math.min(Math.max(clientY - parent.y - shift.y, minY), maxY);
+
+  //   setPosition({ x: newX, y: newY });
+  // };
+
+  // const handleEnd = () => {
+  //   setIsDragging(false);
+  //   handleStir();
+  // };
+
+  // const handleStir = () => {
+  //   const nextCount = stirCount + 1;
+
+  //   if (nextCount <= 10) {
+  //     setStirCount(nextCount);
+  //   }
+
+  //   if (nextCount === 10) {
+  //     setIsCompleteEvent(true);
+  //   }
+  // };
+
+  // /**
+  //  *
+  //  * 초콜릿 짜기 이벤트
+  //  *
+  //  */
+
+  // const handleChocolatePress = (index) => {
+  //   if (index !== currentChocolateIndex) return; // 순서대로만 진행
+
+  //   handleChocolateClick(index);
+  //   // setIsPressing(true);
+
+  //   const growthInterval = 100;
+  //   let interval;
+
+  //   interval = setInterval(() => {
+  //     setChocolateInfo((prev) => {
+  //       const updatedSizes = [...prev.sizes];
+  //       if (updatedSizes[index] < 100) {
+  //         updatedSizes[index] += 10;
+  //       }
+  //       return { ...prev, sizes: updatedSizes };
+  //     });
+  //   }, growthInterval);
+
+  //   const stopGrowing = () => {
+  //     clearInterval(interval);
+  //     // setIsPressing(false);
+  //   };
+
+  //   window.addEventListener("mouseup", stopGrowing);
+  //   window.addEventListener("touchend", stopGrowing);
+  // };
+
+  // // 초콜릿이 100% 채워지면 다음 초콜릿으로 이동
+  // useEffect(() => {
+  //   if (stage.main !== "stage4") return;
+
+  //   if (chocolateInfo.sizes[currentChocolateIndex] >= 100 && !hasMovedRef.current.has(currentChocolateIndex)) {
+  //     hasMovedRef.current.add(currentChocolateIndex); // 현재 인덱스 저장 (중복 실행 방지)
+
+  //     setTimeout(() => {
+  //       if (currentChocolateIndex < chocolatePositions.length - 1) {
+  //         setCurrentChocolateIndex((prev) => prev + 1);
+  //       }
+  //     }, 300); // 0.3초 후 이동
+  //   }
+  // }, [chocolateInfo.sizes, currentChocolateIndex]);
+
+  // // 짤주머니 위치 업데이트
+  // useEffect(() => {
+  //   setPastryBagPosition(chocolatePositions[currentChocolateIndex]);
+  // }, [currentChocolateIndex]);
+
+  // useEffect(() => {
+  //   if (chocolateInfo.sizes.every((size) => size >= 100)) {
+  //     setIsCompleteEvent(true); // Next 버튼 활성화
+  //     setIsPastryBagHidden(true); // 짤주머니 숨김
+  //   }
+  // }, [chocolateInfo.sizes]);
+
+  // useEffect(() => {
+  //   debug("current chocolate index", currentChocolateIndex);
+  // }, [currentChocolateIndex]);
+
+  // useEffect(() => {
+  //   debug("current tab index", currentTabIndex);
+  // }, [currentTabIndex]);
+
+  // const handleSaveDrawing = (imageData) => {
+  //   setChocolateInfo((prev) => ({
+  //     ...prev,
+  //     drawings: {
+  //       ...prev.drawings,
+  //       [currentChocolateIndex]: imageData,
+  //     },
+  //   }));
+  // };
 
   // useEffect(() => {
   //   const handleClickOutside = (event) => {
@@ -460,423 +465,57 @@ const moldRef = useRef(null);
   //   };
   // }, [isZoomMode]);
 
+  // useEffect(() => {
+  //   const mainStage = Number(stage.main.split("stage")[1]);
+  //   if (mainStage >= 3) {
+  //     document.body.classList.add("block-scroll");
+  //   } else {
+  //     document.body.classList.remove("block-scroll");
+  //   }
+
+  //   if (mainStage === 4) {
+  //     setShapes(
+  //       Array(6)
+  //         .fill(null)
+  //         .map((_, i) => chocolateInfo.shapes[i % chocolateInfo.shapes.length]) // 순환 적용
+  //     );
+  //   }
+
+  //   return () => {
+  //     document.body.classList.remove("block-scroll");
+  //   };
+  // }, [stage.main, chocolateInfo.shapes]);
+
   return (
     <StageLayout
       backgroundSrc={bg}
-      characterSrc={currentData.imgSrc}
+      characterSrc={currentData?.imgSrc}
       modalContent={
-        isShowModal && (
+        uiState.isShowModal && (
           <Modal
             title={modalConfig.title}
             type={modalConfig.type}
             maxLength={modalConfig.maxLength}
-            value={inputValue}
+            value={formState.inputValue}
             onChange={handleInputChange}
             // onClose={handleCloseModal}
           >
-            <Button
-              message={"작성 완료"}
-              size="full"
-              disabled={!isSubmitEnabled}
-              onClick={handleFormData}
-            />
+            <Button message={"작성 완료"} size="full" disabled={!uiState.isSubmitEnabled} onClick={handleFormData} />
           </Modal>
         )
       }
     >
       {/* 말풍선 */}
-      {isTalkBubbleShow && (
-        <>
-          <div className="absolute bottom-[436px] right-3 w-48">
-            <Image className="" src={talkBubbleBodySm} alt="말풍선" />
-            <p
-              className="absolute left-4 top-1/2 -translate-y-1/2  text-2xl"
-              dangerouslySetInnerHTML={{ __html: currentData.dialogue }}
-              onDragStart={(e) => e.preventDefault()}
-              draggable={false}
-            />
-          </div>
-          <div className="absolute bottom-[444px] right-[196px] w-7">
-            <Image src={talkBubbleTail} alt="말풍선" />
-          </div>
-          {/* 동적 대사 */}
-          {isShowItems &&
-            stage.main === "stage3" &&
-            stage.sub === "description" && (
-              <p className="leading-6 text-2xl absolute right-[134px] bottom-[450px]">
-                {stirCount} / 10
-              </p>
-            )}
-        </>
-      )}
+      {uiState.isTalkBubbleShow && <TalkBubble dialogue={currentData?.dialogue || "안녕하세요!"} />}
+
       {/* 스테이지별 메인 아이템 */}
-      {isShowItems && (
-        <div className="absolute bottom-[132px] left-1/2 w-[296px] -translate-x-1/2 flex justify-center gap-6 flex-wrap animate-bounce-up-once">
-          {/* Stage 1 렌더링 */}
-          {stage.main === "stage1" && (
-            <>
-              {stageItems[stage.main].items.map((item, index) => (
-                <div
-                  onClick={() => {
-                    handleEvent(item.type, item.variant, index);
-                  }}
-                  className="relative w-20 h-20 flex items-center justify-center cursor-pointer"
-                  key={index}
-                >
-                  <Image
-                    src={item.imgSrc}
-                    width={80}
-                    height={80}
-                    alt={item.alt}
-                  />
-                  <Image
-                    className={`${
-                      chocolateInfo.shapes.includes(item.variant)
-                        ? ""
-                        : "hidden"
-                    } absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}
-                    src={checkLg}
-                    alt="완료"
-                  />
-                </div>
-              ))}
-            </>
-          )}
+      {uiState.isShowItems && <StageItems currentData={currentData} stage={stage} />}
 
-          {/* Stage 2 렌더링 */}
-          {stage.main === "stage2" && (
-            <>
-              <div className="relative">
-                <div className="relative w-72 h-72">
-                  {stageItems[stage.main].items.map((item, i) => (
-                    <Image
-                      key={i}
-                      className={`${
-                        currentIndex === i
-                          ? "opacity-100 visible"
-                          : "opacity-0 invisible"
-                      } absolute bottom-0`}
-                      src={item.imgSrc}
-                      alt={item.alt}
-                    />
-                  ))}
-                </div>
-                <div
-                  style={{
-                    top: `${currentToolPosition.top}px`,
-                    right: `${currentToolPosition.right}px`,
-                  }}
-                  className={`${
-                    toolState === "off" ? "w-6" : "w-8"
-                  } absolute cursor-pointer`}
-                  draggable={false}
-                  onDragStart={(e) => e.preventDefault()}
-                  onClick={() => {
-                    toggleToolState();
-                    handleEvent(
-                      stageItems[stage.main].items[currentIndex].type,
-                      "_",
-                      currentIndex
-                    );
-                  }}
-                >
-                  <Image
-                    src={stageItems[stage.main].tool[toolState].imgSrc}
-                    alt={stageItems[stage.main].tool[toolState].alt}
-                  />
-                </div>
-              </div>
-            </>
-          )}
-
-          {/* Stage 3 렌더링 */}
-          {stage.main === "stage3" && (
-            <>
-              <div className="relative w-72 h-72">
-                <Image
-                  src={stageItems[stage.main].items[0].imgSrc}
-                  alt={stageItems[stage.main].items[0].alt}
-                  className={`absolute bottom-0 ${
-                    stirCount < 5
-                      ? "opacity-100 visible"
-                      : "opacity-0 invisible"
-                  }`}
-                />
-                <Image
-                  src={stageItems[stage.main].items[1].imgSrc}
-                  alt={stageItems[stage.main].items[1].alt}
-                  className={`absolute bottom-0 ${
-                    stirCount >= 5 && stirCount < 10
-                      ? "opacity-100 visible"
-                      : "opacity-0 invisible"
-                  }`}
-                />
-                <Image
-                  src={stageItems[stage.main].items[2].imgSrc}
-                  alt={stageItems[stage.main].items[2].alt}
-                  className={`absolute bottom-0 ${
-                    stirCount >= 10
-                      ? "opacity-100 visible"
-                      : "opacity-0 invisible"
-                  }`}
-                />
-              </div>
-              <div className="w-full h-96 bottom-[-20px] absolute">
-                <Image
-                  style={{
-                    position: "absolute",
-                    cursor: "grab",
-                    left: `${position.x}px`,
-                    top: `${position.y}px`,
-                    WebkitTouchCallout: "none",
-                    TouchAction: "none",
-                  }}
-                  className="w-32 cursor-pointer"
-                  onMouseDown={handleStart}
-                  onMouseMove={handleMove}
-                  onMouseUp={handleEnd}
-                  onTouchStart={handleStart}
-                  onTouchMove={handleMove}
-                  onTouchEnd={handleEnd}
-                  draggable={false}
-                  onDragStart={(e) => e.preventDefault()}
-                  src={stageItems[stage.main].tool.off.imgSrc}
-                  alt={stageItems[stage.main].tool.off.alt}
-                />
-              </div>
-            </>
-          )}
-
-          {/* Stage 4 렌더링 */}
-          {stage.main === "stage4" && (
-            <>
-              <div className="relative w-72 h-56">
-                <Image
-                  src={mold}
-                  alt="초콜릿 틀"
-                  width={280}
-                  height={280}
-                  className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2"
-                  onDragStart={(e) => e.preventDefault()}
-                  draggable={false}
-                  style={{
-                    pointerEvents: "none",
-                    WebkitTouchCallout: "none",
-                    TouchAction: "none",
-                  }}
-                />
-                {/* 초콜릿들 */}
-                <div className="w-full flex justify-center items-center flex-wrap absolute gap-6 top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
-                  {shapes.map((item, index) => {
-                    const name = item[0].toUpperCase() + item.slice(1);
-                    const ShapeComponent = Shapes[name];
-                    const color = chocolateInfo.colors[index];
-
-                    return ShapeComponent ? (
-                      <div
-                        key={index}
-                        onClick={() => handleChocolateClick(index)}
-                        onMouseDown={() => handleChocolatePress(index)}
-                        onTouchStart={() => handleChocolatePress(index)}
-                        onDragStart={(e) => e.preventDefault()}
-                        draggable={false}
-                        className="flex-shrink-0 cursor-pointer relative w-16 h-14"
-                        style={{
-                          pointerEvents: "none",
-                          WebkitTouchCallout: "none",
-                          TouchAction: "none",
-                        }}
-                      >
-                        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-                          {/* 틀 */}
-                          <ShapeComponent
-                            style={{
-                              pointerEvents: "none",
-                              WebkitTouchCallout: "none",
-                              TouchAction: "none",
-                            }}
-                            strokeColor={
-                              bottomNaviData.stage4[0].data.default.border
-                            }
-                            fillColor={
-                              bottomNaviData.stage4[0].data.default.fill
-                            }
-                            width={64}
-                            height={56}
-                            draggable={false}
-                            onDragStart={(e) => e.preventDefault()}
-                          />
-                        </div>
-                        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-                          {/* 실제 초콜릿 */}
-                          <ShapeComponent
-                            draggable={false}
-                            onDragStart={(e) => e.preventDefault()}
-                            strokeColor={
-                              bottomNaviData.stage4[0].data[color].border
-                            }
-                            fillColor={
-                              bottomNaviData.stage4[0].data[color].fill
-                            }
-                            width={
-                              (64 * (chocolateInfo.sizes[index] || 0)) / 100
-                            }
-                            height={
-                              (56 * (chocolateInfo.sizes[index] || 0)) / 100
-                            }
-                          />
-                        </div>
-                      </div>
-                    ) : (
-                      console.warn(`${name} 컴포넌트 없음`) || null
-                    );
-                  })}
-                </div>
-              </div>
-              <div
-                className="w-[343px] h-96 bottom-[-20px] pastry-bag-area absolute"
-                style={{ pointerEvents: "none" }}
-              >
-                <PastryBag
-                  fillColor={bottomNaviData.stage4[0].data[currentColor].fill}
-                  className={`${isPastryBagHidden ? "hidden" : ""}`} // 모든 초콜릿 채우면 숨김
-                  style={{
-                    position: "absolute",
-                    cursor: "grab",
-                    left: `${pastryBagPosition.x}px`,
-                    top: `${pastryBagPosition.y}px`,
-                    WebkitTouchCallout: "none",
-                    TouchAction: "none",
-                    pointerEvents: "auto",
-                    userSelect: "none",
-                  }}
-                  onClick={() => handleChocolateClick(currentChocolateIndex)}
-                  onMouseDown={() =>
-                    handleChocolatePress(currentChocolateIndex)
-                  }
-                  onTouchStart={() =>
-                    handleChocolatePress(currentChocolateIndex)
-                  }
-                  draggable={false}
-                  onDragStart={(e) => e.preventDefault()}
-                />
-              </div>
-            </>
-          )}
-
-          {/* Stage 5 렌더링 */}
-          {stage.main === "stage5" && (
-            <>
-              {/* <div
-                className={`transition-transform duration-300 ${isZoomMode ? "scale-[2] overflow-scroll" : ""} relative w-72 h-56`}
-                ref */}
-              <div
-                className="relative w-72 h-56 transition-transform duration-300"
-                ref={moldRef}
-              >
-                <Image
-                  src={box}
-                  alt="초콜릿 틀"
-                  width={280}
-                  height={280}
-                  className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2"
-                  onDragStart={(e) => e.preventDefault()}
-                  draggable={false}
-                  style={{
-                    pointerEvents: "none",
-                    WebkitTouchCallout: "none",
-                    TouchAction: "none",
-                  }}
-                />
-                {/* 초콜릿들 */}
-                <div className="w-full flex justify-center items-center flex-wrap absolute gap-x-2 gap-y-2 top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
-                  {chocolateInfo.shapes.map((item, index) => {
-                    const name = item[0].toUpperCase() + item.slice(1);
-                    const ShapeComponent = Shapes[name];
-                    const color = chocolateInfo.colors[index];
-                    const isSelected = currentChocolateIndex === index;
-                    const isChocoPenMode = currentTabIndex === 0; 
-
-                    return ShapeComponent ? (
-                      <div
-                        key={index}
-                        onMouseOver={() => setCurrentChocolateIndex(index)}
-                        // onMouseLeave={() => setCurrentChocolateIndex(null)}
-                        onDragStart={(e) => e.preventDefault()}
-                        draggable={false}
-                        className={`flex-shrink-0 cursor-${isChocoPenMode ? 'chocopen' : currentTopping} relative w-[80px] h-[76px] bg-gray-warm-300 rounded-xl`}
-                        style={{
-                          WebkitTouchCallout: "none",
-                          TouchAction: "none",
-                        }}
-                      >
-                        <div
-                          className={`${
-                            isZoomMode && isSelected ? "z-10" : ""
-                          } absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2`}
-                        >
-                          <ShapeComponent
-                            draggable={false}
-                            className={
-                              isZoomMode && isSelected
-                                ? "scale-[2] transition duration-200 ease-in-out"
-                                : ""
-                            }
-                            onDragStart={(e) => e.preventDefault()}
-                            strokeColor={
-                              bottomNaviData.stage4[0].data[color].border
-                            }
-                            fillColor={
-                              bottomNaviData.stage4[0].data[color].fill
-                            }
-                            width={
-                              (64 * (chocolateInfo.sizes[index] || 0)) / 100
-                            }
-                            height={
-                              (56 * (chocolateInfo.sizes[index] || 0)) / 100
-                            }
-                          />
-                        </div>
-                        <Canvas
-                          isSelected={isSelected}
-                          isZoomMode={isZoomMode}
-                          strokeColor={currentColor}
-                          onSave={handleSaveDrawing}
-                        />
-                      </div>
-                    ) : (
-                      console.warn(`${name} 컴포넌트 없음`) || null
-                    );
-                  })}
-                </div>
-              </div>
-              {/* <ChocoPen
-                className="absolute pointer-events-none "
-                id="chocoPen"
-                style={{
-                  transform: "translate(-50%, -90%)", // 중심을 아래쪽으로 맞춤
-                  left: "50%",
-                  top: "50%",
-                  opacity: 0,
-                }}
-              /> */}
-            </>
-          )}
-
-          {/* Stage 6 렌더링 */}
-          {stage.main === "stage6" && (
-            <div className="relative">
-              {/* Stage6 관련 UI 추가 */}
-              <p>Stage 6 Content</p>
-            </div>
-          )}
-        </div>
-      )}
       {/* 버튼 */}
-      {isShowButton && (
+      {uiState.isShowButton && (
         <div className="absolute right-4 top-[46%]">
           <Button
-            disabled={!isCompleteEvent}
+            disabled={!uiState.isCompleteEvent}
             onClick={handleNextMainStage}
             shape={buttonConfig.shape}
             type={buttonConfig.type}
@@ -884,125 +523,12 @@ const moldRef = useRef(null);
           />
         </div>
       )}
+
       {/* 상단 네비게이션 */}
-      {isShowNavi && (
-        <Navi
-          currentStage={extractStageNumber(stage.main)}
-          completedStages={completedStages}
-        />
-      )}
+      {uiState.isShowNavi && <Navi currentStage={extractStageNumber(stage.main)} completedStages={gameState.completedStages} />}
+
       {/* 하단 네비게이션 */}
-      {isShowItems &&
-        Number(stage.main.split("stage")[1]) >= 4 &&
-        stage.sub === "description" && (
-          <div className="fixed h-[104px] bottom-0 left-0 right-0">
-            {/* 탭 */}
-            {bottomNaviData[stage.main].length > 1 && (
-              <div className="flex h-10">
-                {bottomNaviData[stage.main].map((item, index) => {
-                  return (
-                    <div
-                      key={index}
-                      onClick={() => setCurrentTabIndex(index)}
-                      className={`cursor-pointer ${
-                        currentTabIndex === index
-                          ? "bg-popup-100"
-                          : "bg-gray-warm-50 text-gray-warm-200"
-                      } w-20 flex items-center justify-center text-xl rounded-tl-xl rounded-tr-xl`}
-                    >
-                      {item.title}
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-
-            {/* 네비 데이터 */}
-            <div className="absolute bg-popup-100 left-0 right-0 h-16 bottom-0">
-              <div className="flex gap-7 justify-center items-center w-full h-full">
-                {bottomNaviData[stage.main].map((naviData, index) => {
-                  const { type } = naviData;
-
-                  switch (type) {
-                    case "color":
-                      return Object.keys(naviData.data)
-                        .filter((item) => item !== "default")
-                        .map((item, subIndex) => (
-                          <div
-                            key={`${stage.main}-${type}-${item}-${subIndex}`}
-                            onClick={() => setCurrentColor(item)}
-                            className={`cursor-pointer flex-shrink-0 rounded-full border-2 w-8 h-8 ${
-                              currentColor === item
-                                ? "ring-4 ring-brand-200"
-                                : ""
-                            } 
-                              ${
-                                currentTabIndex === index
-                                  ? "opacity-100 visible"
-                                  : "opacity-0 invisible absolute"
-                              }`}
-                            style={{
-                              backgroundColor: naviData.data[item].fill,
-                              borderColor: naviData.data[item].border,
-                            }}
-                          ></div>
-                        ));
-
-                    case "image":
-                      return (
-                        <div
-                          key={`${stage.main}-${type}-${index}`}
-                          className={`flex gap-7  ${
-                            currentTabIndex === index
-                              ? "opacity-100 visible"
-                              : "opacity-0 invisible absolute"
-                          }`}
-                        >
-                          {naviData.data.map((item, subIndex) => (
-                            <Image
-                              key={`${stage.main}-${type}-${subIndex}-${item.imgSrc}`}
-                              src={item.imgSrc}
-                              alt={item.alt || "토핑 이미지"}
-                              onClick={() => setCurrentTopping(item.name)}
-                              className={`w-8 h-8 cursor-pointer rounded-sm ${
-                                currentTopping === item.name
-                                  ? "ring-4 ring-brand-200"
-                                  : ""
-                              }`}
-                            />
-                          ))}
-                        </div>
-                      );
-
-                    // case "text":
-                    //   return (
-                    //     <input
-                    //       key={`${stage.main}-${type}-${index}`}
-                    //       type="text"
-                    //       placeholder={naviData.data.placeholder}
-                    //       maxLength={naviData.data.maxLength}
-                    //       className="border px-2 py-1 rounded-md text-sm w-48"
-                    //       onChange={(e) => setCardMessage(e.target.value)}
-                    //       value={cardMessage}
-                    //     />
-                    //   );
-
-                    default:
-                      return null;
-                  }
-                })}
-              </div>
-            </div>
-            <button
-              onClick={() => setIsZoomMode((prev) => !prev)}
-              className={`absolute p-3 right-4 bottom-16 ${
-                isZoomMode ? "bg-blue-700" : "bg-blue-300"
-              }`}
-            >
-              🔍 돋보기
-            </button>
-          </div>
-        )}
+      {uiState.isShowItems && Number(stage.main.split("stage")[1]) >= 4 && stage.sub === "description" && <BottomNavi stage={stage} />}
     </StageLayout>
   );
 }
