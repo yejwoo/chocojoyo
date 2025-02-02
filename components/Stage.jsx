@@ -7,7 +7,7 @@ import Navi from "./Navi";
 import { delay } from "@/utils/delay";
 import { extractStageNumber } from "@/utils/extractStageNumber";
 import { debug } from "@/utils/debug";
-import { checkLg, bg } from "@/public/images/common";
+import { bg } from "@/public/images/common";
 import { bottomNaviConfig, stageData } from "@/data/Stage";
 import { Shapes } from "@/public/icons/shapes";
 import mold from "@/public/images/stage4/chocolate-mold.svg";
@@ -18,6 +18,11 @@ import Canvas from "./Canvas";
 import TalkBubble from "./TalkBubble";
 import { BottomNavi, BottomNaviItem } from "./BottomNavi";
 import StageItems from "./StageItems";
+import { handleSelect } from "@/app/handlers/stageHandlers/stage1Handlers";
+import { handleChop } from "@/app/handlers/stageHandlers/stage2Handlers";
+import { handleStir } from "@/app/handlers/stageHandlers/stage3Handlers";
+import { handleChocolateClick, handleChocolatePress } from "@/app/handlers/stageHandlers/stage4Handlers";
+import { handleSaveDrawing } from "@/app/handlers/generalHandlers";
 
 export default function Stage() {
   const [stage, setStage] = useState({
@@ -238,171 +243,39 @@ export default function Stage() {
     }));
   };
 
-  // // @TODO: 인풋에 입력한 데이터 저장
-  // const handleFormData = () => {
-  //   handleNextSubStage();
-  // };
-
-  // //   const handleCloseModal = () => {};
-
   // const handleInputChange = (e) => {
   //   const value = e.target.value;
   //   setInputValue(value);
   //   setIsSubmitEnabled(value.length > 0);
   // };
 
-  // const handleSelect = (variant) => {
-  //   setChocolateInfo((prev) => {
-  //     const updatedShapes = prev.shapes.includes(variant) ? prev.shapes.filter((item) => item !== variant) : [...prev.shapes, variant];
-
-  //     setIsCompleteEvent(updatedShapes.length > 0);
-  //     return { ...prev, shapes: updatedShapes };
-  //   });
-  // };
-
-  // const handleChop = () => {
-  //   const toolStep = stageItems[stage.main].tool.positions.step;
-
-  //   if (currentIndex < stageItems[stage.main].items.length - 1) {
-  //     setCurrentIndex((prev) => prev + 1);
-  //     setCurrentToolPosition({
-  //       top: currentToolPosition.top,
-  //       right: currentToolPosition.right + toolStep.right,
-  //     });
-  //   }
-  //   if (currentIndex === stageItems[stage.main].items.length - 2) setIsCompleteEvent(true);
-  // };
-
-  // const toggleToolState = () => {
-  //   setToolState((prev) => (prev === "off" ? "on" : "off"));
-  // };
-
-  // const handleChocolateClick = (index) => {
-  //   setChocolateInfo((prev) => {
-  //     const updatedColors = [...prev.colors];
-
-  //     // 이미 100% 채워진 초콜릿은 색상 변경 불가
-  //     if (prev.sizes[index] < 100) {
-  //       updatedColors[index] = currentColor;
-  //     }
-
-  //     return { ...prev, colors: updatedColors };
-  //   });
-  // };
-
-  // const handleEvent = (type, variant) => {
-  //   switch (type) {
-  //     case "select":
-  //       handleSelect(variant);
-  //       break;
-  //     case "chop":
-  //       handleChop();
-  //       break;
-  //     default:
-  //       console.warn("Unhandled event type:", type);
-  //   }
-  // };
-
-  // /**
-  //  *
-  //  * 드래그 이벤트
-  //  *
-  //  */
-
-  // const handleStart = (e) => {
-  //   e.preventDefault();
-  //   setIsDragging(true);
-
-  //   // 이벤트 타입에 따라 좌표 가져오기
-  //   const isTouchEvent = e.type === "touchstart";
-  //   const clientX = isTouchEvent ? e.touches[0].clientX : e.clientX;
-  //   const clientY = isTouchEvent ? e.touches[0].clientY : e.clientY;
-
-  //   // 이미지와 터치/마우스의 상대적 위치 계산
-  //   const img = e.target.getBoundingClientRect();
-  //   setShift({
-  //     x: clientX - img.left,
-  //     y: clientY - img.top,
-  //   });
-  // };
-
-  // const handleMove = (e) => {
-  //   if (!isDragging) return;
-
-  //   const isTouchEvent = e.type === "touchmove";
-  //   const clientX = isTouchEvent ? e.touches[0].clientX : e.clientX;
-  //   const clientY = isTouchEvent ? e.touches[0].clientY : e.clientY;
-  //   const isStage4 = stage.main === "stage4";
-
-  //   const parent = isStage4 ? document.querySelector(".pastry-bag-area")?.getBoundingClientRect() : e.target.parentElement.getBoundingClientRect();
-  //   if (!parent) return;
-
-  //   const imgWidth = isStage4 ? 114 : 100;
-  //   const imgHeight = isStage4 ? 155 : 200;
-
-  //   // 이동 가능한 범위 계산
-  //   const minX = 0;
-  //   const maxX = parent.width - imgWidth;
-  //   const minY = 0;
-  //   const maxY = parent.height - imgHeight;
-
-  //   // 새로운 위치 계산
-  //   const newX = Math.min(Math.max(clientX - parent.x - shift.x, minX), maxX);
-  //   const newY = Math.min(Math.max(clientY - parent.y - shift.y, minY), maxY);
-
-  //   setPosition({ x: newX, y: newY });
-  // };
-
-  // const handleEnd = () => {
-  //   setIsDragging(false);
-  //   handleStir();
-  // };
-
-  // const handleStir = () => {
-  //   const nextCount = stirCount + 1;
-
-  //   if (nextCount <= 10) {
-  //     setStirCount(nextCount);
-  //   }
-
-  //   if (nextCount === 10) {
-  //     setIsCompleteEvent(true);
-  //   }
-  // };
-
-  // /**
-  //  *
-  //  * 초콜릿 짜기 이벤트
-  //  *
-  //  */
-
-  // const handleChocolatePress = (index) => {
-  //   if (index !== currentChocolateIndex) return; // 순서대로만 진행
-
-  //   handleChocolateClick(index);
-  //   // setIsPressing(true);
-
-  //   const growthInterval = 100;
-  //   let interval;
-
-  //   interval = setInterval(() => {
-  //     setChocolateInfo((prev) => {
-  //       const updatedSizes = [...prev.sizes];
-  //       if (updatedSizes[index] < 100) {
-  //         updatedSizes[index] += 10;
-  //       }
-  //       return { ...prev, sizes: updatedSizes };
-  //     });
-  //   }, growthInterval);
-
-  //   const stopGrowing = () => {
-  //     clearInterval(interval);
-  //     // setIsPressing(false);
-  //   };
-
-  //   window.addEventListener("mouseup", stopGrowing);
-  //   window.addEventListener("touchend", stopGrowing);
-  // };
+  const handleEvent = (type, variant, index) => {
+    switch (stage.main) {
+      case "stage1":
+        handleSelect(variant, setChocolateInfo, setUIState);
+        break;
+      case "stage2":
+        handleChop(gameState, setGameState, positionState, setPositionState, currentData);
+        break;
+      case "stage3":
+        handleStir(gameState, setGameState, setUIState);
+        break;
+      case "stage4":
+        if (type === "chocolateClick") {
+          handleChocolateClick(index, selectionState, setChocolateInfo);
+        } else if (type === "pressChocolate") {
+          handleChocolatePress(index, selectionState, setChocolateInfo);
+        }
+        break;
+      case "stage5":
+        if (type === "saveDrawing") {
+          handleSaveDrawing(variant, setChocolateInfo, index);
+        }
+        break;
+      default:
+        console.warn("Unhandled stage:", stage.main);
+    }
+  };
 
   // // 초콜릿이 100% 채워지면 다음 초콜릿으로 이동
   // useEffect(() => {
@@ -438,16 +311,6 @@ export default function Stage() {
   // useEffect(() => {
   //   debug("current tab index", currentTabIndex);
   // }, [currentTabIndex]);
-
-  // const handleSaveDrawing = (imageData) => {
-  //   setChocolateInfo((prev) => ({
-  //     ...prev,
-  //     drawings: {
-  //       ...prev.drawings,
-  //       [currentChocolateIndex]: imageData,
-  //     },
-  //   }));
-  // };
 
   // useEffect(() => {
   //   const handleClickOutside = (event) => {
@@ -509,7 +372,9 @@ export default function Stage() {
       {uiState.isTalkBubbleShow && <TalkBubble dialogue={currentData?.dialogue || "안녕하세요!"} />}
 
       {/* 스테이지별 메인 아이템 */}
-      {uiState.isShowItems && <StageItems currentData={currentData} stage={stage} />}
+      {uiState.isShowItems && (
+        <StageItems currentData={currentData} stage={stage} handleEvent={handleEvent} selectionState={selectionState} positionState={positionState} />
+      )}
 
       {/* 버튼 */}
       {uiState.isShowButton && (

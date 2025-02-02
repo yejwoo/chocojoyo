@@ -1,9 +1,8 @@
-// import { Shapes } from "@/public/icons/shapes";
+import { Shapes } from "@/public/icons/shapes";
 import tailwindConfig from "../tailwind.config.mjs";
 import { yantoBlink, yantoHello, yantoEat, yantoSwing, yantoThumb } from "@/public/images/common";
 import { chocolate1, chocolate2, chocolate3, chocolate4, chocolate5, chocolate6, chocolate7, knifeDown, knifeUp, arrowDown } from "@/public/images/stage2";
 import { doubleBoiler1, doubleBoiler2, doubleBoiler3, spatula } from "@/public/images/stage3";
-
 const chocolateColorsConfig = tailwindConfig.theme.extend.colors.chocolates;
 const chocopenColorsConfig = tailwindConfig.theme.extend.colors.chocopens;
 import { PastryBag } from "@/public/images/stage4";
@@ -33,47 +32,48 @@ export const stageData = {
     init: {
       imgSrc: yantoHello,
       dialogue: "안녕하세요!<br/> 저는 얀토예요.",
-      sequence: [{ type: "delay", value: 1500 }, { type: "nextSubStage" }],
-      nextSubStage: "message",
-    },
-    message: {
-      imgSrc: yantoThumb,
-      dialogue: "달콤한 초콜릿을<br/> 만들러 가볼까요?",
-      sequence: [{ type: "delay", value: 2000 }, { type: "nextSubStage" }],
+      // { type: "delay", value: 1500 }, 
+      sequence: [{ type: "nextSubStage" }],
       nextSubStage: "description",
     },
+    // message: {
+    //   imgSrc: yantoThumb,
+    //   dialogue: "달콤한 초콜릿을<br/> 만들러 가볼까요?",
+    //   sequence: [{ type: "delay", value: 2000 }, { type: "nextSubStage" }],
+    //   nextSubStage: "description",
+    // },
     description: {
       imgSrc: yantoBlink,
       dialogue: "초콜릿 모양을 선택해주세요.",
       ...commonConfig,
       items: [
         {
-          imgSrc: "./icons/shapes/shape-circle.svg",
+          imgSrc: Shapes.Circle,
           alt: "원형 초콜릿",
           variant: "circle",
         },
         {
-          imgSrc: "./icons/shapes/shape-heart.svg",
+          imgSrc: Shapes.Heart,
           alt: "하트 초콜릿",
           variant: "heart",
         },
         {
-          imgSrc: "./icons/shapes/shape-square.svg",
+          imgSrc: Shapes.Square,
           alt: "사각형 초콜릿",
           variant: "square",
         },
         {
-          imgSrc: "./icons/shapes/shape-bear.svg",
+          imgSrc: Shapes.Bear,
           alt: "곰 초콜릿",
           variant: "bear",
         },
         {
-          imgSrc: "./icons/shapes/shape-rabbit.svg",
+          imgSrc: Shapes.Rabbit,
           alt: "토끼 초콜릿",
           variant: "rabbit",
         },
         {
-          imgSrc: "./icons/shapes/shape-cat.svg",
+          imgSrc: Shapes.Cat,
           alt: "고양이 초콜릿",
           variant: "cat",
         },
