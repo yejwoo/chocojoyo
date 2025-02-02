@@ -436,11 +436,11 @@ export const bottomNaviData = {
       type: "image",
       data: [
         {
-          imgSrc: '',
+          imgSrc: 'test',
           alt: '',
         },
         {
-          imgSrc: '',
+          imgSrc: 'test',
           alt: '',
         },
       ],

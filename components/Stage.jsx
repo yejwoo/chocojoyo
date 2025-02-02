@@ -19,10 +19,11 @@ import mold from "@/public/images/stage4/chocolate-mold.svg";
 import box from "@/public/images/stage5/box.svg";
 import { PastryBag } from "@/public/images/stage4";
 import { ChocoPen } from "@/public/images/stage5/chocopen";
+import Canvas from "./Canvas";
 
 export default function Stage() {
   const [stage, setStage] = useState({
-    main: "stage1",
+    main: "stage5",
     sub: "init",
   });
   const [buttonConfig, setButtonConfig] = useState({
@@ -56,6 +57,7 @@ export default function Stage() {
   const currentData = stageData[stage.main][stage.sub];
   const [currentChocolateIndex, setCurrentChocolateIndex] = useState(0);
   const [currentTabIndex, setCurrentTabIndex] = useState(0);
+
   const [isPastryBagHidden, setIsPastryBagHidden] = useState(false); // 짤주머니 숨김 여부
   const hasMovedRef = useRef(new Set());
   const chocolatePositions = [
@@ -68,14 +70,20 @@ export default function Stage() {
   ];
   const modalConfig = currentData.modalConfig;
   const [selectedColor, setSelectedColor] = useState("vanilla");
+  // const [chocolateInfo, setChocolateInfo] = useState({
+  //   shapes: [],
+  //   colors: Array(6).fill("default"),
+  //   sizes: Array(6).fill(0),
+  //   drawings: {},
+  //   toppings: {},
+  // });
   const [chocolateInfo, setChocolateInfo] = useState({
-    shapes: [],
-    colors: Array(6).fill("default"),
-    sizes: Array(6).fill(0),
-    drawings: {},
-    toppings: {},
+    shapes: ["rabbit", "bear", "cat", "circle", "circle", "circle"], // 6개 추가
+    colors: ["ruby", "vanilla", "milk", "dark", "greentea", "red"], // 각 초콜릿의 색상 지정
+    sizes: [100, 100, 100, 100, 100, 100], // 초콜릿 크기를 100%로 설정
+    drawings: {}, // 캔버스 그림 저장 (초기에는 빈 객체)
+    toppings: {}, // 토핑 저장 (초기에는 빈 객체)
   });
-
   const [shapes, setShapes] = useState([]);
   const [formData, setFormData] = useState({
     username: "",
@@ -414,6 +422,20 @@ export default function Stage() {
     }
   }, [chocolateInfo.sizes]);
 
+  useEffect(() => {
+    debug("current chocolate index", currentChocolateIndex);
+  }, [currentChocolateIndex]);
+
+  const handleSaveDrawing = (imageData) => {
+    setChocolateInfo((prev) => ({
+      ...prev,
+      drawings: {
+        ...prev.drawings,
+        [currentChocolateIndex]: imageData,
+      },
+    }));
+  };
+
   return (
     <StageLayout
       backgroundSrc={bg}
@@ -738,7 +760,7 @@ export default function Stage() {
                 />
                 {/* 초콜릿들 */}
                 <div className="w-full flex justify-center items-center flex-wrap absolute gap-x-2 gap-y-2 top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
-                  {shapes.map((item, index) => {
+                  {chocolateInfo.shapes.map((item, index) => {
                     const name = item[0].toUpperCase() + item.slice(1);
                     const ShapeComponent = Shapes[name];
                     const color = chocolateInfo.colors[index];
@@ -746,14 +768,11 @@ export default function Stage() {
                     return ShapeComponent ? (
                       <div
                         key={index}
-                        onClick={() => handleChocolateClick(index)}
-                        onMouseDown={() => handleChocolatePress(index)}
-                        onTouchStart={() => handleChocolatePress(index)}
+                        onClick={() => setCurrentChocolateIndex(index)}
                         onDragStart={(e) => e.preventDefault()}
                         draggable={false}
                         className="flex-shrink-0 cursor-pointer relative w-[80px] h-[76px] bg-gray-warm-300 rounded-xl"
                         style={{
-                          pointerEvents: "none",
                           WebkitTouchCallout: "none",
                           TouchAction: "none",
                         }}
@@ -776,12 +795,18 @@ export default function Stage() {
                             }
                           />
                         </div>
+                        <Canvas
+                          isSelected={currentChocolateIndex === index}
+                          strokeColor={selectedColor}
+                          onSave={handleSaveDrawing}
+                        />
                       </div>
                     ) : (
                       console.warn(`${name} 컴포넌트 없음`) || null
                     );
                   })}
                 </div>
+               
               </div>
               <div
                 className="w-[343px] h-96 bottom-[-20px] pastry-bag-area absolute"
@@ -790,16 +815,16 @@ export default function Stage() {
                 <ChocoPen
                   fillColor={bottomNaviData.stage5[0].data[selectedColor].fill}
                   // className={`${isPastryBagHidden ? "hidden" : ""}`} // 모든 초콜릿 채우면 숨김
-                  style={{
-                    position: "absolute",
-                    cursor: "grab",
-                    left: `${pastryBagPosition.x}px`,
-                    top: `${pastryBagPosition.y}px`,
-                    WebkitTouchCallout: "none",
-                    TouchAction: "none",
-                    pointerEvents: "auto",
-                    userSelect: "none",
-                  }}
+                  // style={{
+                  //   position: "absolute",
+                  //   cursor: "grab",
+                  //   left: `${pastryBagPosition.x}px`,
+                  //   top: `${pastryBagPosition.y}px`,
+                  //   WebkitTouchCallout: "none",
+                  //   TouchAction: "none",
+                  //   pointerEvents: "auto",
+                  //   userSelect: "none",
+                  // }}
                   // onClick={() => handleChocolateClick(currentChocolateIndex)}
                   // onMouseDown={() =>
                   //   handleChocolatePress(currentChocolateIndex)
@@ -811,6 +836,7 @@ export default function Stage() {
                   onDragStart={(e) => e.preventDefault()}
                 />
               </div>
+
             </>
           )}
 
@@ -887,7 +913,11 @@ export default function Stage() {
                                 ? "ring-4 ring-brand-200"
                                 : ""
                             } 
-                              ${currentTabIndex === index ? "opacity-100 visible" : "opacity-0 invisible absolute"}`}
+                              ${
+                                currentTabIndex === index
+                                  ? "opacity-100 visible"
+                                  : "opacity-0 invisible absolute"
+                              }`}
                             style={{
                               backgroundColor: naviData.data[item].fill,
                               borderColor: naviData.data[item].border,
@@ -899,7 +929,11 @@ export default function Stage() {
                       return (
                         <div
                           key={`${stage.main}-${type}-${index}`}
-                          className={`flex gap-4  ${currentTabIndex === index ? "opacity-100 visible" : "opacity-0 invisible absolute"}`}
+                          className={`flex gap-4  ${
+                            currentTabIndex === index
+                              ? "opacity-100 visible"
+                              : "opacity-0 invisible absolute"
+                          }`}
                         >
                           {naviData.data.map((item, subIndex) => (
                             <img

@@ -1,6 +1,6 @@
 export const ChocoPen = ({
   fillColor = "#fff",
-  width = 96,
+  width = 64,
   height = 175,
   ...props
 }) => (
