@@ -1,4 +1,3 @@
-import tailwindConfig from "../tailwind.config.mjs";
 import StageLayout from "./StageLayout";
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
@@ -14,11 +13,12 @@ import {
   checkLg,
   bg,
 } from "@/public/images/common";
-import { stageData, stageItems } from "@/data/Stage";
+import { bottomNaviData, stageData, stageItems } from "@/data/Stage";
 import { Shapes } from "@/public/icons/shapes";
 import mold from "@/public/images/stage4/chocolate-mold.svg";
 import box from "@/public/images/stage5/box.svg";
 import { PastryBag } from "@/public/images/stage4";
+import { ChocoPen } from "@/public/images/stage5/chocopen";
 
 export default function Stage() {
   const [stage, setStage] = useState({
@@ -46,13 +46,16 @@ export default function Stage() {
   const [inputValue, setInputValue] = useState("");
   const [isSubmitEnabled, setIsSubmitEnabled] = useState(false);
   const [isCompleteEvent, setIsCompleteEvent] = useState(false);
-  const currentData = stageData[stage.main][stage.sub];
   const [position, setPosition] = useState({ x: 100, y: 120 });
   const [isDragging, setIsDragging] = useState(false);
   const [shift, setShift] = useState({ x: 0, y: 0 });
   const [stirCount, setStirCount] = useState(0);
   const [pastryBagPosition, setPastryBagPosition] = useState({ x: 54, y: 72 });
+
+  // current 데이터
+  const currentData = stageData[stage.main][stage.sub];
   const [currentChocolateIndex, setCurrentChocolateIndex] = useState(0);
+  const [currentTabIndex, setCurrentTabIndex] = useState(0);
   const [isPastryBagHidden, setIsPastryBagHidden] = useState(false); // 짤주머니 숨김 여부
   const hasMovedRef = useRef(new Set());
   const chocolatePositions = [
@@ -63,40 +66,7 @@ export default function Stage() {
     { x: 144, y: 154 },
     { x: 233, y: 154 },
   ];
-
   const modalConfig = currentData.modalConfig;
-  const chocolatColorsConfig = tailwindConfig.theme.extend.colors.chocolates;
-  const chocolateColors = {
-    default: {
-      fill: "#A9A9A9",
-      border: "#9E9C9D",
-    },
-    vanilla: {
-      fill: chocolatColorsConfig.vanilla[100],
-      border: chocolatColorsConfig.vanilla[200],
-    },
-    milk: {
-      fill: chocolatColorsConfig.milk[100],
-      border: chocolatColorsConfig.milk[200],
-    },
-    dark: {
-      fill: chocolatColorsConfig.dark[100],
-      border: chocolatColorsConfig.dark[200],
-    },
-    ruby: {
-      fill: chocolatColorsConfig.ruby[100],
-      border: chocolatColorsConfig.ruby[200],
-    },
-    red: {
-      fill: chocolatColorsConfig.red[100],
-      border: chocolatColorsConfig.red[200],
-    },
-    greentea: {
-      fill: chocolatColorsConfig.greentea[100],
-      border: chocolatColorsConfig.greentea[200],
-    },
-  };
-
   const [selectedColor, setSelectedColor] = useState("vanilla");
   const [chocolateInfo, setChocolateInfo] = useState({
     shapes: [],
@@ -105,6 +75,7 @@ export default function Stage() {
     drawings: {},
     toppings: {},
   });
+
   const [shapes, setShapes] = useState([]);
   const [formData, setFormData] = useState({
     username: "",
@@ -236,6 +207,7 @@ export default function Stage() {
     setIsPastryBagHidden(false);
     setCurrentIndex(0);
     setCurrentChocolateIndex(0);
+    setSelectedColor("vanilla");
     setButtonConfig({
       shape: "rectangle",
       type: null,
@@ -677,8 +649,12 @@ export default function Stage() {
                               WebkitTouchCallout: "none",
                               TouchAction: "none",
                             }}
-                            strokeColor={chocolateColors.default.border}
-                            fillColor={chocolateColors.default.fill}
+                            strokeColor={
+                              bottomNaviData.stage4[0].data.default.border
+                            }
+                            fillColor={
+                              bottomNaviData.stage4[0].data.default.fill
+                            }
                             width={64}
                             height={56}
                             draggable={false}
@@ -690,8 +666,12 @@ export default function Stage() {
                           <ShapeComponent
                             draggable={false}
                             onDragStart={(e) => e.preventDefault()}
-                            strokeColor={chocolateColors[color].border}
-                            fillColor={chocolateColors[color].fill}
+                            strokeColor={
+                              bottomNaviData.stage4[0].data[color].border
+                            }
+                            fillColor={
+                              bottomNaviData.stage4[0].data[color].fill
+                            }
                             width={
                               (64 * (chocolateInfo.sizes[index] || 0)) / 100
                             }
@@ -712,7 +692,7 @@ export default function Stage() {
                 style={{ pointerEvents: "none" }}
               >
                 <PastryBag
-                  fillColor={chocolateColors[selectedColor].fill}
+                  fillColor={bottomNaviData.stage4[0].data[selectedColor].fill}
                   className={`${isPastryBagHidden ? "hidden" : ""}`} // 모든 초콜릿 채우면 숨김
                   style={{
                     position: "absolute",
@@ -782,8 +762,12 @@ export default function Stage() {
                           <ShapeComponent
                             draggable={false}
                             onDragStart={(e) => e.preventDefault()}
-                            strokeColor={chocolateColors[color].border}
-                            fillColor={chocolateColors[color].fill}
+                            strokeColor={
+                              bottomNaviData.stage4[0].data[color].border
+                            }
+                            fillColor={
+                              bottomNaviData.stage4[0].data[color].fill
+                            }
                             width={
                               (64 * (chocolateInfo.sizes[index] || 0)) / 100
                             }
@@ -799,13 +783,13 @@ export default function Stage() {
                   })}
                 </div>
               </div>
-              {/* <div
+              <div
                 className="w-[343px] h-96 bottom-[-20px] pastry-bag-area absolute"
                 style={{ pointerEvents: "none" }}
               >
-                <PastryBag
-                  fillColor={chocolateColors[selectedColor].fill}
-                  className={`${isPastryBagHidden ? "hidden" : ""}`} // 모든 초콜릿 채우면 숨김
+                <ChocoPen
+                  fillColor={bottomNaviData.stage5[0].data[selectedColor].fill}
+                  // className={`${isPastryBagHidden ? "hidden" : ""}`} // 모든 초콜릿 채우면 숨김
                   style={{
                     position: "absolute",
                     cursor: "grab",
@@ -816,17 +800,17 @@ export default function Stage() {
                     pointerEvents: "auto",
                     userSelect: "none",
                   }}
-                  onClick={() => handleChocolateClick(currentChocolateIndex)}
-                  onMouseDown={() =>
-                    handleChocolatePress(currentChocolateIndex)
-                  }
-                  onTouchStart={() =>
-                    handleChocolatePress(currentChocolateIndex)
-                  }
+                  // onClick={() => handleChocolateClick(currentChocolateIndex)}
+                  // onMouseDown={() =>
+                  //   handleChocolatePress(currentChocolateIndex)
+                  // }
+                  // onTouchStart={() =>
+                  //   handleChocolatePress(currentChocolateIndex)
+                  // }
                   draggable={false}
                   onDragStart={(e) => e.preventDefault()}
                 />
-              </div> */}
+              </div>
             </>
           )}
 
@@ -862,26 +846,90 @@ export default function Stage() {
       {isShowItems &&
         Number(stage.main.split("stage")[1]) >= 4 &&
         stage.sub === "description" && (
-          <div
-            className={`absolute bg-popup-100 left-0 right-0 h-16 bottom-0 ${
-              isPastryBagHidden ? "hidden" : ""
-            }`}
-          >
-            <div className="flex gap-7 justify-center items-center w-full h-full">
-              {Object.keys(chocolateColors)
-                .filter((item) => item !== "default")
-                .map((item) => (
-                  <div
-                    key={item}
-                    onClick={() => setSelectedColor(item)}
-                    className={`cursor-pointer rounded-full border-2 w-8 h-8
-                  ${selectedColor === item ? "ring-4 ring-brand-200" : ""}`}
-                    style={{
-                      backgroundColor: chocolateColors[item].fill,
-                      borderColor: chocolateColors[item].border,
-                    }}
-                  ></div>
-                ))}
+          <div className="fixed h-[104px] bottom-0 left-0 right-0">
+            {/* 탭 */}
+            {bottomNaviData[stage.main].length > 1 && (
+              <div className="flex h-10">
+                {bottomNaviData[stage.main].map((item, index) => {
+                  return (
+                    <div
+                      key={index}
+                      onClick={() => setCurrentTabIndex(index)}
+                      className={`cursor-pointer ${
+                        currentTabIndex === index
+                          ? "bg-popup-100"
+                          : "bg-gray-warm-50 text-gray-warm-200"
+                      } w-20 flex items-center justify-center text-xl rounded-tl-xl rounded-tr-xl`}
+                    >
+                      {item.title}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* 네비 데이터 */}
+            <div className="absolute bg-popup-100 left-0 right-0 h-16 bottom-0">
+              <div className="flex gap-7 justify-center items-center w-full h-full">
+                {bottomNaviData[stage.main].map((naviData, index) => {
+                  const { type } = naviData;
+
+                  switch (type) {
+                    case "color":
+                      return Object.keys(naviData.data)
+                        .filter((item) => item !== "default")
+                        .map((item, subIndex) => (
+                          <div
+                            key={`${stage.main}-${type}-${item}-${subIndex}`}
+                            onClick={() => setSelectedColor(item)}
+                            className={`cursor-pointer flex-shrink-0 rounded-full border-2 w-8 h-8 ${
+                              selectedColor === item
+                                ? "ring-4 ring-brand-200"
+                                : ""
+                            } 
+                              ${currentTabIndex === index ? "opacity-100 visible" : "opacity-0 invisible absolute"}`}
+                            style={{
+                              backgroundColor: naviData.data[item].fill,
+                              borderColor: naviData.data[item].border,
+                            }}
+                          ></div>
+                        ));
+
+                    case "image":
+                      return (
+                        <div
+                          key={`${stage.main}-${type}-${index}`}
+                          className={`flex gap-4  ${currentTabIndex === index ? "opacity-100 visible" : "opacity-0 invisible absolute"}`}
+                        >
+                          {naviData.data.map((item, subIndex) => (
+                            <img
+                              key={`${stage.main}-${type}-${subIndex}-${item.imgSrc}`} // 유니크한 key 보장
+                              src={item.imgSrc}
+                              alt={item.alt || "토핑 이미지"}
+                              className="w-8 h-8 cursor-pointer"
+                            />
+                          ))}
+                        </div>
+                      );
+
+                    // case "text":
+                    //   return (
+                    //     <input
+                    //       key={`${stage.main}-${type}-${index}`}
+                    //       type="text"
+                    //       placeholder={naviData.data.placeholder}
+                    //       maxLength={naviData.data.maxLength}
+                    //       className="border px-2 py-1 rounded-md text-sm w-48"
+                    //       onChange={(e) => setCardMessage(e.target.value)}
+                    //       value={cardMessage}
+                    //     />
+                    //   );
+
+                    default:
+                      return null;
+                  }
+                })}
+              </div>
             </div>
           </div>
         )}

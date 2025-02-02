@@ -1,4 +1,5 @@
 // import { Shapes } from "@/public/icons/shapes";
+import tailwindConfig from "../tailwind.config.mjs";
 import {
   yantoBlink,
   yantoHello,
@@ -26,6 +27,8 @@ import {
   doubleBoiler3,
   spatula,
 } from "@/public/images/stage3";
+const chocolateColorsConfig = tailwindConfig.theme.extend.colors.chocolates;
+const chocopenColorsConfig = tailwindConfig.theme.extend.colors.chocopens;
 import { pastryBag } from "@/public/images/stage4";
 
 // @TODO: 얀토 이미지 수정 후 imgSrc 전면 수정
@@ -44,29 +47,14 @@ export const stageData = {
         `,
       modalConfig: null,
       sequence: [{ type: "delay", value: 1500 }, { type: "nextSubStage" }],
-      nextSubStage: "namePrompt",
-      isFinal: false,
-    },
-    namePrompt: {
-      imgSrc: yantoBlink,
-      dialogue: `
-          어떤 이름으로<br/>
-          초콜릿을 전해드릴까요?
-        `,
-      sequence: [{ type: "delay", value: 1200 }, { type: "showModal" }],
-      modalConfig: {
-        title: "내 이름은...",
-        type: "single",
-        maxLength: 10,
-      },
       nextSubStage: "message",
       isFinal: false,
     },
     message: {
       imgSrc: yantoThumb,
       dialogue: `
-            멋진 이름이에요!<br/>
-            이제 시작해볼까요?
+            달콤한 초콜릿을<br/>
+            만들러 가볼까요?
         `,
       modalConfig: null,
       sequence: [{ type: "delay", value: 2000 }, { type: "nextSubStage" }],
@@ -267,6 +255,21 @@ export const stageData = {
    * =========================Stage 7(Share)=========================
    *
    */
+  // namePrompt: {
+  //   imgSrc: yantoBlink,
+  //   dialogue: `
+  //       어떤 이름으로<br/>
+  //       초콜릿을 전해드릴까요?
+  //     `,
+  //   sequence: [{ type: "delay", value: 1200 }, { type: "showModal" }],
+  //   modalConfig: {
+  //     title: "내 이름은...",
+  //     type: "single",
+  //     maxLength: 10,
+  //   },
+  //   nextSubStage: "message",
+  //   isFinal: false,
+  // },
 };
 
 export const stageItems = {
@@ -358,5 +361,109 @@ export const stageItems = {
         variant: null,
       },
     ],
-  }
+  },
+};
+
+export const bottomNaviData = {
+  stage4: [
+    {
+      type: "color",
+      data: {
+        default: {
+          fill: "#A9A9A9",
+          border: "#9E9C9D",
+        },
+        vanilla: {
+          fill: chocolateColorsConfig.vanilla[100],
+          border: chocolateColorsConfig.vanilla[200],
+        },
+        milk: {
+          fill: chocolateColorsConfig.milk[100],
+          border: chocolateColorsConfig.milk[200],
+        },
+        dark: {
+          fill: chocolateColorsConfig.dark[100],
+          border: chocolateColorsConfig.dark[200],
+        },
+        ruby: {
+          fill: chocolateColorsConfig.ruby[100],
+          border: chocolateColorsConfig.ruby[200],
+        },
+        red: {
+          fill: chocolateColorsConfig.red[100],
+          border: chocolateColorsConfig.red[200],
+        },
+        greentea: {
+          fill: chocolateColorsConfig.greentea[100],
+          border: chocolateColorsConfig.greentea[200],
+        },
+      },
+      title: null,
+    },
+  ],
+  stage5: [
+    {
+      type: "color",
+      data: {
+        vanilla: {
+          fill: chocopenColorsConfig.vanilla[100],
+          border: chocopenColorsConfig.vanilla[200],
+        },
+        ruby: {
+          fill: chocopenColorsConfig.ruby[100],
+          border: chocopenColorsConfig.ruby[200],
+        },
+        red: {
+          fill: chocopenColorsConfig.red[100],
+          border: chocopenColorsConfig.red[200],
+        },
+        yellow: {
+          fill: chocopenColorsConfig.yellow[100],
+          border: chocopenColorsConfig.yellow[200],
+        },
+        greentea: {
+          fill: chocopenColorsConfig.greentea[100],
+          border: chocopenColorsConfig.greentea[200],
+        },
+        dark: {
+          fill: chocopenColorsConfig.dark[100],
+          border: chocopenColorsConfig.dark[200],
+        },
+      },
+      title: "초코펜",
+    },
+    {
+      type: "image",
+      data: [
+        {
+          imgSrc: '',
+          alt: '',
+        },
+        {
+          imgSrc: '',
+          alt: '',
+        },
+      ],
+      title: "토핑",
+    },
+  ],
+  stage6: [
+    {
+      type: "color",
+      title: "박스 색상",
+      data: {
+        white: { fill: "#FFFFFF", border: "#CCCCCC" },
+        pink: { fill: "#FFC0CB", border: "#FF99A5" },
+        blue: { fill: "#ADD8E6", border: "#7BB7D5" },
+      },
+    },
+    {
+      type: "text",
+      title: "카드 작성",
+      data: {
+        placeholder: "카드에 메시지를 입력하세요.", // 입력 필드에 들어갈 힌트 텍스트
+        maxLength: 100, // 최대 입력 가능 글자 수
+      },
+    },
+  ],
 };
