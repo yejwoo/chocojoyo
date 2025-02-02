@@ -34,16 +34,16 @@ export default function Stage() {
 
   // 💝 UI 상태
   const [uiState, setUIState] = useState({
-    isTalkBubbleShow: false,
-    isShowButton: false,
-    isShowModal: false,
-    isShowItems: false,
-    isShowNavi: false,
-    isCompleteEvent: false,
-    isDragging: false,
-    isSubmitEnabled: false,
-    isZoomMode: false,
-  });
+  isTalkBubbleShow: false,
+  isShowButton: false,
+  isShowModal: false,
+  isShowItems: false,
+  isShowNavi: false,
+  isCompleteEvent: false,
+  isDragging: false,
+  isSubmitEnabled: false,
+  isZoomMode: false,
+  })
 
   // 💝 현재 선택 관련 상태
   const [selectionState, setSelectionState] = useState({
@@ -53,6 +53,7 @@ export default function Stage() {
     currentTopping: "",
   });
 
+  
   const currentData = stageData[stage.main][stage.sub];
 
   // 💝 위치 관련 상태
@@ -88,8 +89,9 @@ export default function Stage() {
   });
 
   // 💝 ref 관련 정보
-  const hasMovedRef = useRef(new Set());
-  const moldRef = useRef(null);
+const hasMovedRef = useRef(new Set());
+const moldRef = useRef(null);
+
 
   const actionHandlers = {
     delay: async (value) => await delay(value),
@@ -440,6 +442,7 @@ export default function Stage() {
       },
     }));
   };
+
 
   // useEffect(() => {
   //   const handleClickOutside = (event) => {
@@ -792,7 +795,7 @@ export default function Stage() {
                     const ShapeComponent = Shapes[name];
                     const color = chocolateInfo.colors[index];
                     const isSelected = currentChocolateIndex === index;
-                    const isChocoPenMode = currentTabIndex === 0;
+                    const isChocoPenMode = currentTabIndex === 0; 
 
                     return ShapeComponent ? (
                       <div
@@ -801,9 +804,7 @@ export default function Stage() {
                         // onMouseLeave={() => setCurrentChocolateIndex(null)}
                         onDragStart={(e) => e.preventDefault()}
                         draggable={false}
-                        className={`flex-shrink-0 cursor-${
-                          isChocoPenMode ? "chocopen" : currentTopping
-                        } relative w-[80px] h-[76px] bg-gray-warm-300 rounded-xl`}
+                        className={`flex-shrink-0 cursor-${isChocoPenMode ? 'chocopen' : currentTopping} relative w-[80px] h-[76px] bg-gray-warm-300 rounded-xl`}
                         style={{
                           WebkitTouchCallout: "none",
                           TouchAction: "none",
