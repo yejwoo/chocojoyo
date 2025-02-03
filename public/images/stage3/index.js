@@ -1,5 +1,5 @@
-export { default as arrow } from './arrow.png';
-export { default as doubleBoiler1 } from './double-boiler1.png';
-export { default as doubleBoiler2 } from './double-boiler2.png';
-export { default as doubleBoiler3 } from './double-boiler3.png';
-export { default as spatula } from './spatula.png';
+export { default as doubleBoiler } from './double-boiler.svg';
+export { default as spatula } from './spatula.svg';
+export { default as meltedChocolate1 } from './melted-chocolate1.svg';
+export { default as meltedChocolate2 } from './melted-chocolate2.svg';
+export { default as meltedChocolate3 } from './melted-chocolate3.svg';

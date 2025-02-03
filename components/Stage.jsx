@@ -16,7 +16,7 @@ import { handleChocolateClick, handleChocolatePress } from "@/app/handlers/stage
 import { handleSaveDrawing } from "@/app/handlers/generalHandlers";
 
 export default function Stage() {
-  const [stage, setStage] = useState({ main: 2, sub: "init" });
+  const [stage, setStage] = useState({ main: 3, sub: "init" });
   const [buttonConfig, setButtonConfig] = useState({
     shape: "rectangle",
     type: null,

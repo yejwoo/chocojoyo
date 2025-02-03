@@ -1,7 +1,7 @@
 import tailwindConfig from "../tailwind.config.mjs";
 import { yantoBlink, yantoHello, yantoEat, yantoSwing, yantoThumb } from "@/public/images/common";
 import { chocolate1, chocolate2, chocolate3, chocolate4, chocolate5, chocolate6, chocolate7, chocolate8, knife } from "@/public/images/stage2";
-import { doubleBoiler1, doubleBoiler2, doubleBoiler3, spatula } from "@/public/images/stage3";
+import { doubleBoiler, meltedChocolate1, meltedChocolate2, meltedChocolate3, spatula } from "@/public/images/stage3";
 const chocolateColorsConfig = tailwindConfig.theme.extend.colors.chocolates;
 const chocopenColorsConfig = tailwindConfig.theme.extend.colors.chocopens;
 import { PastryBag } from "@/public/images/stage4";
@@ -108,19 +108,25 @@ export const stageData = [
           imgSrc: spatula,
           alt: "스패츌라",
           variant: null,
+          position: { x: 180, y: 100 } 
         },
         {
-          imgSrc: doubleBoiler1,
+          imgSrc: doubleBoiler,
+          alt: "중탕 냄비",
+          variant: null,
+        },
+        {
+          imgSrc: meltedChocolate1,
           alt: "초콜릿 중탕",
           variant: null,
         },
         {
-          imgSrc: doubleBoiler2,
+          imgSrc: meltedChocolate2,
           alt: "초콜릿 중탕",
           variant: null,
         },
         {
-          imgSrc: doubleBoiler3,
+          imgSrc: meltedChocolate3,
           alt: "초콜릿 중탕",
           variant: null,
         },
