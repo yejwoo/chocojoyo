@@ -12,7 +12,7 @@ import {
   naviStage5On,
   naviStage6Off,
   naviStage6On,
-  checkSm,
+  check,
 } from "@/public/images/common";
 
 const stages = [
@@ -26,8 +26,8 @@ const stages = [
 
 export default function Navi({ currentStage, completedStages }) {
   return (
-    <nav className="fixed left-0 right-0 top-6">
-      <ul className="flex items-center justify-center gap-4">
+    <nav className="fixed left-0 right-0 top-6 flex  justify-center">
+      <ul className="flex items-center justify-center gap-4 rounded-lg">
         {stages.map((stage) => {
           const isCurrent = currentStage === stage.id;
           const isCompleted = completedStages.includes(stage.id);
@@ -35,13 +35,20 @@ export default function Navi({ currentStage, completedStages }) {
           const showOn = isCurrent || isCompleted;
 
           return (
-            <li key={stage.id} className={`stage${stage.id} relative w-10 h-10 flex-shrink-0`}>
+            <li key={stage.id} className={`stage${stage.id} w-12 h-14 relative flex-shrink-0 flex items-center justify-center`}>
+              <div className="absolute bottom-[2px] w-[52px] h-[52px] bg-white shadow-pink rounded-lg"></div>
               {/* Off 상태 */}
-              {showOff && <Image src={stage.off} alt={`${stage.id}단계`} />}
+              {showOff && <Image className="z-10" src={stage.off} alt={`${stage.id}단계`} />}
               {/* On 상태 */}
-              {showOn && <Image src={stage.on} alt={`${stage.id}단계`} className={isCompleted && !isCurrent ? "opacity-70" : "opacity-100"} />}
+              {showOn && (
+                <Image
+                  src={stage.on}
+                  alt={`${stage.id}단계`}
+                  className={`${isCompleted && !isCurrent ? "opacity-70" : "opacity-100 animate-heartbeat"} z-10`}
+                />
+              )}
               {/* 완료 체크 */}
-              {isCompleted && <Image src={checkSm} alt="완료" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />}
+              {isCompleted && <Image src={check} alt="완료" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20" />}
             </li>
           );
         })}

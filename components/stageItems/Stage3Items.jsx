@@ -9,7 +9,7 @@ export default function Stage3Items({ currentData, gameState, handleEvent, toolS
   const rotationRef = useRef(false);
 
   return (
-    <div className="relative w-60 h-56">
+    <div className="absolute w-60 h-56 bottom-[-32px]">
       <ProgressBar gameState={gameState} />
 
       {/* 초콜릿 중탕기 */}

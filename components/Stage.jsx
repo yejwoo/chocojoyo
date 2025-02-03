@@ -403,7 +403,7 @@ export default function Stage() {
 
       {/* 스테이지별 메인 아이템 */}
       {uiState.isShowItems && (
-        <div id="main-items" className="absolute bottom-[132px] left-1/2 w-[296px] -translate-x-1/2 flex justify-center gap-6 flex-wrap animate-bounce-up-once">
+        <div id="main-items" className="absolute bottom-[120px] left-1/2 w-[296px] -translate-x-1/2 flex justify-center gap-6 flex-wrap animate-bounce-up-once">
           <StageItems
             currentData={currentData}
             stage={stage}

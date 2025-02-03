@@ -83,3 +83,7 @@ hr {
 .cursor-coffeebean {
   cursor: url('/images/stage5/topping-coffeebean-cursor.svg') 16 16, auto;
 }
+
+.shadow-pink {
+  box-shadow: 4px 4px rgb(244, 152, 166)
+}

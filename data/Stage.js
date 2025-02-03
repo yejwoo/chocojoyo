@@ -86,7 +86,7 @@ export const stageData = [
       dialogue: "이제 칼을 눌러서<br/> 초콜릿을 썰어주세요.",
       ...commonConfig,
       items: [
-        { imgSrc: knife, alt: "칼", variant: null, position: { x: 135, y: 100 } },
+        { imgSrc: knife, alt: "칼", variant: null, position: { x: 180, y: 100 } },
         { imgSrc: chocolate1, alt: "초콜릿 썰기", variant: null, position: { x: 135, y: 100 } },
         { imgSrc: chocolate2, alt: "초콜릿 썰기", variant: null, position: { x: 90, y: 100 } },
         { imgSrc: chocolate3, alt: "초콜릿 썰기", variant: null, position: { x: 64, y: 100 } },

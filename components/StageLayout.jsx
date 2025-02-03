@@ -8,7 +8,7 @@ export default function StageLayout({ backgroundSrc, characterSrc, children, mod
         {/* 배경 */}
         <Image src={backgroundSrc} alt="배경" />
         {/* 캐릭터 */}
-        <div className="absolute bottom-[316px] w-40 cursor-pointer">
+        <div className="absolute bottom-[288px] w-40 cursor-pointer">
           <Image className="" src={characterSrc} alt="얀토" draggable={false} />
         </div>
         {/* 카운터 */}

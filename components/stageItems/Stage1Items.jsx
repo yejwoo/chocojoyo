@@ -1,5 +1,5 @@
 import { Shapes } from "@/public/icons/shapes";
-import { checkLg } from "@/public/images/common";
+import { check } from "@/public/images/common";
 import Image from "next/image";
 
 export default function Stage1Items({ currentData, handleEvent, selectionState, chocolateInfo }) {
@@ -18,8 +18,8 @@ export default function Stage1Items({ currentData, handleEvent, selectionState, 
             <Image
               className={`${
                 chocolateInfo.shapes.includes(item.variant) ? "opacity-100 visible" : "opacity-0"
-              } absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}
-              src={checkLg}
+              } w-12 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}
+              src={check}
               alt="완료"
             />
           </div>
