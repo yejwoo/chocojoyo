@@ -45,13 +45,13 @@ export const Shapes = {
       />
     </svg>
   ),
-  Heart: ({ strokeColor = "#3D2505", fillColor = "#894E00", width = 200, height = 180, className = "" }) => (
+  Heart: ({ strokeColor = "#3D2505", fillColor = "#894E00", width = 200, height = 180, strokeWidth= 10, className = "" }) => (
     <svg className={className} width={width} height={height} viewBox="0 0 211 181" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M105.34 23.9321C92.264 11.1402 56.7008 -11.1984 21.8148 23.9321C8.53603 37.304 -7.43236 73.7663 21.8148 108.472C51.0619 143.178 89.6845 167.332 105.34 175.071C120.995 167.332 159.618 143.178 188.865 108.472C218.112 73.7663 202.144 37.304 188.865 23.9321C153.979 -11.1984 118.416 11.1402 105.34 23.9321Z"
         fill={fillColor}
         stroke={strokeColor}
-        strokeWidth="10"
+        strokeWidth={strokeWidth}
         strokeLinecap="round"
         strokeLinejoin="round"
       />

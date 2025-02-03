@@ -418,7 +418,7 @@ export default function Stage() {
 
       {/* 버튼 */}
       {uiState.isShowButton && (
-        <div className="absolute right-4 top-[46%]">
+        <div className="absolute right-3 bottom-[380px]">
           <Button
             disabled={!uiState.isCompleteEvent}
             onClick={handleNextMainStage}

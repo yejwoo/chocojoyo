@@ -38,7 +38,8 @@ export default {
         "bounce-up": "bounceUp 2.5s linear infinite",
         "bounce-up-once": "bounceUpOnce 0.5s linear",
         "bounce-down": "bounceDown 4s linear infinite",
-        "heartbeat": "heartbeat 3s ease-in-out infinite",
+        "heartbeat": "heartbeat 3s ease-in-out 5",
+        "heartbeat-fast": "heartbeat 1s ease-in-out infinite",
       },
       colors: {
         default: "#3D2505",
