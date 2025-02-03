@@ -16,7 +16,7 @@ import { handleChocolateClick, handleChocolatePress } from "@/app/handlers/stage
 import { handleSaveDrawing } from "@/app/handlers/generalHandlers";
 
 export default function Stage() {
-  const [stage, setStage] = useState({ main: 3, sub: "init" });
+  const [stage, setStage] = useState({ main: 1, sub: "init" });
   const [buttonConfig, setButtonConfig] = useState({
     shape: "rectangle",
     type: null,
@@ -260,7 +260,7 @@ export default function Stage() {
     }));
   };
 
-  const handleEvent = (type, variant, index, e) => {
+  const handleEvent = (type, variant, index, e, ref) => {
     switch (stage.main) {
       case 1:
         handleSelect(variant, setChocolateInfo, setUIState);
@@ -270,7 +270,7 @@ export default function Stage() {
         handleToolClick(toolState, setToolState);
         break;
       case 3:
-        handleStir(e, type, gameState, setGameState, setUIState, setToolState);
+        handleStir(e, type, ref, gameState, setGameState, setUIState, setToolState);
         break;
       case 4:
         if (type === "chocolateClick") {

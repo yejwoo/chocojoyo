@@ -1,7 +1,7 @@
-<svg width="641" height="578" viewBox="0 0 641 578" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M635.328 288.822C635.328 444.812 494.801 572.131 320.328 572.131C145.855 572.131 5.32764 444.812 5.32764 288.822C5.32764 132.833 145.855 5.51367 320.328 5.51367C494.801 5.51367 635.328 132.833 635.328 288.822Z" fill="#E6E6E6" stroke="#A5A5A5" stroke-width="10"/>
-<ellipse cx="320.328" cy="288.823" rx="260.116" ry="234.355" fill="#DEDEDE"/>
-<ellipse cx="320.328" cy="288.823" rx="187.236" ry="168.693" fill="#D4D4D4"/>
-<path d="M421.73 505.071C491.929 484.186 596.901 414.458 578.8 261.295" stroke="white" stroke-opacity="0.5" stroke-width="10" stroke-linecap="round"/>
-<path d="M243 60.999C176.113 77.3802 92.5 141.499 69.5 215.499" stroke="white" stroke-opacity="0.5" stroke-width="10" stroke-linecap="round"/>
+<svg width="601" height="578" viewBox="0 0 601 578" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M595.328 289.187C595.328 445.468 463.441 572.495 300.328 572.495C137.214 572.495 5.32764 445.468 5.32764 289.187C5.32764 132.905 137.214 5.87793 300.328 5.87793C463.441 5.87793 595.328 132.905 595.328 289.187Z" fill="#E6E6E6" stroke="#A5A5A5" stroke-width="10"/>
+<ellipse cx="300.328" cy="289.187" rx="243.858" ry="234.355" fill="#DEDEDE"/>
+<ellipse cx="300.328" cy="289.187" rx="175.534" ry="168.693" fill="#D4D4D4"/>
+<path d="M395.392 505.435C461.204 484.55 559.615 414.822 542.646 261.659" stroke="white" stroke-opacity="0.5" stroke-width="10" stroke-linecap="round"/>
+<path d="M227.833 61.3633C165.126 77.7445 86.7393 141.863 65.1768 215.863" stroke="white" stroke-opacity="0.5" stroke-width="10" stroke-linecap="round"/>
 </svg>

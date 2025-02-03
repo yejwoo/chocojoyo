@@ -1,4 +1,4 @@
-export const handleStir = (e, actionType, gameState, setGameState, setUIState, setToolState) => {
+export const handleStir = (e, actionType, rotationRef, gameState, setGameState, setUIState, setToolState) => {
   if (!actionType) {
     console.warn("Unknown stir action:", actionType);
     return;
@@ -6,42 +6,61 @@ export const handleStir = (e, actionType, gameState, setGameState, setUIState, s
 
   switch (actionType) {
     case "stirStart":
-      const { currentItemIndex } = gameState;
-      const nextIndex = currentItemIndex + 1;
+      if (rotationRef.current || gameState.stirCount >= 10) return; 
 
-      setUIState((prev) => {
-        if (prev.isRotating) return prev; // 이미 회전 중이면 중복 실행 방지
-        return { ...prev, isRotating: true };
-      });
+      rotationRef.current = true; // 회전 중 상태로 변경
+      setUIState((prev) => ({ ...prev, isRotating: true }));
 
-      setToolState((prev) => ({
-        ...prev,
-        rotation: prev.rotation + 20, // 회전 적용
-      }));
+      const centerX = 80; // 원 중심 X
+      const centerY = 48; // 원 중심 Y
+      const radius = 30; // 원 반지름
+      let startTime = null;
+      const duration = 1000; // 1초 동안 회전
+      let chocolateRotation = 0; // 초콜릿 덩어리 회전값
 
-      setTimeout(() => {
-        setUIState((prev) => ({ ...prev, isRotating: false })); // 회전 가능 상태로 복귀
-      }, 500); // 0.5초 후 회전 가능
+      const animate = (timestamp) => {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / duration, 1);
 
-      // 회전 횟수 증가
-      const nextCount = gameState.stirCount + 1;
-      setGameState((prev) => ({
-        ...prev,
-        stirCount: nextCount,
-      }));
+        const angle = progress * 2 * Math.PI; // 원을 도는 각도
+        chocolateRotation += 5; // 초콜릿 덩어리 점진적 회전
 
-      if(nextCount === 5 || nextCount === 10) {
-        // currentItemIndex: nextIndex,
-        setGameState((prev) => ({
+        setToolState((prev) => ({
           ...prev,
-          currentItemIndex: nextIndex,
-        }))
-      }
+          position: {
+            x: centerX + radius * Math.cos(angle),
+            y: centerY + radius * Math.sin(angle),
+          },
+          rotation: prev.rotation + 3.6, // 스패츌라 회전
+          chocolateRotation: prev.chocolateRotation + 5, // 초콜릿 덩어리 점진적 회전
+        }));
 
-      // 10회 이상이면 클리어 처리
-      if (nextCount >= 10) {
-        setUIState((prev) => ({ ...prev, isCompleteEvent: true }));
-      }
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          setToolState((prev) => ({
+            ...prev,
+            position: { x: centerX, y: centerY },
+          }));
+
+          setUIState((prev) => ({ ...prev, isRotating: false }));
+          rotationRef.current = false; // 🔥 회전 종료 (중복 실행 방지)
+
+          // 🔥 회전 횟수 업데이트 (10회를 넘지 않도록 제한)
+          const nextCount = Math.min(gameState.stirCount + 1, 10);
+          setGameState((prev) => ({
+            ...prev,
+            stirCount: nextCount,
+            currentItemIndex: nextCount === 5 || nextCount === 10 ? prev.currentItemIndex + 1 : prev.currentItemIndex,
+          }));
+
+          if (nextCount >= 10) {
+            setUIState((prev) => ({ ...prev, isCompleteEvent: true }));
+          }
+        }
+      };
+
+      requestAnimationFrame(animate);
       break;
 
     default:
