@@ -10,7 +10,7 @@ export default function Stage3Items({ currentData, gameState, handleEvent, toolS
 
   return (
     <>
-      <div className="absolute w-60 h-56 bottom-[-12px]">
+      <div className="absolute w-60 h-56 bottom-[-56px]">
         {/* 초콜릿 중탕기 */}
         <Image src={doubleBoiler.imgSrc} alt={doubleBoiler.alt} className="absolute bottom-0" />
 
@@ -50,7 +50,6 @@ export default function Stage3Items({ currentData, gameState, handleEvent, toolS
           />
         </div>
       </div>
-      <ProgressBar gameState={gameState} />
     </>
   );
 }

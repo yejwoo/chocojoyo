@@ -1,4 +1,6 @@
 export const handleStir = (e, actionType, rotationRef, gameState, setGameState, setUIState, setToolState) => {
+  const completeCount = 8;
+
   if (!actionType) {
     console.warn("Unknown stir action:", actionType);
     return;
@@ -6,7 +8,7 @@ export const handleStir = (e, actionType, rotationRef, gameState, setGameState, 
 
   switch (actionType) {
     case "stirStart":
-      if (rotationRef.current || gameState.stirCount >= 10) return; 
+      if (rotationRef.current || gameState.stirCount >= completeCount) return; 
 
       rotationRef.current = true; // 회전 중 상태로 변경
       setUIState((prev) => ({ ...prev, isRotating: true }));
@@ -47,11 +49,11 @@ export const handleStir = (e, actionType, rotationRef, gameState, setGameState, 
           rotationRef.current = false; // 🔥 회전 종료 (중복 실행 방지)
 
           // 🔥 회전 횟수 업데이트 (10회를 넘지 않도록 제한)
-          const nextCount = Math.min(gameState.stirCount + 1, 10);
+          const nextCount = Math.min(gameState.stirCount + 1, completeCount);
           setGameState((prev) => ({
             ...prev,
             stirCount: nextCount,
-            currentItemIndex: nextCount === 5 || nextCount === 10 ? prev.currentItemIndex + 1 : prev.currentItemIndex,
+            currentItemIndex: nextCount === completeCount / 2 || nextCount === completeCount ? prev.currentItemIndex + 1 : prev.currentItemIndex,
           }));
 
           if (nextCount >= 10) {

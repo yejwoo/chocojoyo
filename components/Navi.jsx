@@ -26,8 +26,8 @@ const stages = [
 
 export default function Navi({ currentStage, completedStages }) {
   return (
-    <nav className="fixed left-0 right-0 top-6 flex  justify-center">
-      <ul className="flex items-center justify-center gap-4 rounded-lg">
+    <nav className="fixed left-0 right-0 top-6 flex justify-center">
+      <ul className="flex items-center justify-center gap-[10px] rounded-lg w-[343px]">
         {stages.map((stage) => {
           const isCurrent = currentStage === stage.id;
           const isCompleted = completedStages.includes(stage.id);

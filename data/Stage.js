@@ -44,7 +44,7 @@ export const stageData = [
     // },
     description: {
       imgSrc: yantoBlink,
-      dialogue: "초콜릿 모양을 선택해주세요.",
+      dialogue: "초콜릿 모양을<br/>선택해주세요.",
       ...commonConfig,
       items: [
         {
