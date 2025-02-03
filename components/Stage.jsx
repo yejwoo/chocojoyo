@@ -34,6 +34,7 @@ export default function Stage() {
     isShowNavi: false,
     isCompleteEvent: false,
     isDragging: false,
+    isRotating: false,
     isSubmitEnabled: false,
     isZoomMode: false,
   });
@@ -65,7 +66,7 @@ export default function Stage() {
 
   // 💝 게임 진행 상태
   const [gameState, setGameState] = useState({
-    currentItemIndex: 1,
+    currentItemIndex: 0,
     completedStages: [],
     stirCount: 0,
   });
@@ -183,7 +184,7 @@ export default function Stage() {
 
     setGameState((prev) => ({
       ...prev,
-      currentIndex: 0,
+      currentItemIndex: 0,
     }));
   };
 
@@ -255,21 +256,21 @@ export default function Stage() {
     // 게임 진행 상태 초기화
     setGameState((prev) => ({
       ...prev,
-      currentIndex: 0,
+      currentItemIndex: 0,
     }));
   };
 
-  const handleEvent = (type, variant, index) => {
+  const handleEvent = (type, variant, index, e) => {
     switch (stage.main) {
       case 1:
         handleSelect(variant, setChocolateInfo, setUIState);
         break;
       case 2:
         handleChop(gameState, setGameState, setUIState, setToolState, currentData);
-        handleToolClick(toolState, setToolState)
+        handleToolClick(toolState, setToolState);
         break;
       case 3:
-        handleStir(gameState, setGameState, setUIState);
+        handleStir(e, type, gameState, setGameState, setUIState, setToolState);
         break;
       case 4:
         if (type === "chocolateClick") {

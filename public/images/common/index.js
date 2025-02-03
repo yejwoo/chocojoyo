@@ -1,6 +1,5 @@
-export { default as bgBrown } from "./bg-brown.png";
-export { default as bg } from "./bg.png";
-export { default as bgCounterTop } from "./bg-countertop.png";
+export { default as bg } from "./bg.svg";
+export { default as bgCounterTop } from "./bg-countertop.svg";
 export { default as checkLg } from "./check-lg.png";
 export { default as checkSm } from "./check-sm.png";
 export { default as naviStage1Off } from "./navi-stage1-off.png";
