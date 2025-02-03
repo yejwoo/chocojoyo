@@ -56,7 +56,7 @@ export const handleStir = (e, actionType, rotationRef, gameState, setGameState, 
             currentItemIndex: nextCount === completeCount / 2 || nextCount === completeCount ? prev.currentItemIndex + 1 : prev.currentItemIndex,
           }));
 
-          if (nextCount >= 10) {
+          if (nextCount >= completeCount) {
             setUIState((prev) => ({ ...prev, isCompleteEvent: true }));
           }
         }
