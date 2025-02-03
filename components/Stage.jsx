@@ -10,13 +10,13 @@ import TalkBubble from "./TalkBubble";
 import { BottomNavi } from "./BottomNavi";
 import StageItems from "./StageItems";
 import { handleSelect } from "@/app/handlers/stageHandlers/stage1Handlers";
-import { handleChop } from "@/app/handlers/stageHandlers/stage2Handlers";
+import { handleChop, handleToolClick } from "@/app/handlers/stageHandlers/stage2Handlers";
 import { handleStir } from "@/app/handlers/stageHandlers/stage3Handlers";
 import { handleChocolateClick, handleChocolatePress } from "@/app/handlers/stageHandlers/stage4Handlers";
 import { handleSaveDrawing } from "@/app/handlers/generalHandlers";
 
 export default function Stage() {
-  const [stage, setStage] = useState({ main: 1, sub: "init" });
+  const [stage, setStage] = useState({ main: 2, sub: "init" });
   const [buttonConfig, setButtonConfig] = useState({
     shape: "rectangle",
     type: null,
@@ -46,8 +46,12 @@ export default function Stage() {
     currentTopping: "",
   });
 
-  // 💝 위치 관련 상태
-  const [positionState, setPositionState] = useState({ x: 90, y: 64 });
+  // 💝 툴 관련 상태
+  const [toolState, setToolState] = useState({
+    position: { x: 0, y: 0 },
+    size: 1,
+    rotation: 0,
+  });
 
   // 💝 초콜릿 정보
   const [chocolateInfo, setChocolateInfo] = useState({
@@ -61,7 +65,7 @@ export default function Stage() {
 
   // 💝 게임 진행 상태
   const [gameState, setGameState] = useState({
-    currentItemIndex: 0, 
+    currentItemIndex: 1,
     completedStages: [],
     stirCount: 0,
   });
@@ -261,7 +265,8 @@ export default function Stage() {
         handleSelect(variant, setChocolateInfo, setUIState);
         break;
       case 2:
-        handleChop(gameState, setGameState, setUIState, positionState, setPositionState, currentData);
+        handleChop(gameState, setGameState, setUIState, setToolState, currentData);
+        handleToolClick(toolState, setToolState)
         break;
       case 3:
         handleStir(gameState, setGameState, setUIState);
@@ -282,6 +287,19 @@ export default function Stage() {
         console.warn("Unhandled stage:", stage.main);
     }
   };
+
+  useEffect(() => {
+    if (currentData?.items?.length > 0) {
+      setToolState((prev) => ({
+        ...prev,
+        position: {
+          x: currentData.items[0].position?.x || prev.position.x,
+          y: currentData.items[0].position?.y || prev.position.y,
+        },
+      }));
+    }
+  }, [currentData]);
+
   // const handleInputChange = (e) => {
   //   const value = e.target.value;
   //   setInputValue(value);
@@ -390,7 +408,7 @@ export default function Stage() {
             stage={stage}
             handleEvent={handleEvent}
             selectionState={selectionState}
-            positionState={positionState}
+            toolState={toolState}
             chocolateInfo={chocolateInfo}
             gameState={gameState}
           />

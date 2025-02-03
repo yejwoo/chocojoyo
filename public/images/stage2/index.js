@@ -5,4 +5,5 @@ export { default as chocolate4 } from './chocolate4.svg';
 export { default as chocolate5 } from './chocolate5.svg';
 export { default as chocolate6 } from './chocolate6.svg';
 export { default as chocolate7 } from './chocolate7.svg';
+export { default as chocolate8 } from './chocolate8.svg';
 export { default as knife } from './knife.svg';

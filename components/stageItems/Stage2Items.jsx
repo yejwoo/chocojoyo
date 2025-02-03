@@ -1,19 +1,18 @@
 import Image from "next/image";
 
-//   handleChop(gameState, setGameState, positionState, setPositionState, currentData);
-export default function Stage2Items({ currentData, handleEvent, positionState, gameState}) {
+export default function Stage2Items({ currentData, handleEvent, toolState, gameState }) {
   const items = currentData.items;
-  const tool = currentData.items[0];
+  const tool = items[0]; 
 
   return (
     <div className="relative">
       <div className="relative w-72 h-72">
         {items
-          .filter((_, idx) => idx !== 0)
+          .slice(1)
           .map((item, i) => (
             <Image
               key={i}
-              className={`${gameState.currentItemIndex === i ? "opacity-100 visible" : "opacity-0 invisible"} absolute bottom-0`}
+              className={`${gameState.currentItemIndex === i + 1 ? "opacity-100 visible" : "opacity-0 invisible"} absolute bottom-0`}
               src={item.imgSrc}
               alt={item.alt}
             />
@@ -21,21 +20,18 @@ export default function Stage2Items({ currentData, handleEvent, positionState, g
       </div>
       <div
         style={{
-          top: `${positionState.x}px`,
-          right: `${positionState.y}px`,
+          left: `${toolState.position.x}px`,
+          top: `${toolState.position.y}px`,
+          rotate: `${toolState.rotation}deg`,
+          scale: toolState.size
         }}
-        className="w-6 absolute cursor-pointer"
+        className="w-16 absolute cursor-pointer flex justify-center"
         draggable={false}
         onDragStart={(e) => e.preventDefault()}
-        onClick={() => {
-          handleEvent("_", "_", positionState);
-        }}
+        onClick={() => handleEvent()}
       >
-        <Image src={tool.imgSrc} alt={tool.alt} />
+        <Image width={24} src={tool.imgSrc} alt={tool.alt} />
       </div>
     </div>
   );
 }
-
-// handleChop(gameState, setGameState, positionState, setPositionState, currentData);
-
