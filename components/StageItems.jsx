@@ -5,14 +5,14 @@ import Stage4Items from "./stageItems/Stage4Items";
 import Stage5Items from "./stageItems/Stage5Items";
 import Stage6Items from "./stageItems/Stage6Items";
 
-export default function StageItems ({ stage, currentData, handleEvent, selectionState, positionState, chocolateInfo }) {
+export default function StageItems ({ stage, currentData, handleEvent, selectionState, positionState, chocolateInfo, gameState }) {
     const stageComponents = {
-      stage1: Stage1Items,
-      stage2: Stage2Items,
-      stage3: Stage3Items,
-      stage4: Stage4Items,
-      stage5: Stage5Items,
-      stage6: Stage6Items,
+      1: Stage1Items,
+      2: Stage2Items,
+      3: Stage3Items,
+      4: Stage4Items,
+      5: Stage5Items,
+      6: Stage6Items,
     };
   
     const StageComponent = stageComponents[stage.main];
@@ -24,6 +24,7 @@ export default function StageItems ({ stage, currentData, handleEvent, selection
         selectionState={selectionState}
         positionState={positionState}
         chocolateInfo={chocolateInfo}
+        gameState={gameState}
       />
     ) : null;
   };

@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function Stage4Items ({ currentData, selectionState, handleChocolateClick }) {
     return (
       <div className="relative w-72 h-56">

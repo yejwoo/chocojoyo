@@ -4,7 +4,6 @@ import Button from "./Button";
 import Modal from "./Modal";
 import Navi from "./Navi";
 import { delay } from "@/utils/delay";
-import { extractStageNumber } from "@/utils/extractStageNumber";
 import { bg } from "@/public/images/common";
 import { stageData } from "@/data/Stage";
 import TalkBubble from "./TalkBubble";
@@ -17,10 +16,7 @@ import { handleChocolateClick, handleChocolatePress } from "@/app/handlers/stage
 import { handleSaveDrawing } from "@/app/handlers/generalHandlers";
 
 export default function Stage() {
-  const [stage, setStage] = useState({
-    main: "stage1",
-    sub: "init",
-  });
+  const [stage, setStage] = useState({ main: 1, sub: "init" });
   const [buttonConfig, setButtonConfig] = useState({
     shape: "rectangle",
     type: null,
@@ -51,13 +47,7 @@ export default function Stage() {
   });
 
   // 💝 위치 관련 상태
-  const [positionState, setPositionState] = useState({
-    penPosition: { x: 100, y: 300 },
-    currentToolPosition: { top: 90, right: 64 },
-    position: { x: 100, y: 120 },
-    shift: { x: 0, y: 0 },
-    pastryBagPosition: { x: 54, y: 72 },
-  });
+  const [positionState, setPositionState] = useState({ x: 90, y: 64 });
 
   // 💝 초콜릿 정보
   const [chocolateInfo, setChocolateInfo] = useState({
@@ -71,7 +61,7 @@ export default function Stage() {
 
   // 💝 게임 진행 상태
   const [gameState, setGameState] = useState({
-    currentIndex: 0,
+    currentItemIndex: 0, 
     completedStages: [],
     stirCount: 0,
   });
@@ -130,7 +120,7 @@ export default function Stage() {
       const { main, sub } = stage;
       const sequence = stageData[main][sub]?.sequence;
 
-      if (stage.main === "stage1" && stage.sub === "description") {
+      if (stage.main === 1 && stage.sub === "description") {
         setUIState((prev) => ({
           ...prev,
           isShowNavi: true,
@@ -157,9 +147,21 @@ export default function Stage() {
     console.log("💝 chocolateInfo", chocolateInfo);
   }, [chocolateInfo]);
 
+  // useEffect(() => {
+  //   console.log("current data: ", currentData);
+  // }, [currentData]);
+
+  // 스테이지 관리
   const handleNextSubStage = () => {
     const { main, sub } = stage;
-    const nextSubStage = stageData[main][sub]?.nextSubStage;
+    const currentStageData = stageData[main];
+
+    if (!currentStageData || !currentStageData[sub]) {
+      console.error(`스테이지 데이터를 찾을 수 없습니다: main=${main}, sub=${sub}`);
+      return;
+    }
+
+    const nextSubStage = currentStageData[sub]?.nextSubStage;
 
     if (nextSubStage) {
       setStage((prev) => ({ ...prev, sub: nextSubStage }));
@@ -186,35 +188,34 @@ export default function Stage() {
     const currentStageData = stageData[main];
 
     if (!currentStageData) {
-      console.error("현재 스테이지 데이터를 찾을 수 없습니다.");
+      console.error(`현재 스테이지 데이터를 찾을 수 없습니다: main=${main}`);
       return;
     }
 
-    setGameState((prev) => {
-      const updatedStages = [...prev.completedStages, Number(main.split("stage")[1])];
-      console.log("업데이트된 completedStages: ", updatedStages);
-      return { ...prev, completedStages: updatedStages };
-    });
+    setGameState((prev) => ({
+      ...prev,
+      completedStages: [...prev.completedStages, main],
+    }));
 
     // 'isFinal: true' 서브 스테이지 찾기
-    const finalSubStageKey = Object.keys(currentStageData).find((key) => currentStageData[key].isFinal);
+    const isFinalStage = Object.values(currentStageData).some((stage) => stage?.isFinal);
 
-    if (!finalSubStageKey) {
-      console.warn("isFinal 서브스테이지를 찾을 수 없습니다.");
+    if (!isFinalStage) {
+      console.warn(`isFinal 서브스테이지를 찾을 수 없습니다: main=${main}`);
       return;
     }
 
     // 다음 메인 스테이지로 이동
-    const nextMainStage = currentStageData[finalSubStageKey]?.nextMainStage;
+    const nextMainStage = main + 1;
 
-    if (!nextMainStage) {
-      console.log("다음 메인 스테이지 없음");
+    if (nextMainStage >= stageData.length) {
+      console.log("더 이상 진행할 스테이지 없음");
       return;
     }
 
     setStage({ main: nextMainStage, sub: "init" });
 
-    // 초콜릿 모양 6개 미만이면 반복해서 6개로 채우기
+    // 초콜릿 개수가 6개 미만이면 반복해서 채우기
     setChocolateInfo((prev) => {
       if (prev.shapes.length < 6) {
         const repeatedShapes = Array.from({ length: 6 }, (_, i) => prev.shapes[i % prev.shapes.length]);
@@ -223,7 +224,7 @@ export default function Stage() {
       return prev;
     });
 
-    // UI 상태 업데이트
+    // UI 상태 초기화
     setUIState((prev) => ({
       ...prev,
       isTalkBubbleShow: false,
@@ -236,7 +237,7 @@ export default function Stage() {
     // 선택 상태 초기화
     setSelectionState((prev) => ({
       ...prev,
-      currentChocolateIndex: main === "stage5" ? null : 0,
+      currentChocolateIndex: nextMainStage === 5 ? null : 0,
       currentColor: "vanilla",
     }));
 
@@ -247,7 +248,7 @@ export default function Stage() {
       message: "",
     });
 
-    // 게임 진행 상태 업데이트
+    // 게임 진행 상태 초기화
     setGameState((prev) => ({
       ...prev,
       currentIndex: 0,
@@ -256,23 +257,23 @@ export default function Stage() {
 
   const handleEvent = (type, variant, index) => {
     switch (stage.main) {
-      case "stage1":
+      case 1:
         handleSelect(variant, setChocolateInfo, setUIState);
         break;
-      case "stage2":
-        handleChop(gameState, setGameState, positionState, setPositionState, currentData);
+      case 2:
+        handleChop(gameState, setGameState, setUIState, positionState, setPositionState, currentData);
         break;
-      case "stage3":
+      case 3:
         handleStir(gameState, setGameState, setUIState);
         break;
-      case "stage4":
+      case 4:
         if (type === "chocolateClick") {
           handleChocolateClick(index, selectionState, setChocolateInfo);
         } else if (type === "pressChocolate") {
           handleChocolatePress(index, selectionState, setChocolateInfo);
         }
         break;
-      case "stage5":
+      case 5:
         if (type === "saveDrawing") {
           handleSaveDrawing(variant, setChocolateInfo, index);
         }
@@ -391,6 +392,7 @@ export default function Stage() {
             selectionState={selectionState}
             positionState={positionState}
             chocolateInfo={chocolateInfo}
+            gameState={gameState}
           />
         </div>
       )}
@@ -409,10 +411,10 @@ export default function Stage() {
       )}
 
       {/* 상단 네비게이션 */}
-      {uiState.isShowNavi && <Navi currentStage={extractStageNumber(stage.main)} completedStages={gameState.completedStages} />}
+      {uiState.isShowNavi && <Navi currentStage={stage.main} completedStages={gameState.completedStages} />}
 
       {/* 하단 네비게이션 */}
-      {uiState.isShowItems && Number(stage.main.split("stage")[1]) >= 4 && stage.sub === "description" && <BottomNavi stage={stage} />}
+      {uiState.isShowItems && stage.main >= 4 && stage.sub === "description" && <BottomNavi stage={stage} />}
     </StageLayout>
   );
 }

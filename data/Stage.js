@@ -1,6 +1,6 @@
 import tailwindConfig from "../tailwind.config.mjs";
 import { yantoBlink, yantoHello, yantoEat, yantoSwing, yantoThumb } from "@/public/images/common";
-import { chocolate1, chocolate2, chocolate3, chocolate4, chocolate5, chocolate6, chocolate7, knifeDown, knifeUp, arrowDown } from "@/public/images/stage2";
+import { chocolate1, chocolate2, chocolate3, chocolate4, chocolate5, chocolate6, chocolate7, chocolate8, knife } from "@/public/images/stage2";
 import { doubleBoiler1, doubleBoiler2, doubleBoiler3, spatula } from "@/public/images/stage3";
 const chocolateColorsConfig = tailwindConfig.theme.extend.colors.chocolates;
 const chocopenColorsConfig = tailwindConfig.theme.extend.colors.chocopens;
@@ -26,8 +26,9 @@ const createColorConfig = (colors) => {
   }, {});
 };
 
-export const stageData = {
-  stage1: {
+export const stageData = [
+  null,
+  {
     init: {
       imgSrc: yantoHello,
       dialogue: "안녕하세요!<br/> 저는 얀토예요.",
@@ -77,16 +78,15 @@ export const stageData = {
           variant: "cat",
         },
       ],
-      nextMainStage: "stage2",
     },
   },
-  stage2: {
+  {
     init: {
       imgSrc: yantoBlink,
       dialogue: "이제 칼을 눌러서<br/> 초콜릿을 썰어주세요.",
       ...commonConfig,
       items: [
-        { imgSrc: knifeUp, alt: "칼", variant: null },
+        { imgSrc: knife, alt: "칼", variant: null },
         { imgSrc: chocolate1, alt: "초콜릿 썰기", variant: null },
         { imgSrc: chocolate2, alt: "초콜릿 썰기", variant: null },
         { imgSrc: chocolate3, alt: "초콜릿 썰기", variant: null },
@@ -95,10 +95,9 @@ export const stageData = {
         { imgSrc: chocolate6, alt: "초콜릿 썰기", variant: null },
         { imgSrc: chocolate7, alt: "초콜릿 썰기", variant: null },
       ],
-      nextMainStage: "stage3",
     },
   },
-  stage3: {
+  {
     init: {
       imgSrc: yantoBlink,
       dialogue: "초콜릿을 저어주세요.",
@@ -125,10 +124,9 @@ export const stageData = {
           variant: null,
         },
       ],
-      nextMainStage: "stage4",
     },
   },
-  stage4: {
+  {
     init: {
       imgSrc: yantoSwing,
       dialogue: "짤주머니를 꾹 눌러 초콜릿을 채워주세요.",
@@ -140,10 +138,9 @@ export const stageData = {
           fillColor: chocolateColorsConfig[currentColor].fill,
         }),
       },
-      nextMainStage: "stage5",
     },
   },
-  stage5: {
+  {
     init: {
       imgSrc: yantoSwing,
       dialogue: "거의 다 왔어요. 초콜릿을 꾸며주세요.",
@@ -152,39 +149,16 @@ export const stageData = {
         cursor: (currentColor) => `url('/cursors/chocopen-${currentColor}.png'), auto`, // 커서 변경
       },
       ...commonConfig,
-      nextMainStage: "stage6",
     },
   },
-  stage6: {
+  {
     init: {
       imgSrc: yantoSwing,
       dialogue: "마지막이에요. 상자를 꾸며주세요.",
       ...commonConfig,
-      nextMainStage: "stage7",
     },
   },
-};
-
-/**
- *
- * =========================Stage 7(Share)=========================
- *
- */
-// namePrompt: {
-//   imgSrc: yantoBlink,
-//   dialogue: `
-//       어떤 이름으로<br/>
-//       초콜릿을 전해드릴까요?
-//     `,
-//   sequence: [{ type: "delay", value: 1200 }, { type: "showModal" }],
-//   modalConfig: {
-//     title: "내 이름은...",
-//     type: "single",
-//     maxLength: 10,
-//   },
-//   nextSubStage: "message",
-//   isFinal: false,
-// },
+];
 
 export const bottomNaviConfig = {
   stage4: [
