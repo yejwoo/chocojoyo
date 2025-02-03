@@ -1,22 +1,14 @@
 import StageLayout from "./StageLayout";
 import React, { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import Button from "./Button";
 import Modal from "./Modal";
 import Navi from "./Navi";
 import { delay } from "@/utils/delay";
 import { extractStageNumber } from "@/utils/extractStageNumber";
-import { debug } from "@/utils/debug";
 import { bg } from "@/public/images/common";
-import { bottomNaviConfig, stageData } from "@/data/Stage";
-import { Shapes } from "@/public/icons/shapes";
-import mold from "@/public/images/stage4/chocolate-mold.svg";
-import box from "@/public/images/stage5/box.svg";
-import { PastryBag } from "@/public/images/stage4";
-import { ChocoPen } from "@/public/images/stage5/chocopen";
-import Canvas from "./Canvas";
+import { stageData } from "@/data/Stage";
 import TalkBubble from "./TalkBubble";
-import { BottomNavi, BottomNaviItem } from "./BottomNavi";
+import { BottomNavi } from "./BottomNavi";
 import StageItems from "./StageItems";
 import { handleSelect } from "@/app/handlers/stageHandlers/stage1Handlers";
 import { handleChop } from "@/app/handlers/stageHandlers/stage2Handlers";
@@ -34,6 +26,8 @@ export default function Stage() {
     type: null,
     message: "",
   });
+
+  const currentData = stageData[stage.main][stage.sub];
 
   // 💝 UI 상태
   const [uiState, setUIState] = useState({
@@ -56,8 +50,6 @@ export default function Stage() {
     currentTopping: "",
   });
 
-  const currentData = stageData[stage.main][stage.sub];
-
   // 💝 위치 관련 상태
   const [positionState, setPositionState] = useState({
     penPosition: { x: 100, y: 300 },
@@ -69,11 +61,12 @@ export default function Stage() {
 
   // 💝 초콜릿 정보
   const [chocolateInfo, setChocolateInfo] = useState({
-    shapes: ["rabbit", "bear", "cat", "circle", "circle", "circle"], // 6개 추가
-    colors: ["ruby", "vanilla", "milk", "dark", "greentea", "red"], // 각 초콜릿의 색상 지정
-    sizes: [100, 100, 100, 100, 100, 100], // 초콜릿 크기를 100%로 설정
+    shapes: [],
+    colors: [],
+    sizes: [],
     drawings: [],
-    toppings: {}, // 토핑 저장 (초기에는 빈 객체)
+    toppings: [],
+    box: "", // 컬러 인덱스?
   });
 
   // 💝 게임 진행 상태
@@ -157,7 +150,7 @@ export default function Stage() {
     };
 
     runSequence();
-    debug("Stage Info", stage, "blue");
+    console.log("Stage Info: ", stage);
   }, [stage]);
 
   useEffect(() => {
@@ -203,19 +196,34 @@ export default function Stage() {
       return { ...prev, completedStages: updatedStages };
     });
 
-    const finalSubStageKey = Object.keys(currentStageData).find((key) => currentStageData[key].isFinal === true);
+    // 'isFinal: true' 서브 스테이지 찾기
+    const finalSubStageKey = Object.keys(currentStageData).find((key) => currentStageData[key].isFinal);
 
-    if (finalSubStageKey) {
-      const nextMainStage = currentStageData[finalSubStageKey]?.nextMainStage;
-      if (nextMainStage) {
-        setStage({ main: nextMainStage, sub: "init" });
-      } else {
-        console.log("다음 메인 스테이지 없음");
-      }
-    } else {
-      console.log("isFinal 서브스테이지를 찾을 수 없습니다.");
+    if (!finalSubStageKey) {
+      console.warn("isFinal 서브스테이지를 찾을 수 없습니다.");
+      return;
     }
 
+    // 다음 메인 스테이지로 이동
+    const nextMainStage = currentStageData[finalSubStageKey]?.nextMainStage;
+
+    if (!nextMainStage) {
+      console.log("다음 메인 스테이지 없음");
+      return;
+    }
+
+    setStage({ main: nextMainStage, sub: "init" });
+
+    // 초콜릿 모양 6개 미만이면 반복해서 6개로 채우기
+    setChocolateInfo((prev) => {
+      if (prev.shapes.length < 6) {
+        const repeatedShapes = Array.from({ length: 6 }, (_, i) => prev.shapes[i % prev.shapes.length]);
+        return { ...prev, shapes: repeatedShapes };
+      }
+      return prev;
+    });
+
+    // UI 상태 업데이트
     setUIState((prev) => ({
       ...prev,
       isTalkBubbleShow: false,
@@ -225,29 +233,26 @@ export default function Stage() {
       isCompleteEvent: false,
     }));
 
+    // 선택 상태 초기화
     setSelectionState((prev) => ({
       ...prev,
       currentChocolateIndex: main === "stage5" ? null : 0,
       currentColor: "vanilla",
     }));
 
+    // 버튼 상태 초기화
     setButtonConfig({
       shape: "rectangle",
       type: null,
       message: "",
     });
 
+    // 게임 진행 상태 업데이트
     setGameState((prev) => ({
       ...prev,
       currentIndex: 0,
     }));
   };
-
-  // const handleInputChange = (e) => {
-  //   const value = e.target.value;
-  //   setInputValue(value);
-  //   setIsSubmitEnabled(value.length > 0);
-  // };
 
   const handleEvent = (type, variant, index) => {
     switch (stage.main) {
@@ -276,6 +281,11 @@ export default function Stage() {
         console.warn("Unhandled stage:", stage.main);
     }
   };
+  // const handleInputChange = (e) => {
+  //   const value = e.target.value;
+  //   setInputValue(value);
+  //   setIsSubmitEnabled(value.length > 0);
+  // };
 
   // // 초콜릿이 100% 채워지면 다음 초콜릿으로 이동
   // useEffect(() => {
@@ -373,7 +383,16 @@ export default function Stage() {
 
       {/* 스테이지별 메인 아이템 */}
       {uiState.isShowItems && (
-        <StageItems currentData={currentData} stage={stage} handleEvent={handleEvent} selectionState={selectionState} positionState={positionState} />
+        <div id="main-items" className="absolute bottom-[132px] left-1/2 w-[296px] -translate-x-1/2 flex justify-center gap-6 flex-wrap animate-bounce-up-once">
+          <StageItems
+            currentData={currentData}
+            stage={stage}
+            handleEvent={handleEvent}
+            selectionState={selectionState}
+            positionState={positionState}
+            chocolateInfo={chocolateInfo}
+          />
+        </div>
       )}
 
       {/* 버튼 */}

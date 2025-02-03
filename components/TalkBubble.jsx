@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function TalkBubble({ dialogue }) {
   return (
-    <div>
+    <div id="talk-bubble">
       <div className="absolute bottom-[436px] right-3 w-48">
         <Image src={talkBubbleBodySm} alt="말풍선" />
         <p

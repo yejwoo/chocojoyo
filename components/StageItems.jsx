@@ -5,7 +5,7 @@ import Stage4Items from "./stageItems/Stage4Items";
 import Stage5Items from "./stageItems/Stage5Items";
 import Stage6Items from "./stageItems/Stage6Items";
 
-export default function StageItems ({ stage, currentData, handleEvent, selectionState, positionState }) {
+export default function StageItems ({ stage, currentData, handleEvent, selectionState, positionState, chocolateInfo }) {
     const stageComponents = {
       stage1: Stage1Items,
       stage2: Stage2Items,
@@ -23,6 +23,7 @@ export default function StageItems ({ stage, currentData, handleEvent, selection
         handleEvent={handleEvent}
         selectionState={selectionState}
         positionState={positionState}
+        chocolateInfo={chocolateInfo}
       />
     ) : null;
   };

@@ -1,4 +1,3 @@
-import { Shapes } from "@/public/icons/shapes";
 import tailwindConfig from "../tailwind.config.mjs";
 import { yantoBlink, yantoHello, yantoEat, yantoSwing, yantoThumb } from "@/public/images/common";
 import { chocolate1, chocolate2, chocolate3, chocolate4, chocolate5, chocolate6, chocolate7, knifeDown, knifeUp, arrowDown } from "@/public/images/stage2";
@@ -32,7 +31,7 @@ export const stageData = {
     init: {
       imgSrc: yantoHello,
       dialogue: "안녕하세요!<br/> 저는 얀토예요.",
-      // { type: "delay", value: 1500 }, 
+      // { type: "delay", value: 1500 },
       sequence: [{ type: "nextSubStage" }],
       nextSubStage: "description",
     },
@@ -48,32 +47,32 @@ export const stageData = {
       ...commonConfig,
       items: [
         {
-          imgSrc: Shapes.Circle,
+          imgKey: "Circle",
           alt: "원형 초콜릿",
           variant: "circle",
         },
         {
-          imgSrc: Shapes.Heart,
+          imgKey: "Heart",
           alt: "하트 초콜릿",
           variant: "heart",
         },
         {
-          imgSrc: Shapes.Square,
+          imgKey: "Square",
           alt: "사각형 초콜릿",
           variant: "square",
         },
         {
-          imgSrc: Shapes.Bear,
+          imgKey: "Bear",
           alt: "곰 초콜릿",
           variant: "bear",
         },
         {
-          imgSrc: Shapes.Rabbit,
+          imgKey: "Rabbit",
           alt: "토끼 초콜릿",
           variant: "rabbit",
         },
         {
-          imgSrc: Shapes.Cat,
+          imgKey: "Cat",
           alt: "고양이 초콜릿",
           variant: "cat",
         },
@@ -82,7 +81,7 @@ export const stageData = {
     },
   },
   stage2: {
-    description: {
+    init: {
       imgSrc: yantoBlink,
       dialogue: "이제 칼을 눌러서<br/> 초콜릿을 썰어주세요.",
       ...commonConfig,
@@ -100,7 +99,7 @@ export const stageData = {
     },
   },
   stage3: {
-    description: {
+    init: {
       imgSrc: yantoBlink,
       dialogue: "초콜릿을 저어주세요.",
       ...commonConfig,
@@ -130,7 +129,7 @@ export const stageData = {
     },
   },
   stage4: {
-    description: {
+    init: {
       imgSrc: yantoSwing,
       dialogue: "짤주머니를 꾹 눌러 초콜릿을 채워주세요.",
       ...commonConfig,
@@ -145,7 +144,7 @@ export const stageData = {
     },
   },
   stage5: {
-    description: {
+    init: {
       imgSrc: yantoSwing,
       dialogue: "거의 다 왔어요. 초콜릿을 꾸며주세요.",
       toolConfig: {
@@ -157,7 +156,7 @@ export const stageData = {
     },
   },
   stage6: {
-    description: {
+    init: {
       imgSrc: yantoSwing,
       dialogue: "마지막이에요. 상자를 꾸며주세요.",
       ...commonConfig,
