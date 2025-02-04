@@ -8,12 +8,12 @@ export default function Button({ shape = "rectangle", message, color = "main", t
     default: "min-w-48",
   };
   const buttonColors = {
-    main: "bg-brand-100",
+    main: "bg-chocolates-ruby-100",
     secondary: "bg-popup-100",
     tertiary: "bg-gray-cool-50",
   };
   const buttonShadowColors = {
-    main: "bg-brand-200",
+    main: "bg-chocolates-ruby-200",
     secondary: "bg-popup-200",
     tertiary: "bg-gray-cool-100",
   };
