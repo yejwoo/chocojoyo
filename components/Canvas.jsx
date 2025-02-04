@@ -1,7 +1,7 @@
 import { bottomNaviConfig } from "@/data/Stage";
 import React, { useRef, useEffect, useState } from "react";
 
-const Canvas = ({ isSelected, isZoomMode, strokeColor = "vanilla", onSave, className }) => {
+const Canvas = ({ isToppingMode, isSelected, isZoomMode, strokeColor = "vanilla", onSave, className }) => {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -50,6 +50,8 @@ const Canvas = ({ isSelected, isZoomMode, strokeColor = "vanilla", onSave, class
   };
 
   const startDrawing = (e) => {
+    if (isToppingMode) return; 
+
     e.preventDefault();
     const { x, y } = getCoordinates(e);
     contextRef.current.beginPath();

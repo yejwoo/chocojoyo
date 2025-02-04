@@ -6,6 +6,7 @@ import Canvas from "../Canvas";
 
 export default function Stage5Items({ currentData, chocolateInfo, selectionState, uiState, setChocolateInfo, handleEvent }) {
   const chocolateColors = bottomNaviConfig[4][0].data;
+  const isToppingMode = selectionState.currentTabIndex === 1;
   return (
     <>
       <div className="relative w-[280px] h-[182px]">
@@ -38,8 +39,10 @@ export default function Stage5Items({ currentData, chocolateInfo, selectionState
             return ShapeComponent ? (
               <div
                 key={index}
-                onClick={(e) => {
-                  handleEvent("clickTopping", "_", index);
+                onClick={() => {
+                  if(isToppingMode) {
+                    handleEvent("clickTopping", "_", index);
+                  }
                 }}
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => {
@@ -72,6 +75,7 @@ export default function Stage5Items({ currentData, chocolateInfo, selectionState
                 <Canvas
                   isSelected={isSelected}
                   isZoomMode={uiState.isZoomMode}
+                  isToppingMode={isToppingMode} 
                   strokeColor={selectionState.currentColor}
                   onSave={(e) => handleEvent("saveDrawing", e)}
                 />
