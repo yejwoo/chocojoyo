@@ -9,13 +9,13 @@ export default function Button({ shape = "rectangle", message, color = "main", t
     sm: "w-24"
   };
   const buttonColors = {
-    main: "bg-chocolates-ruby-100",
-    secondary: "bg-popup-100",
+    main: "bg-brand-100",
+    secondary: "bg-chocolates-ruby-100",
     tertiary: "bg-gray-cool-50",
   };
   const buttonShadowColors = {
-    main: "bg-chocolates-ruby-200",
-    secondary: "bg-popup-200",
+    main: "bg-brand-200",
+    secondary: "bg-chocolates-ruby-200",
     tertiary: "bg-gray-cool-100",
   };
   const buttonIcons = {

@@ -51,8 +51,8 @@ export default function Modal({ size = "sm", title, type = "card", value = "", m
             {/* ✅ 버튼 */}
             {type === "confirm" && (
               <div className="flex gap-3 absolute bottom-0 w-full">
-                <Button onClick={onCancel} className="bg-gray-300 px-4 py-2 rounded" size="half" message={"아니오"} />
-                <Button onClick={onConfirm} className="bg-red-500 text-white px-4 py-2 rounded" size="half" message={"네"} />
+                <Button color="secondary" onClick={onCancel} className="bg-gray-300 px-4 py-2 rounded" size="half" message={"아니오"} />
+                <Button color="secondary" onClick={onConfirm} className="bg-red-500 text-white px-4 py-2 rounded" size="half" message={"네"} />
               </div>
             )}
           </div>

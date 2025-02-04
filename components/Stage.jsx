@@ -271,7 +271,7 @@ export default function Stage() {
 
       {/* 버튼 */}
       <div
-        className={`absolute right-3 bottom-[360px] transition duration-300 ease-in-out ${uiState.isCompleteEvent ? "opacity-100 visible" : "opacity-0 invisible"}`}
+        className={`absolute right-5 bottom-[324px] transition duration-300 ease-in-out ${uiState.isShowButton && uiState.isCompleteEvent ? "opacity-100 visible" : "opacity-0 invisible"}`}
       >
         <Button
           // disabled={!uiState.isCompleteEvent}
