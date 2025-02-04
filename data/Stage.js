@@ -137,7 +137,26 @@ export const stageData = [
     init: {
       imgSrc: yantoSwing,
       dialogue: "짤주머니를 꾹 눌러<br/>초콜릿을 채워주세요.",
-      positions: [{x: 0, y: 0}],
+      items: [
+        {
+          position: { x: 54, y: 96 },
+        },
+        {
+          position: { x: 142, y: 96 },
+        },
+        {
+          position: { x: 230, y: 96 },
+        },
+        {
+          position: { x: 54, y: 180 },
+        },
+        {
+          position: { x: 142, y: 180 },
+        },
+        {
+          position: { x: 230, y: 180 },
+        },
+      ],
       ...commonConfig,
     },
   },

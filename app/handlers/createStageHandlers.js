@@ -2,26 +2,11 @@ import { handleSaveDrawing } from "./generalHandlers";
 import { handleSelect } from "./stageHandlers/stage1Handlers";
 import { handleChop, handleToolClick } from "./stageHandlers/stage2Handlers";
 import { handleStir } from "./stageHandlers/stage3Handlers";
-import {
-  handleChocolateClick,
-  handleChocolatePress,
-  updatePastryBagPosition,
-  updatePastryBagVisibility,
-} from "./stageHandlers/stage4Handlers";
+import { handleChocolateClick, handleChocolatePress, updatePastryBagPosition, updatePastryBagVisibility } from "./stageHandlers/stage4Handlers";
 
 export const createStageHandlers = (store) => {
-  const {
-    setChocolateInfo,
-    setUIState,
-    setGameState,
-    setToolState,
-    setSelectionState,
-    chocolateInfo,
-    gameState,
-    selectionState,
-    currentData,
-    intervalRef,
-  } = store;
+  const { setChocolateInfo, setUIState, setGameState, setToolState, setSelectionState, chocolateInfo, gameState, selectionState, currentData, intervalRef } =
+    store;
 
   return {
     1: (type, variant) => handleSelect(variant, setChocolateInfo, setUIState),
@@ -44,7 +29,7 @@ export const createStageHandlers = (store) => {
       if (handlers[type]) handlers[type]();
 
       updatePastryBagVisibility(chocolateInfo, setUIState);
-      updatePastryBagPosition(selectionState, currentData, setToolState);
+      updatePastryBagPosition(selectionState, chocolateInfo, currentData, setSelectionState, setToolState, setUIState);
     },
 
     5: (type, variant, index) => {

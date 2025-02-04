@@ -27,7 +27,7 @@ export const handleChocolatePress = (index, setChocolateInfo, selectionState, se
     }
     return prev; // 색상이 동일하면 변경하지 않음
   });
-  
+
   if (intervalRef.current) {
     clearInterval(intervalRef.current);
   }
@@ -59,20 +59,36 @@ export const updatePastryBagVisibility = (chocolateInfo, setUIState) => {
     setUIState((prev) => ({
       ...prev,
       isPastryBagHidden: true,
+      isCompleteEvent: true
     }));
   }
 };
 
-export const updatePastryBagPosition = (selectionState, currentData, setToolState) => {
-  if (selectionState.currentChocolateIndex !== null && currentData.positions) {
-    const targetPosition = currentData.positions[selectionState.currentChocolateIndex];
+export const updatePastryBagPosition = (selectionState, chocolateInfo, currentData, setSelectionState, setToolState) => {
+  const { currentChocolateIndex } = selectionState;
+  const { items } = currentData;
 
-    setToolState((prev) => ({
-      ...prev,
-      position: {
-        x: targetPosition?.x || prev.position.x,
-        y: targetPosition?.y || prev.position.y,
-      },
-    }));
+  if (chocolateInfo.sizes[currentChocolateIndex] >= 100) {
+    const nextIndex = currentChocolateIndex + 1;
+
+    if (nextIndex < chocolateInfo.sizes.length) {
+      setSelectionState((prev) => ({
+        ...prev,
+        currentChocolateIndex: nextIndex,
+      }));
+
+      if (items && items[nextIndex]?.position) {
+        const targetPosition = items[nextIndex].position;
+
+        setToolState((prev) => ({
+          ...prev,
+          position: {
+            x: targetPosition.x,
+            y: targetPosition.y,
+          },
+        }));
+      }
+    }
   }
 };
+

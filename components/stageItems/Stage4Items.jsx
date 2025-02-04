@@ -6,18 +6,28 @@ import { PastryBag } from "@/public/images/stage4";
 import { useEffect } from "react";
 import { updatePastryBagPosition, updatePastryBagVisibility } from "@/app/handlers/stageHandlers/stage4Handlers";
 
-export default function Stage4Items({ currentData, selectionState, uiState, toolState, handleEvent, chocolateInfo, setUIState, setToolState }) {
+export default function Stage4Items({
+  currentData,
+  selectionState,
+  setSelectionState,
+  uiState,
+  setUIState,
+  toolState,
+  setToolState,
+  handleEvent,
+  chocolateInfo,
+}) {
   const chocolateColors = bottomNaviConfig[4][0].data;
 
-  // ✅ 짤주머니 숨김 처리 로직을 핸들러에서 실행
+  // ✅ 짤주머니 숨김 처리 로직
   useEffect(() => {
     updatePastryBagVisibility(chocolateInfo, setUIState);
   }, [chocolateInfo.sizes, setUIState]);
 
-  // ✅ 짤주머니 위치 업데이트 핸들러 실행
+  // ✅ 초콜릿이 100% 차면 자동 이동
   useEffect(() => {
-    updatePastryBagPosition(selectionState, currentData, setToolState);
-  }, [selectionState.currentChocolateIndex, currentData.positions, setToolState]);
+    updatePastryBagPosition(selectionState, chocolateInfo, currentData, setSelectionState, setToolState, setUIState);
+  }, [chocolateInfo.sizes, selectionState.currentChocolateIndex]);
 
   return (
     <>
