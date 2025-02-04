@@ -68,12 +68,17 @@ const Canvas = ({ isSelected, isZoomMode, strokeColor = "vanilla", onSave, class
   const stopDrawing = () => {
     setIsDrawing(false);
     contextRef.current.closePath();
-
+  
     if (canvasRef.current) {
       const imageData = canvasRef.current.toDataURL();
-      onSave(imageData);
+      if (onSave) {
+        onSave(imageData); 
+      } else {
+        console.error("❌ onSave 함수가 정의되지 않음!"); 
+      }
     }
   };
+  
 
   return (
     <canvas

@@ -17,7 +17,7 @@ import { useStageState } from "@/app/hooks/useStateState";
 export default function Stage() {
   const { state, setState, intervalRef } = useStageState();
   const { buttonConfig, stage, currentData, selectionState, toolState, chocolateInfo, gameState, uiState } = state;
-  const { setStage, setButtonConfig, setUIState, setToolState, setSelectionState, setChocolateInfo, setGameState } = setState;
+  const { setStage, setButtonConfig, setUIState, setToolState, setSelectionState, setGameState, setChocolateInfo } = setState;
 
   const stageHandlers = createStageHandlers({
     ...setState,

@@ -3,9 +3,17 @@ import box from "@/public/images/stage5/box.svg";
 import { Shapes } from "@/public/icons/shapes";
 import { bottomNaviConfig } from "@/data/Stage";
 import Canvas from "../Canvas";
+import { handleSaveDrawing } from "@/app/handlers/stageHandlers/stage5Handlers";
+import { useCallback } from "react";
 
-export default function Stage5Items({ currentData, chocolateInfo, selectionState, uiState }) {
+export default function Stage5Items({ currentData, chocolateInfo, selectionState, uiState, setChocolateInfo }) {
   const chocolateColors = bottomNaviConfig[4][0].data;
+  const handleSave = useCallback(
+    (imageData, index) => {
+      handleSaveDrawing(imageData, setChocolateInfo, index);
+    },
+    [setChocolateInfo]
+  );
 
   return (
     <>
@@ -32,7 +40,8 @@ export default function Stage5Items({ currentData, chocolateInfo, selectionState
             const color = chocolateInfo.colors[index];
             const isSelected = selectionState.currentChocolateIndex === index;
             const isChocoPenMode = selectionState.currentTabIndex === 0;
-
+            const cursorImage = isChocoPenMode ? `/images/stage5/cursor-chocopen-${selectionState.currentColor}.png` : `/images/stage5/cursor-topping-${selectionState.currentTopping}.svg`;
+            
             return ShapeComponent ? (
               <div
                 key={index}
@@ -40,10 +49,9 @@ export default function Stage5Items({ currentData, chocolateInfo, selectionState
                 // onMouseLeave={() => setCurrentChocolateIndex(null)}
                 // onDragStart={(e) => e.preventDefault()}
                 draggable={false}
-                className={`flex-shrink-0 cursor-${
-                  isChocoPenMode ? "chocopen" : selectionState.currentTopping
-                } relative w-[80px] h-[76px] bg-gray-warm-300 rounded-xl`}
+                className="flex-shrink-0 relative w-[80px] h-[76px] bg-gray-warm-300 rounded-xl"
                 style={{
+                  cursor: `url('${cursorImage}') 10 114, auto`,
                   WebkitTouchCallout: "none",
                   TouchAction: "none",
                 }}
@@ -59,7 +67,12 @@ export default function Stage5Items({ currentData, chocolateInfo, selectionState
                     strokeColor={chocolateColors[color]?.border}
                   />
                 </div>
-                {/* <Canvas isSelected={isSelected} isZoomMode={uiState.isZoomMode} strokeColor={selectionState.currentColor} /> */}
+                <Canvas
+                  isSelected={isSelected}
+                  isZoomMode={uiState.isZoomMode}
+                  strokeColor={selectionState.currentColor}
+                  onSave={(imageData) => handleSave(imageData, index)}
+                />
               </div>
             ) : (
               console.warn(`${name} 컴포넌트 없음`) || null
