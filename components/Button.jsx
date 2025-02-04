@@ -6,6 +6,7 @@ export default function Button({ shape = "rectangle", message, color = "main", t
     half: "w-1/2",
     full: "w-full",
     default: "min-w-48",
+    sm: "w-24"
   };
   const buttonColors = {
     main: "bg-chocolates-ruby-100",

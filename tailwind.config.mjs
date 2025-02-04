@@ -50,6 +50,7 @@ export default {
       },
       animation: {
         "bounce-up": "bounceUp 2.5s linear infinite",
+        "bounce-up-fast": "bounceUp 1.2s linear infinite",
         "bounce-up-once": "bounceUpOnce 0.5s linear",
         "bounce-up-once-middle": "bounceUpOnceMiddle 0.5s linear",
         "bounce-down": "bounceDown 4s linear infinite",

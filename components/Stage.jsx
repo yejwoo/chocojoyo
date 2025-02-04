@@ -69,6 +69,40 @@ export default function Stage() {
   }, [chocolateInfo]);
 
   useEffect(() => {
+    if (stage.main === 5 && stage.sub === "init") {
+      const runOnboarding = async () => {
+        await delay(5000); 
+        setUIState((prev) => ({
+          ...prev,
+          isOnboarding: true,
+          highlightedElement: "item0",
+        }));
+        await delay(3000); 
+  
+        setUIState((prev) => ({
+          ...prev,
+          highlightedElement: "item1",
+        }));
+        await delay(3000); 
+
+        setUIState((prev) => ({
+          ...prev,
+          highlightedElement: "item2",
+        }));
+        await delay(3000); 
+  
+        setUIState((prev) => ({
+          ...prev,
+          isOnboarding: false,
+          highlightedElement: null,
+        }));
+      };
+  
+      runOnboarding();
+    }
+  }, [stage]);
+
+  useEffect(() => {
     if (currentData?.items?.length > 0) {
       setToolState((prev) => ({
         ...prev,
@@ -216,6 +250,10 @@ export default function Stage() {
         )
       }
     >
+      {/* 온보딩 오버레이 */}
+      {uiState.isOnboarding && <div className="absolute inset-0 bg-black bg-opacity-60 z-40"></div>}
+
+
       {/* 말풍선 */}
       {uiState.isTalkBubbleShow && <TalkBubble dialogue={currentData?.dialogue || "안녕하세요!"} />}
 
@@ -260,7 +298,7 @@ export default function Stage() {
       {/* && stage.sub === "description" -> 이 조건은 대사 다 정하고 추가 */}
       {uiState.isShowItems && stage.main >= 4 && (
         <BottomNavi
-          stage={stage.main}
+          stage={stage}
           selectionState={selectionState}
           setSelectionState={setSelectionState}
           uiState={uiState}

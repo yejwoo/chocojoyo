@@ -48,6 +48,7 @@ export const handleReset = (setChocolateInfo, setUIState) => {
   setUIState((prev) => ({
     ...prev,
     isResetPopupOpen: false,
-    isClearCanvas: true
+    isClearCanvas: true,
+    isResetBtnClicked: !prev.isResetBtnClicked 
   }));
 };

@@ -29,7 +29,9 @@ export function useStageState() {
     isSubmitEnabled: false,
     isZoomMode: false,
     isResetPopupOpen: false,
-    isClearCanvas: false
+    isClearCanvas: false,
+    isOnboarding: false,
+    isResetBtnClicked: false
   });
 
   // 💝 현재 선택 관련 상태
@@ -51,7 +53,7 @@ export function useStageState() {
   const [chocolateInfo, setChocolateInfo] = useState({
     shapes: ["heart", "heart", "heart", "heart", "heart", "heart"],
     // shapes: [],
-    colors: Array(6).fill("milk"),
+    colors: [],
     // sizes: Array(6).fill(0),
     sizes: Array(6).fill(100),
     drawings: [],
