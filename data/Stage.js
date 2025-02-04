@@ -164,7 +164,6 @@ export const stageData = [
     init: {
       imgSrc: yantoSwing,
       dialogue: "거의 다 왔어요. 초콜릿을 꾸며주세요.",
-
       ...commonConfig,
     },
   },

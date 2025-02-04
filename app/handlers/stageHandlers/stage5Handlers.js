@@ -37,3 +37,17 @@ export const handleToppingPlacement = (setChocolateInfo, topping, index) => {
     return { ...prev, toppings: updatedToppings };
   });
 };
+
+export const handleReset = (setChocolateInfo, setUIState) => {
+  setChocolateInfo((prev) => ({ 
+    ...prev,
+    drawings: [],
+    toppings: [],
+  }));
+
+  setUIState((prev) => ({
+    ...prev,
+    isResetPopupOpen: false,
+    isClearCanvas: true
+  }));
+};

@@ -2,10 +2,11 @@ import { bottomNaviConfig } from "@/data/Stage";
 import Image from "next/image";
 import { useMemo } from "react";
 import { handleTabClick, handleColorSelection, handleToppingSelection } from "@/app/handlers/generalHandlers";
-import { handleZoomMode } from "@/app/handlers/stageHandlers/stage5Handlers";
-import { magnifierActive, magnifierDefault } from "@/public/images/stage5";
+import { handleReset, handleZoomMode } from "@/app/handlers/stageHandlers/stage5Handlers";
+import { magnifierActive, magnifierDefault, resetActive, resetDefault } from "@/public/images/stage5";
+import Modal from "./Modal";
 
-export const BottomNaviItem = ({ naviData, uiState, selectionState, setSelectionState, currentTabIndex }) => {
+export const BottomNaviItem = ({ naviData, uiState, selectionState, setSelectionState, setChocolateInfo, currentTabIndex }) => {
   if (naviData.type === "color") {
     return Object.keys(naviData.data)
       .filter((item) => item !== "default")
@@ -45,7 +46,7 @@ export const BottomNaviItem = ({ naviData, uiState, selectionState, setSelection
   return null;
 };
 
-export const BottomNavi = ({ stage, selectionState, setSelectionState, uiState, setUIState }) => {
+export const BottomNavi = ({ stage, selectionState, setSelectionState, setChocolateInfo, uiState, setUIState }) => {
   const naviData = bottomNaviConfig[stage];
 
   const naviItems = useMemo(() => {
@@ -56,6 +57,7 @@ export const BottomNavi = ({ stage, selectionState, setSelectionState, uiState, 
         uiState={uiState}
         selectionState={selectionState}
         setSelectionState={setSelectionState}
+        setChocolateInfo={setChocolateInfo}
         currentTabIndex={selectionState.currentTabIndex}
       />
     ));
@@ -65,23 +67,40 @@ export const BottomNavi = ({ stage, selectionState, setSelectionState, uiState, 
     <div className="fixed h-[104px] bottom-0 left-0 right-0">
       {/* ✅ 탭 UI (2개 이상일 때만 표시) */}
       {naviData.length > 1 && (
-        <div className="flex h-10">
-          {naviData.map((item, index) => (
-            <div
-              key={index}
-              onClick={() => handleTabClick(index, selectionState, setSelectionState, uiState, setUIState)}
-              className={`cursor-pointer ${
-                selectionState.currentTabIndex === index ? "bg-popup-100" : "bg-gray-warm-50 text-gray-warm-200"
-              } w-20 flex items-center justify-center text-xl rounded-tl-xl rounded-tr-xl`}
+        <>
+          <div className="flex h-10">
+            {naviData.map((item, index) => (
+              <div
+                key={index}
+                onClick={() => handleTabClick(index, selectionState, setSelectionState, uiState, setUIState)}
+                className={`cursor-pointer ${
+                  selectionState.currentTabIndex === index ? "bg-popup-100" : "bg-gray-warm-50 text-gray-warm-200"
+                } w-20 flex items-center justify-center text-xl rounded-tl-xl rounded-tr-xl`}
+              >
+                {item.title}
+              </div>
+            ))}
+            {/* ✅ 돋보기 버튼 */}
+            <button className="px-1" onClick={() => handleZoomMode(setUIState)}>
+              <Image width={40} height={40} src={uiState.isZoomMode ? magnifierActive : magnifierDefault} alt="돋보기" />
+            </button>
+            {/* ✅ 리셋 버튼 */}
+            <button className="px-1" onClick={() => setUIState((prev) => ({ ...prev, isResetPopupOpen: true }))}>
+              <Image width={40} height={40} src={resetDefault} alt="돋보기" />
+            </button>
+          </div>
+          {/* ✅ 리셋 팝업(모달) */}
+          {uiState.isResetPopupOpen && (
+            <Modal
+              type="confirm"
+              title="초콜릿 다시 꾸미기"
+              onCancel={() => setUIState((prev) => ({ ...prev, isResetPopupOpen: false }))}
+              onConfirm={() => handleReset(setChocolateInfo, setUIState)}
             >
-              {item.title}
-            </div>
-          ))}
-          {/* ✅ 돋보기 버튼 */}
-          <button className="px-1 rounded-tl-xl rounded-tr-xl" onClick={() => handleZoomMode(setUIState)}>
-            <Image width={40} height={40} src={uiState.isZoomMode ? magnifierActive : magnifierDefault} alt="돋보기" />
-          </button>
-        </div>
+              그린 그림과 토핑이 사라져요.<br/>처음부터 다시 꾸며볼까요?
+            </Modal>
+          )}
+        </>
       )}
 
       {/* ✅ 선택된 탭의 네비 데이터 */}

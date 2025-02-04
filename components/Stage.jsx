@@ -197,16 +197,6 @@ export default function Stage() {
     }));
   };
 
-  const handleEvent = (type, variant, index, e, ref) => {
-    const handler = stageHandlers[stage.main];
-
-    if (handler) {
-      handler(type, variant, index, e, ref);
-    } else {
-      console.warn("Unhandled stage:", stage.main);
-    }
-  };
-
   return (
     <StageLayout
       backgroundSrc={bg}
@@ -269,7 +259,14 @@ export default function Stage() {
       {/* 하단 네비게이션 */}
       {/* && stage.sub === "description" -> 이 조건은 대사 다 정하고 추가 */}
       {uiState.isShowItems && stage.main >= 4 && (
-        <BottomNavi stage={stage.main} selectionState={selectionState} setSelectionState={setSelectionState} uiState={uiState} setUIState={setUIState} />
+        <BottomNavi
+          stage={stage.main}
+          selectionState={selectionState}
+          setSelectionState={setSelectionState}
+          uiState={uiState}
+          setUIState={setUIState}
+          setChocolateInfo={setChocolateInfo}
+        />
       )}
     </StageLayout>
   );

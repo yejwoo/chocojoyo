@@ -1,11 +1,21 @@
 import { bottomNaviConfig } from "@/data/Stage";
 import React, { useRef, useEffect, useState } from "react";
 
-const Canvas = ({ isToppingMode, isSelected, isZoomMode, strokeColor = "vanilla", onSave, className }) => {
+const Canvas = ({ isToppingMode, isSelected, isZoomMode, strokeColor = "vanilla", onSave, uiState, className, setUIState }) => {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const chocoPenColors = bottomNaviConfig[5][0].data;
+
+  if (contextRef.current && uiState.isClearCanvas) {
+    contextRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+  }
+
+  useEffect(() => {
+    if (!uiState.isResetPopupOpen) {
+      setUIState((prev) => ({ ...prev, isClearCanvas: false })); 
+    }
+  }, [uiState.isResetPopupOpen]);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -50,7 +60,7 @@ const Canvas = ({ isToppingMode, isSelected, isZoomMode, strokeColor = "vanilla"
   };
 
   const startDrawing = (e) => {
-    if (isToppingMode) return; 
+    if (isToppingMode) return;
 
     e.preventDefault();
     const { x, y } = getCoordinates(e);
@@ -70,17 +80,17 @@ const Canvas = ({ isToppingMode, isSelected, isZoomMode, strokeColor = "vanilla"
   const stopDrawing = () => {
     setIsDrawing(false);
     contextRef.current.closePath();
-  
+
     if (canvasRef.current) {
       const imageData = canvasRef.current.toDataURL();
       if (onSave) {
-        onSave(imageData); 
+        onSave(imageData);
       } else {
-        console.error("❌ onSave 함수가 정의되지 않음!"); 
+        console.error("❌ onSave 함수가 정의되지 않음!");
       }
     }
   };
-  
+
   return (
     <canvas
       ref={canvasRef}

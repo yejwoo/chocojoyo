@@ -4,7 +4,7 @@ import { Shapes } from "@/public/icons/shapes";
 import { bottomNaviConfig } from "@/data/Stage";
 import Canvas from "../Canvas";
 
-export default function Stage5Items({ currentData, chocolateInfo, selectionState, uiState, setChocolateInfo, handleEvent }) {
+export default function Stage5Items({ currentData, chocolateInfo, selectionState, uiState, setChocolateInfo, setUIState, handleEvent }) {
   const chocolateColors = bottomNaviConfig[4][0].data;
   const isToppingMode = selectionState.currentTabIndex === 1;
   return (
@@ -73,6 +73,8 @@ export default function Stage5Items({ currentData, chocolateInfo, selectionState
                   isToppingMode={isToppingMode}
                   strokeColor={selectionState.currentColor}
                   onSave={(e) => handleEvent("saveDrawing", e)}
+                  uiState={uiState}
+                  setUIState={setUIState}
                 />
                 {/* 토핑 렌더링 */}
                 {chocolateInfo.toppings[index] && (
@@ -98,6 +100,7 @@ export default function Stage5Items({ currentData, chocolateInfo, selectionState
           })}
         </div>
       </div>
+       
     </>
   );
 }

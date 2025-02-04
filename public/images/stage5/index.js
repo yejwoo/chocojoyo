@@ -6,3 +6,5 @@ export { default as toppingSprinkle } from './toppings/topping-sprinkle.svg';
 export { default as toppingStrawberry } from './toppings/topping-strawberry.svg';
 export { default as magnifierDefault } from './magnifier-default.svg';
 export { default as magnifierActive } from './magnifier-active.svg';
+export { default as resetActive } from './reset-active.svg';
+export { default as resetDefault } from './reset-default.svg';
