@@ -6,7 +6,7 @@ import Canvas from "../Canvas";
 import { handleSaveDrawing } from "@/app/handlers/stageHandlers/stage5Handlers";
 import { useCallback } from "react";
 
-export default function Stage5Items({ currentData, chocolateInfo, selectionState, uiState, setChocolateInfo }) {
+export default function Stage5Items({ currentData, chocolateInfo, selectionState, uiState, setChocolateInfo, handleEvent }) {
   const chocolateColors = bottomNaviConfig[4][0].data;
   const handleSave = useCallback(
     (imageData, index) => {
@@ -40,14 +40,16 @@ export default function Stage5Items({ currentData, chocolateInfo, selectionState
             const color = chocolateInfo.colors[index];
             const isSelected = selectionState.currentChocolateIndex === index;
             const isChocoPenMode = selectionState.currentTabIndex === 0;
-            const cursorImage = isChocoPenMode ? `/images/stage5/cursor-chocopen-${selectionState.currentColor}.png` : `/images/stage5/cursor-topping-${selectionState.currentTopping}.svg`;
-            
+            const cursorImage = isChocoPenMode
+              ? `/images/stage5/cursor-chocopen-${selectionState.currentColor}.png`
+              : `/images/stage5/cursor-topping-${selectionState.currentTopping}.svg`;
+
             return ShapeComponent ? (
               <div
                 key={index}
-                // onMouseOver={() => setCurrentChocolateIndex(index)}
-                // onMouseLeave={() => setCurrentChocolateIndex(null)}
-                // onDragStart={(e) => e.preventDefault()}
+                onMouseOver={() => handleEvent("mouseOver", "_", index)}
+                onMouseLeave={() => handleEvent("mouseLeave", "_", null)}
+                onDragStart={(e) => e.preventDefault()}
                 draggable={false}
                 className="flex-shrink-0 relative w-[80px] h-[76px] bg-gray-warm-300 rounded-xl"
                 style={{
@@ -71,7 +73,7 @@ export default function Stage5Items({ currentData, chocolateInfo, selectionState
                   isSelected={isSelected}
                   isZoomMode={uiState.isZoomMode}
                   strokeColor={selectionState.currentColor}
-                  onSave={(imageData) => handleSave(imageData, index)}
+                  onSave={(e) => handleEvent("saveDrawing", e)}
                 />
               </div>
             ) : (
@@ -80,6 +82,10 @@ export default function Stage5Items({ currentData, chocolateInfo, selectionState
           })}
         </div>
       </div>
+
+      <button onClick={() => handleEvent("zoomMode")} className={`absolute p-3 right-4 bottom-16 ${uiState.isZoomMode ? "bg-blue-700" : "bg-blue-300"}`}>
+        🔍 돋보기
+      </button>
     </>
   );
 }

@@ -12,3 +12,18 @@ export const handleSaveDrawing = (imageData, setChocolateInfo, currentChocolateI
     },
   }));
 };
+
+export const handleZoomMode = (setUIState) => {
+  setUIState((prev) => ({
+    ...prev,
+    isZoomMode: !prev.isZoomMode,
+  }));
+};
+
+export const handleMouseOver = (setSelectionState, index) => {
+  setSelectionState((prev) => ({ ...prev, currentChocolateIndex: index }));
+};
+
+export const handleMouseLeave = (setSelectionState, reset) => {
+  setSelectionState((prev) => ({ ...prev, currentChocolateIndex: reset }));
+};
