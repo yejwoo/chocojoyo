@@ -56,9 +56,9 @@ export default function Stage4Items({
             return ShapeComponent ? (
               <div
                 key={index}
-                onClick={() => handleEvent("click", null, index)}
-                onMouseDown={() => handleEvent("press", null, index)}
-                onTouchStart={() => handleEvent("press", null, index)}
+                // onClick={() => handleEvent("click", null, index)}
+                // onMouseDown={() => handleEvent("press", null, index)}
+                // onTouchStart={() => handleEvent("press", null, index)}
                 onDragStart={(e) => e.preventDefault()}
                 draggable={false}
                 className="flex-shrink-0 cursor-pointer relative w-16 h-14"
