@@ -9,16 +9,12 @@ import { stageData } from "@/data/Stage";
 import TalkBubble from "./TalkBubble";
 import { BottomNavi } from "./BottomNavi";
 import StageItems from "./StageItems";
-import { handleSelect } from "@/app/handlers/stageHandlers/stage1Handlers";
-import { handleChop, handleToolClick } from "@/app/handlers/stageHandlers/stage2Handlers";
-import { handleStir } from "@/app/handlers/stageHandlers/stage3Handlers";
-import { handleChocolateClick, handleChocolatePress } from "@/app/handlers/stageHandlers/stage4Handlers";
-import { handleSaveDrawing } from "@/app/handlers/generalHandlers";
 import ProgressBar from "./ProgressBar";
-import { createActionHandlers } from "@/app/handlers/actionHandlers";
+import { createActionHandlers } from "@/app/handlers/createActionHandlers";
+import { createStageHandlers } from "@/app/handlers/createStageHandlers";
 
 export default function Stage() {
-  const [stage, setStage] = useState({ main: 4, sub: "init" });
+  const [stage, setStage] = useState({ main: 1, sub: "init" });
   const [buttonConfig, setButtonConfig] = useState({
     shape: "rectangle",
     type: null,
@@ -90,6 +86,16 @@ export default function Stage() {
     card: "",
   });
 
+  const stageHandlers = createStageHandlers({
+    setChocolateInfo,
+    setUIState,
+    setGameState,
+    setToolState,
+    gameState,
+    selectionState,
+    currentData,
+  });
+
   useEffect(() => {
     const handlers = createActionHandlers({ setUIState, setButtonConfig, handleNextSubStage, handleNextMainStage });
 
@@ -130,7 +136,32 @@ export default function Stage() {
     console.log("💝 chocolateInfo", chocolateInfo);
   }, [chocolateInfo]);
 
+  useEffect(() => {
+    if (currentData?.items?.length > 0) {
+      setToolState((prev) => ({
+        ...prev,
+        position: {
+          x: currentData.items[0].position?.x || prev.position.x,
+          y: currentData.items[0].position?.y || prev.position.y,
+        },
+      }));
+    }
+  }, [currentData]);
+
+  useEffect(() => {
+    if (stage.main >= 3) {
+      document.body.classList.add("block-scroll");
+    } else {
+      document.body.classList.remove("block-scroll");
+    }
+
+    return () => {
+      document.body.classList.remove("block-scroll");
+    };
+  }, [stage.main, chocolateInfo.shapes]);
+
   // 스테이지 관리
+  // @TODO: handlers 폴더로 이동
   const handleNextSubStage = () => {
     const { main, sub } = stage;
     const currentStageData = stageData[main];
@@ -235,57 +266,14 @@ export default function Stage() {
   };
 
   const handleEvent = (type, variant, index, e, ref) => {
-    switch (stage.main) {
-      case 1:
-        handleSelect(variant, setChocolateInfo, setUIState);
-        break;
-      case 2:
-        handleChop(gameState, setGameState, setUIState, setToolState, currentData);
-        handleToolClick(toolState, setToolState);
-        break;
-      case 3:
-        handleStir(e, type, ref, gameState, setGameState, setUIState, setToolState);
-        break;
-      case 4:
-        if (type === "chocolateClick") {
-          handleChocolateClick(index, selectionState, setChocolateInfo);
-        } else if (type === "pressChocolate") {
-          handleChocolatePress(index, selectionState, setChocolateInfo);
-        }
-        break;
-      case 5:
-        if (type === "saveDrawing") {
-          handleSaveDrawing(variant, setChocolateInfo, index);
-        }
-        break;
-      default:
-        console.warn("Unhandled stage:", stage.main);
+    const handler = stageHandlers[stage.main];
+
+    if (handler) {
+      handler(type, variant, index, e, ref);
+    } else {
+      console.warn("Unhandled stage:", stage.main);
     }
   };
-
-  useEffect(() => {
-    if (currentData?.items?.length > 0) {
-      setToolState((prev) => ({
-        ...prev,
-        position: {
-          x: currentData.items[0].position?.x || prev.position.x,
-          y: currentData.items[0].position?.y || prev.position.y,
-        },
-      }));
-    }
-  }, [currentData]);
-
-  useEffect(() => {
-    if (stage.main >= 3) {
-      document.body.classList.add("block-scroll");
-    } else {
-      document.body.classList.remove("block-scroll");
-    }
-
-    return () => {
-      document.body.classList.remove("block-scroll");
-    };
-  }, [stage.main, chocolateInfo.shapes]);
 
   return (
     <StageLayout
