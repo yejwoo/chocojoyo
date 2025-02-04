@@ -308,57 +308,6 @@ export default function Stage() {
   //   setIsSubmitEnabled(value.length > 0);
   // };
 
-  // // 초콜릿이 100% 채워지면 다음 초콜릿으로 이동
-  // useEffect(() => {
-  //   if (stage.main !== "stage4") return;
-
-  //   if (chocolateInfo.sizes[currentChocolateIndex] >= 100 && !hasMovedRef.current.has(currentChocolateIndex)) {
-  //     hasMovedRef.current.add(currentChocolateIndex); // 현재 인덱스 저장 (중복 실행 방지)
-
-  //     setTimeout(() => {
-  //       if (currentChocolateIndex < chocolatePositions.length - 1) {
-  //         setCurrentChocolateIndex((prev) => prev + 1);
-  //       }
-  //     }, 300); // 0.3초 후 이동
-  //   }
-  // }, [chocolateInfo.sizes, currentChocolateIndex]);
-
-  // // 짤주머니 위치 업데이트
-  // useEffect(() => {
-  //   setPastryBagPosition(chocolatePositions[currentChocolateIndex]);
-  // }, [currentChocolateIndex]);
-
-  // useEffect(() => {
-  //   if (chocolateInfo.sizes.every((size) => size >= 100)) {
-  //     setIsCompleteEvent(true); // Next 버튼 활성화
-  //     setIsPastryBagHidden(true); // 짤주머니 숨김
-  //   }
-  // }, [chocolateInfo.sizes]);
-
-  // useEffect(() => {
-  //   debug("current chocolate index", currentChocolateIndex);
-  // }, [currentChocolateIndex]);
-
-  // useEffect(() => {
-  //   debug("current tab index", currentTabIndex);
-  // }, [currentTabIndex]);
-
-  // useEffect(() => {
-  //   const handleClickOutside = (event) => {
-  //     if (!isZoomMode && moldRef.current && !moldRef.current.contains(event.target)) {
-  //       setCurrentChocolateIndex(null); // 초콜릿 영역 외 클릭 시 원상복귀
-  //     }
-  //   };
-
-  //   document.addEventListener("mousedown", handleClickOutside);
-  //   document.addEventListener("touchstart", handleClickOutside);
-
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //     document.removeEventListener("touchstart", handleClickOutside);
-  //   };
-  // }, [isZoomMode]);
-
   // useEffect(() => {
   //   const mainStage = Number(stage.main.split("stage")[1]);
   //   if (mainStage >= 3) {
@@ -434,17 +383,11 @@ export default function Stage() {
       {uiState.isShowNavi && (
         <>
           <Navi currentStage={stage.main} completedStages={gameState.completedStages} />
-          {
-          (stage.main === 2 || stage.main === 3) && (
-          <div className="absolute top-[72px] left-1/2 -translate-x-1/2 z-10">
-            <ProgressBar
-              gameState={gameState}
-              totalItems={stage.main === 2 ? currentData.items.length - 1 : 8} 
-              stageId={stage.main}
-            />
-          </div>
-            )
-          }
+          {(stage.main === 2 || stage.main === 3) && (
+            <div className="absolute top-[72px] left-1/2 -translate-x-1/2 z-10">
+              <ProgressBar gameState={gameState} totalItems={stage.main === 2 ? currentData.items.length - 1 : 8} stageId={stage.main} />
+            </div>
+          )}
         </>
       )}
 

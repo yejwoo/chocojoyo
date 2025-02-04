@@ -8,7 +8,7 @@ export default function TalkBubble({ dialogue }) {
       <div className="absolute bottom-[400px] right-4 w-56">
         <Image src={talkBubble} alt="말풍선" />
         <p
-          className="absolute left-12 top-1/2 -translate-y-1/2 text-2xl text-left"
+          className="absolute left-10 top-1/2 -translate-y-1/2 text-2xl text-left"
           dangerouslySetInnerHTML={{ __html: dialogue }}
           onDragStart={(e) => e.preventDefault()}
           draggable={false}

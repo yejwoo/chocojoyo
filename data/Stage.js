@@ -136,7 +136,7 @@ export const stageData = [
   {
     init: {
       imgSrc: yantoSwing,
-      dialogue: "짤주머니를 꾹 눌러 초콜릿을 채워주세요.",
+      dialogue: "짤주머니를 꾹 눌러<br/>초콜릿을 채워주세요.",
       ...commonConfig,
       toolConfig: {
         type: "pastryBag",
