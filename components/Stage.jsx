@@ -173,7 +173,7 @@ export default function Stage() {
       isShowButton: false,
       isShowModal: false,
       isShowItems: false,
-      isCompleteEvent: false,
+      isCompleteEvent: stage.main === 5 ? true : false, // 5단계 꾸미기는 선택이므로
     }));
 
     // 선택 상태 초기화
@@ -260,12 +260,7 @@ export default function Stage() {
           <Navi currentStage={stage.main} completedStages={gameState.completedStages} />
           {stage.main >= 2 && stage.main <= 4 && (
             <div className="absolute top-[72px] left-1/2 -translate-x-1/2 z-10">
-              <ProgressBar
-                chocolateInfo={chocolateInfo}
-                gameState={gameState}
-                totalItems={currentData.items.length - 1}
-                stageId={stage.main}
-              />
+              <ProgressBar chocolateInfo={chocolateInfo} gameState={gameState} totalItems={currentData.items.length - 1} stageId={stage.main} />
             </div>
           )}
         </>
