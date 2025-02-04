@@ -16,7 +16,7 @@ export default function ProgressBar({ gameState, totalItems, stageId }) {
   }, []); // 최초 렌더링 시 실행
 
   let progressRatio = 0;
-  const completecount = 8;
+  const completecount = 6;
 
   if (stageId === 2) {
     progressRatio = Math.min((gameState.currentItemIndex / (totalItems - 1)) * 100, 100);

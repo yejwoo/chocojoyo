@@ -3,7 +3,7 @@ import { stageData } from "@/data/Stage";
 
 export function useStageState() {
   // 💝 현재 스테이지 상태
-  const [stage, setStage] = useState({ main: 5, sub: "init" });
+  const [stage, setStage] = useState({ main: 1, sub: "init" });
 
   // 현재 스테이지 데이터
   const currentData = stageData[stage.main][stage.sub];
@@ -35,7 +35,6 @@ export function useStageState() {
     currentChocolateIndex: 0,
     currentTabIndex: 0,
     currentColor: "milk",
-    currentChocoPenColor: "white",
     currentTopping: "",
   });
 
@@ -48,9 +47,9 @@ export function useStageState() {
 
   // 💝 초콜릿 정보
   const [chocolateInfo, setChocolateInfo] = useState({
-    // shapes: ["heart", "heart", "heart", "heart", "heart", "heart"],
-    shapes: [],
-    colors: Array(6).fill("mlik"),
+    shapes: ["heart", "heart", "heart", "heart", "heart", "heart"],
+    // shapes: [],
+    colors: Array(6).fill("milk"),
     sizes: Array(6).fill(0),
     drawings: [],
     toppings: [],

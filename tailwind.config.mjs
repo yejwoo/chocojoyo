@@ -74,7 +74,7 @@ export default {
           },
         },
         chocopens: {
-          white: {
+          milk: {
             100: "#FFF",
             200: "#CFCFCF",
           },

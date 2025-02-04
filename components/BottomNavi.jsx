@@ -5,7 +5,7 @@ import { useMemo, useCallback } from "react";
 export const BottomNaviItem = ({ naviData, selectionState, setSelectionState, currentTabIndex }) => {
   const handleColorSelection = useCallback(
     (color) => {
-      setSelectionState((prev) => ({ ...prev, currentChocoPenColor: color }));
+      setSelectionState((prev) => ({ ...prev, currentColor: color }));
     },
     [setSelectionState]
   );
@@ -25,7 +25,7 @@ export const BottomNaviItem = ({ naviData, selectionState, setSelectionState, cu
           key={`${naviData.type}-${item}-${subIndex}`}
           onClick={() => handleColorSelection(item)}
           className={`cursor-pointer flex-shrink-0 rounded-full border-2 w-8 h-8 ${
-            selectionState.currentChocoPenColor === item ? "ring-4 ring-brand-200" : ""
+            selectionState.currentColor === item ? "ring-4 ring-brand-200" : ""
           } 
           ${currentTabIndex === naviData.index ? "opacity-100 visible" : "opacity-0 invisible absolute"}`}
           style={{
@@ -68,7 +68,7 @@ export const BottomNavi = ({ stage, selectionState, setSelectionState }) => {
     return naviData.map((naviItem, index) => (
       <BottomNaviItem
         key={index}
-        naviData={{ ...naviItem, index }} // 인덱스 추가
+        naviData={{ ...naviItem, index }}
         selectionState={selectionState}
         setSelectionState={setSelectionState}
         currentTabIndex={selectionState.currentTabIndex}

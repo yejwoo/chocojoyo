@@ -1,5 +1,5 @@
 export const handleStir = (e, actionType, rotationRef, gameState, setGameState, setUIState, setToolState) => {
-  const completeCount = 8;
+  const completeCount = 6;
 
   if (!actionType) {
     console.warn("Unknown stir action:", actionType);

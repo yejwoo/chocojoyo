@@ -15,6 +15,8 @@ export default function Stage2Items({ currentData, handleEvent, toolState, gameS
             className={`${gameState.currentItemIndex === i ? "opacity-100 visible" : "opacity-0 invisible"} absolute bottom-0`}
             src={item.imgSrc}
             alt={item.alt}
+            draggable={false}
+            onDragStart={(e) => e.preventDefault()}
           />
         ))}
       </div>
