@@ -14,7 +14,7 @@ import { createActionHandlers } from "@/app/handlers/createActionHandlers";
 import { createStageHandlers } from "@/app/handlers/createStageHandlers";
 
 export default function Stage() {
-  const [stage, setStage] = useState({ main: 1, sub: "init" });
+  const [stage, setStage] = useState({ main: 4, sub: "init" });
   const [buttonConfig, setButtonConfig] = useState({
     shape: "rectangle",
     type: null,
@@ -33,6 +33,7 @@ export default function Stage() {
     isCompleteEvent: false,
     isDragging: false,
     isRotating: false,
+    isPastryBagHidden: false,
     isSubmitEnabled: false,
     isZoomMode: false,
   });
@@ -41,7 +42,7 @@ export default function Stage() {
   const [selectionState, setSelectionState] = useState({
     currentChocolateIndex: null,
     currentTabIndex: 0,
-    currentColor: "vanilla",
+    currentColor: "milk",
     currentTopping: "",
   });
 
@@ -65,8 +66,8 @@ export default function Stage() {
   // 💝 TEST용 더미 데이터
   const [chocolateInfo, setChocolateInfo] = useState({
     shapes: ["heart", "heart", "heart", "heart", "heart", "heart"],
-    colors: [],
-    sizes: [],
+    colors: Array(6).fill("brown"),
+    sizes: Array(6).fill(0),
     drawings: [],
     toppings: [],
     box: "", // 컬러 인덱스?
@@ -86,14 +87,19 @@ export default function Stage() {
     card: "",
   });
 
+  // 💝 Ref
+  const intervalRef = useRef(null);
+
   const stageHandlers = createStageHandlers({
     setChocolateInfo,
     setUIState,
     setGameState,
     setToolState,
+    setSelectionState,
     gameState,
     selectionState,
     currentData,
+    intervalRef,
   });
 
   useEffect(() => {

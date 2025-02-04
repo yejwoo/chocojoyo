@@ -1,6 +1,9 @@
 import Image from "next/image";
 
 export default function Stage5Items({ currentData, selectionState, handleChocolateClick }) {
+  // 💝 ref 관련 정보
+  // const hasMovedRef = useRef(new Set());
+  // const moldRef = useRef(null);
   // useEffect(() => {
   //   const handleClickOutside = (event) => {
   //     if (!isZoomMode && moldRef.current && !moldRef.current.contains(event.target)) {

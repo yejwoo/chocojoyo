@@ -38,7 +38,7 @@ export default {
         "bounce-up": "bounceUp 2.5s linear infinite",
         "bounce-up-once": "bounceUpOnce 0.5s linear",
         "bounce-down": "bounceDown 4s linear infinite",
-        "heartbeat": "heartbeat 3s ease-in-out infinite",
+        heartbeat: "heartbeat 3s ease-in-out infinite",
         "heartbeat-fast": "heartbeat 1s ease-in-out infinite",
       },
       colors: {
@@ -48,10 +48,6 @@ export default {
           200: "#FF375C",
         },
         chocolates: {
-          greentea: {
-            100: "#95C43D",
-            200: "#72A90B",
-          },
           milk: {
             100: "#894E00",
             200: "#683E07",
@@ -60,17 +56,21 @@ export default {
             100: "#533608",
             200: "#3F2802",
           },
-          ruby: {
-            100: "#FEACB1",
-            200: "#F77B83",
-          },
           vanilla: {
             100: "#FFF5BA",
             200: "#C6BB7C",
           },
+          ruby: {
+            100: "#FEACB1",
+            200: "#F77B83",
+          },
           red: {
             100: "#E54932",
             200: "#B52915",
+          },
+          greentea: {
+            100: "#95C43D",
+            200: "#72A90B",
           },
         },
         chocopens: {

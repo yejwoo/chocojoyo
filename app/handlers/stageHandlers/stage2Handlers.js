@@ -17,7 +17,7 @@ export const handleChop = (gameState, setGameState, setUIState, setToolState, cu
   }
 };
 
-export const handleToolClick = (toolState, setToolState, sizeFactor = 0.8, rotationStep = -10, resetDelay = 200) => {
+export const handleToolClick = (setToolState, sizeFactor = 0.8, rotationStep = -10, resetDelay = 200) => {
   setToolState((prev) => ({
     ...prev,
     size: prev.size * sizeFactor,
