@@ -180,7 +180,7 @@ export default function Stage() {
     setSelectionState((prev) => ({
       ...prev,
       currentChocolateIndex: nextMainStage === 5 ? null : 0,
-      currentColor: "vanilla",
+      currentColor: "milk",
     }));
 
     // 버튼 상태 초기화

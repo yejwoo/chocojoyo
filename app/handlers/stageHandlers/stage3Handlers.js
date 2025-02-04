@@ -17,7 +17,7 @@ export const handleStir = (e, actionType, rotationRef, gameState, setGameState, 
       const centerY = 48; // 원 중심 Y
       const radius = 30; // 원 반지름
       let startTime = null;
-      const duration = 1000; // 1초 동안 회전
+      const duration = 700; 
       let chocolateRotation = 0; // 초콜릿 덩어리 회전값
 
       const animate = (timestamp) => {

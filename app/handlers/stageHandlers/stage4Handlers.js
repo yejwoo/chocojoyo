@@ -8,9 +8,7 @@ export const handleChocolateClick = (index, selectionState, setChocolateInfo) =>
   });
 };
 
-export const handleChocolatePress = (index, setChocolateInfo, setSelectionState, intervalRef) => {
-  // console.log("Pressed Index:", index);
-
+export const handleChocolatePress = (index, setChocolateInfo, selectionState, setSelectionState, intervalRef) => {
   if (!setSelectionState) {
     console.error("setSelectionState is undefined!");
     return;
@@ -21,6 +19,15 @@ export const handleChocolatePress = (index, setChocolateInfo, setSelectionState,
     currentChocolateIndex: index,
   }));
 
+  setChocolateInfo((prev) => {
+    if (prev.colors[index] !== selectionState.currentColor) {
+      const updatedColors = [...prev.colors];
+      updatedColors[index] = selectionState.currentColor; // 현재 선택된 컬러 적용
+      return { ...prev, colors: updatedColors };
+    }
+    return prev; // 색상이 동일하면 변경하지 않음
+  });
+  
   if (intervalRef.current) {
     clearInterval(intervalRef.current);
   }
@@ -51,7 +58,7 @@ export const updatePastryBagVisibility = (chocolateInfo, setUIState) => {
   if (chocolateInfo.sizes.every((size) => size >= 100)) {
     setUIState((prev) => ({
       ...prev,
-      isPastryBagHidden: true, 
+      isPastryBagHidden: true,
     }));
   }
 };

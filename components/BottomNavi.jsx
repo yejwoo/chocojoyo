@@ -3,6 +3,8 @@ import Image from "next/image";
 import { useMemo, useCallback } from "react";
 
 export const BottomNaviItem = ({ naviData, selectionState, setSelectionState }) => {
+  console.log(selectionState);
+
   const handleColorSelection = useCallback(
     (color) => {
       setSelectionState((prev) => ({ ...prev, currentColor: color }));
