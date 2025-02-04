@@ -2,6 +2,8 @@ import { bottomNaviConfig } from "@/data/Stage";
 import Image from "next/image";
 import { useMemo } from "react";
 import { handleTabClick, handleColorSelection, handleToppingSelection } from "@/app/handlers/generalHandlers";
+import { handleZoomMode } from "@/app/handlers/stageHandlers/stage5Handlers";
+import { magnifierActive, magnifierDefault } from "@/public/images/stage5";
 
 export const BottomNaviItem = ({ naviData, selectionState, setSelectionState, currentTabIndex }) => {
   if (naviData.type === "color") {
@@ -71,6 +73,10 @@ export const BottomNavi = ({ stage, selectionState, setSelectionState, uiState, 
               {item.title}
             </div>
           ))}
+          {/* ✅ 돋보기 버튼 */}
+          <button className="px-2 rounded-tl-xl rounded-tr-xl" onClick={() => handleZoomMode(setUIState)}>
+            <Image src={uiState.isZoomMode ? magnifierActive : magnifierDefault} alt="돋보기" />
+          </button>
         </div>
       )}
 

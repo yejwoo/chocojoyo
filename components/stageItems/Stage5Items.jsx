@@ -3,18 +3,9 @@ import box from "@/public/images/stage5/box.svg";
 import { Shapes } from "@/public/icons/shapes";
 import { bottomNaviConfig } from "@/data/Stage";
 import Canvas from "../Canvas";
-import { handleSaveDrawing } from "@/app/handlers/stageHandlers/stage5Handlers";
-import { useCallback } from "react";
 
 export default function Stage5Items({ currentData, chocolateInfo, selectionState, uiState, setChocolateInfo, handleEvent }) {
   const chocolateColors = bottomNaviConfig[4][0].data;
-  const handleSave = useCallback(
-    (imageData, index) => {
-      handleSaveDrawing(imageData, setChocolateInfo, index);
-    },
-    [setChocolateInfo]
-  );
-
   return (
     <>
       <div className="relative w-[280px] h-[182px]">
@@ -82,10 +73,6 @@ export default function Stage5Items({ currentData, chocolateInfo, selectionState
           })}
         </div>
       </div>
-
-      <button onClick={() => handleEvent("zoomMode")} className={`absolute p-3 right-4 bottom-16 ${uiState.isZoomMode ? "bg-blue-700" : "bg-blue-300"}`}>
-        🔍 돋보기
-      </button>
     </>
   );
 }
