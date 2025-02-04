@@ -17,7 +17,7 @@ import { handleSaveDrawing } from "@/app/handlers/generalHandlers";
 import ProgressBar from "./ProgressBar";
 
 export default function Stage() {
-  const [stage, setStage] = useState({ main: 1, sub: "init" });
+  const [stage, setStage] = useState({ main: 4, sub: "init" });
   const [buttonConfig, setButtonConfig] = useState({
     shape: "rectangle",
     type: null,
@@ -56,8 +56,17 @@ export default function Stage() {
   });
 
   // 💝 초콜릿 정보
+  // const [chocolateInfo, setChocolateInfo] = useState({
+  //   shapes: [],
+  //   colors: [],
+  //   sizes: [],
+  //   drawings: [],
+  //   toppings: [],
+  //   box: "", // 컬러 인덱스?
+  // });
+
   const [chocolateInfo, setChocolateInfo] = useState({
-    shapes: [],
+    shapes: ["heart","heart","heart","heart","heart","heart"],
     colors: [],
     sizes: [],
     drawings: [],
@@ -362,6 +371,7 @@ export default function Stage() {
             toolState={toolState}
             chocolateInfo={chocolateInfo}
             gameState={gameState}
+            uiState={uiState}
           />
         </div>
       )}
@@ -392,7 +402,8 @@ export default function Stage() {
       )}
 
       {/* 하단 네비게이션 */}
-      {uiState.isShowItems && stage.main >= 4 && stage.sub === "description" && <BottomNavi stage={stage} />}
+      {/* && stage.sub === "description" -> 이 조건은 대사 다 정하고 추가 */}
+      {uiState.isShowItems && stage.main >= 4 && <BottomNavi stage={stage.main} selectionState={selectionState} setSelectionState={setSelectionState} />}
     </StageLayout>
   );
 }

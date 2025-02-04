@@ -97,7 +97,7 @@ export const stageData = [
         { imgSrc: chocolate8, alt: "초콜릿 썰기", variant: null, position: { x: 120, y: 100 } },
       ],
     },
-  },  
+  },
   {
     init: {
       imgSrc: yantoBlink,
@@ -108,7 +108,7 @@ export const stageData = [
           imgSrc: spatula,
           alt: "스패츌라",
           variant: null,
-          position: { x: 80, y: 36 } 
+          position: { x: 80, y: 36 },
         },
         {
           imgSrc: doubleBoiler,
@@ -168,14 +168,14 @@ export const stageData = [
 ];
 
 export const bottomNaviConfig = {
-  stage4: [
+  4: [
     {
       type: "color",
       data: createColorConfig(chocolateColorsConfig),
       title: null,
     },
   ],
-  stage5: [
+  5: [
     {
       type: "color",
       data: createColorConfig(chocopenColorsConfig),
@@ -218,7 +218,7 @@ export const bottomNaviConfig = {
       title: "토핑",
     },
   ],
-  stage6: [
+  6: [
     {
       type: "color",
       title: "박스 색상",
