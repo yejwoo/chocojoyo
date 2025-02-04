@@ -1,4 +1,3 @@
-// handleChocolateClick(index, selectionState, setChocolateInfo);
 export const handleChocolateClick = (index, selectionState, setChocolateInfo) => {
   setChocolateInfo((prev) => {
     const updatedColors = [...prev.colors];
@@ -9,8 +8,8 @@ export const handleChocolateClick = (index, selectionState, setChocolateInfo) =>
   });
 };
 
-export const handleChocolatePress = (index, selectionState, setChocolateInfo, setSelectionState, intervalRef) => {
-  console.log("Pressed Index:", index);
+export const handleChocolatePress = (index, setChocolateInfo, setSelectionState, intervalRef) => {
+  // console.log("Pressed Index:", index);
 
   if (!setSelectionState) {
     console.error("setSelectionState is undefined!");
@@ -37,7 +36,7 @@ export const handleChocolatePress = (index, selectionState, setChocolateInfo, se
   }, 100);
 
   const stopGrowing = () => {
-    console.log("Stopped Pressing");
+    // console.log("Stopped Pressing");
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
@@ -46,4 +45,27 @@ export const handleChocolatePress = (index, selectionState, setChocolateInfo, se
 
   window.addEventListener("mouseup", stopGrowing);
   window.addEventListener("touchend", stopGrowing);
+};
+
+export const updatePastryBagVisibility = (chocolateInfo, setUIState) => {
+  if (chocolateInfo.sizes.every((size) => size >= 100)) {
+    setUIState((prev) => ({
+      ...prev,
+      isPastryBagHidden: true, 
+    }));
+  }
+};
+
+export const updatePastryBagPosition = (selectionState, currentData, setToolState) => {
+  if (selectionState.currentChocolateIndex !== null && currentData.positions) {
+    const targetPosition = currentData.positions[selectionState.currentChocolateIndex];
+
+    setToolState((prev) => ({
+      ...prev,
+      position: {
+        x: targetPosition?.x || prev.position.x,
+        y: targetPosition?.y || prev.position.y,
+      },
+    }));
+  }
 };

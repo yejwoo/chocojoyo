@@ -99,6 +99,7 @@ export default function Stage() {
     gameState,
     selectionState,
     currentData,
+    chocolateInfo,
     intervalRef,
   });
 
@@ -315,6 +316,8 @@ export default function Stage() {
             chocolateInfo={chocolateInfo}
             gameState={gameState}
             uiState={uiState}
+            setToolState={setToolState}
+            setUIState={setUIState}
           />
         </div>
       )}

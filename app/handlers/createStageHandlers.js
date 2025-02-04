@@ -2,7 +2,7 @@ import { handleSaveDrawing } from "./generalHandlers";
 import { handleSelect } from "./stageHandlers/stage1Handlers";
 import { handleChop, handleToolClick } from "./stageHandlers/stage2Handlers";
 import { handleStir } from "./stageHandlers/stage3Handlers";
-import { handleChocolateClick, handleChocolatePress } from "./stageHandlers/stage4Handlers";
+import { handleChocolateClick, handleChocolatePress, updatePastryBagPosition, updatePastryBagVisibility } from "./stageHandlers/stage4Handlers";
 
 export const createStageHandlers = ({
   setChocolateInfo,
@@ -10,6 +10,7 @@ export const createStageHandlers = ({
   setGameState,
   setToolState,
   setSelectionState,
+  chocolateInfo,
   gameState,
   selectionState,
   currentData,
@@ -30,8 +31,11 @@ export const createStageHandlers = ({
     if (type === "click") {
       handleChocolateClick(index, selectionState, setChocolateInfo);
     } else if (type === "press") {
-      handleChocolatePress(index, selectionState, setChocolateInfo, setSelectionState, intervalRef); // ✅ 올바르게 전달
-    }
+      handleChocolatePress(index, setChocolateInfo, setSelectionState, intervalRef);
+    } 
+
+    updatePastryBagVisibility(chocolateInfo, setUIState);
+    updatePastryBagPosition(selectionState, currentData, setToolState);
   },
 
   5: (type, variant, index) => {

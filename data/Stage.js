@@ -137,24 +137,15 @@ export const stageData = [
     init: {
       imgSrc: yantoSwing,
       dialogue: "짤주머니를 꾹 눌러<br/>초콜릿을 채워주세요.",
+      positions: [{x: 0, y: 0}],
       ...commonConfig,
-      toolConfig: {
-        type: "pastryBag",
-        component: PastryBag,
-        svgProps: (currentColor) => ({
-          fillColor: chocolateColorsConfig[currentColor].fill,
-        }),
-      },
     },
   },
   {
     init: {
       imgSrc: yantoSwing,
       dialogue: "거의 다 왔어요. 초콜릿을 꾸며주세요.",
-      toolConfig: {
-        type: "chocoPen",
-        cursor: (currentColor) => `url('/cursors/chocopen-${currentColor}.png'), auto`, // 커서 변경
-      },
+
       ...commonConfig,
     },
   },
