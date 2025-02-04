@@ -28,20 +28,7 @@ export const handleMouseLeave = (setSelectionState, reset) => {
   setSelectionState((prev) => ({ ...prev, currentChocolateIndex: reset }));
 };
 
-export const handleDragStartTopping = (setSelectionState, topping) => {
-  setSelectionState((prev) => ({
-    ...prev,
-    draggingTopping: topping,
-  }));
-};
 
-export const handleDragEndTopping = (setChocolateInfo, index, x, y) => {
-  setChocolateInfo((prev) => {
-    const updatedToppings = [...prev.toppings];
-    updatedToppings[index] = { name: prev.draggingTopping, x, y };
-    return { ...prev, toppings: updatedToppings };
-  });
-};
 
 export const handleToppingPlacement = (setChocolateInfo, topping, index) => {
   setChocolateInfo((prev) => {

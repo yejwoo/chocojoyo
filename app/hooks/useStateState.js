@@ -28,7 +28,6 @@ export function useStageState() {
     isPastryBagHidden: false,
     isSubmitEnabled: false,
     isZoomMode: false,
-    isMobile: false
   });
 
   // 💝 현재 선택 관련 상태

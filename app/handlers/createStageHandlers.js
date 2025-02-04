@@ -38,8 +38,6 @@ export const createStageHandlers = (store) => {
         mouseLeave: () => handleMouseLeave(setSelectionState, null),
         saveDrawing: (imageData) => handleSaveDrawing(imageData, setChocolateInfo, index),
         clickTopping: () => handleToppingPlacement(setChocolateInfo, selectionState.currentTopping, index),
-        dragStartTopping: () => handleDragStartTopping(setSelectionState, selectionState.currentTopping),
-        dragEndTopping: () => handleDragEndTopping(setChocolateInfo, index, x, y),
       };
 
       if (handlers[type]) handlers[type]();

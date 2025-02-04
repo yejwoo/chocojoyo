@@ -39,7 +39,7 @@ export default function Stage5Items({ currentData, chocolateInfo, selectionState
               <div
                 key={index}
                 onClick={(e) => {
-                  if (!uiState.isMobile) handleEvent("clickTopping", "_", index);
+                  handleEvent("clickTopping", "_", index);
                 }}
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => {
@@ -78,7 +78,8 @@ export default function Stage5Items({ currentData, chocolateInfo, selectionState
                 {/* 토핑 렌더링 */}
                 {chocolateInfo.toppings[index] && (
                   <Image
-                  className="z-30"
+                  className={`z-30 ${uiState.isZoomMode && isSelected ? "scale-[2] transition duration-200 ease-in-out" : ""}`}
+                  
                     src={`/images/stage5/toppings/topping-${chocolateInfo.toppings[index].name}.svg`}
                     alt="토핑"
                     width={32}

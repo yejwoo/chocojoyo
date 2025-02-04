@@ -2,7 +2,7 @@ import { bottomNaviConfig } from "@/data/Stage";
 import Image from "next/image";
 import { useMemo } from "react";
 import { handleTabClick, handleColorSelection, handleToppingSelection } from "@/app/handlers/generalHandlers";
-import { handleDragStartTopping, handleZoomMode } from "@/app/handlers/stageHandlers/stage5Handlers";
+import { handleZoomMode } from "@/app/handlers/stageHandlers/stage5Handlers";
 import { magnifierActive, magnifierDefault } from "@/public/images/stage5";
 
 export const BottomNaviItem = ({ naviData, uiState, selectionState, setSelectionState, currentTabIndex }) => {
@@ -32,11 +32,10 @@ export const BottomNaviItem = ({ naviData, uiState, selectionState, setSelection
             src={item.imgSrc}
             alt={item.alt || "토핑 이미지"}
             className={`w-8 h-8 cursor-pointer rounded-sm ${selectionState.currentTopping === item.name ? "ring-4 ring-brand-200" : ""}`}
-            draggable
+            draggable={false}
             onClick={() => {
-              if (!uiState.isMobile) handleToppingSelection(item.name, setSelectionState);
+              handleToppingSelection(item.name, setSelectionState);
             }}
-            onDragStart={() => handleDragStartTopping(setSelectionState, item.name)}
           />
         ))}
       </div>

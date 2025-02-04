@@ -204,10 +204,11 @@ export const bottomNaviConfig = {
           name: "heart",
           alt: "하트 토핑",
         },
+
         {
-          imgSrc: toppingBlueberries,
-          name: "blueberries",
-          alt: "블루베리 토핑",
+          imgSrc: toppingCoffeeBean,
+          name: "coffeebean",
+          alt: "커피콩 토핑",
         },
         {
           imgSrc: toppingAlmond,
@@ -215,9 +216,9 @@ export const bottomNaviConfig = {
           alt: "아몬드 토핑",
         },
         {
-          imgSrc: toppingCoffeeBean,
-          name: "coffeebean",
-          alt: "커피콩 토핑",
+          imgSrc: toppingBlueberries,
+          name: "blueberries",
+          alt: "블루베리 토핑",
         },
         {
           imgSrc: toppingStrawberry,
