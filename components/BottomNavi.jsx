@@ -74,8 +74,8 @@ export const BottomNavi = ({ stage, selectionState, setSelectionState, uiState, 
             </div>
           ))}
           {/* ✅ 돋보기 버튼 */}
-          <button className="px-2 rounded-tl-xl rounded-tr-xl" onClick={() => handleZoomMode(setUIState)}>
-            <Image src={uiState.isZoomMode ? magnifierActive : magnifierDefault} alt="돋보기" />
+          <button className="px-1 rounded-tl-xl rounded-tr-xl" onClick={() => handleZoomMode(setUIState)}>
+            <Image width={40} height={40} src={uiState.isZoomMode ? magnifierActive : magnifierDefault} alt="돋보기" />
           </button>
         </div>
       )}
