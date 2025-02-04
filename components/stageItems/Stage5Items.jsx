@@ -40,18 +40,13 @@ export default function Stage5Items({ currentData, chocolateInfo, selectionState
               <div
                 key={index}
                 onClick={() => {
-                  if(isToppingMode) {
+                  if (isToppingMode) {
                     handleEvent("clickTopping", "_", index);
                   }
                 }}
                 onDragOver={(e) => e.preventDefault()}
-                onDrop={(e) => {
-                  const x = e.clientX - e.target.offsetParent.offsetLeft;
-                  const y = e.clientY - e.target.offsetParent.offsetTop;
-                  handleEvent("dragEndTopping", "_", index, x, y);
-                }}
                 onMouseOver={() => handleEvent("mouseOver", "_", index)}
-                onMouseLeave={() => handleEvent("mouseLeave", "_", null)}
+                // onMouseLeave={() => handleEvent("mouseLeave", "_", null)}
                 onDragStart={(e) => e.preventDefault()}
                 draggable={false}
                 className="flex-shrink-0 relative w-[80px] h-[76px] bg-gray-warm-300 rounded-xl"
@@ -65,7 +60,7 @@ export default function Stage5Items({ currentData, chocolateInfo, selectionState
                   <ShapeComponent
                     draggable={false}
                     onDragStart={(e) => e.preventDefault()}
-                    className={uiState.isZoomMode && isSelected ? "scale-[2] transition duration-200 ease-in-out" : ""}
+                    className={uiState.isZoomMode && isSelected ? "scale-[2.2] transition duration-200 ease-in-out" : ""}
                     width={(64 * (chocolateInfo.sizes[index] || 0)) / 100}
                     height={(56 * (chocolateInfo.sizes[index] || 0)) / 100}
                     fillColor={chocolateColors[color]?.fill}
@@ -75,15 +70,14 @@ export default function Stage5Items({ currentData, chocolateInfo, selectionState
                 <Canvas
                   isSelected={isSelected}
                   isZoomMode={uiState.isZoomMode}
-                  isToppingMode={isToppingMode} 
+                  isToppingMode={isToppingMode}
                   strokeColor={selectionState.currentColor}
                   onSave={(e) => handleEvent("saveDrawing", e)}
                 />
                 {/* 토핑 렌더링 */}
                 {chocolateInfo.toppings[index] && (
                   <Image
-                  className={`z-30 ${uiState.isZoomMode && isSelected ? "scale-[2] transition duration-200 ease-in-out" : ""}`}
-                  
+                    className={`z-30 ${uiState.isZoomMode && isSelected ? "scale-[2] transition duration-200 ease-in-out" : ""}`}
                     src={`/images/stage5/toppings/topping-${chocolateInfo.toppings[index].name}.svg`}
                     alt="토핑"
                     width={32}
