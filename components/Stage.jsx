@@ -263,7 +263,9 @@ export default function Stage() {
 
       {/* 하단 네비게이션 */}
       {/* && stage.sub === "description" -> 이 조건은 대사 다 정하고 추가 */}
-      {uiState.isShowItems && stage.main >= 4 && <BottomNavi stage={stage.main} selectionState={selectionState} setSelectionState={setSelectionState} />}
+      {uiState.isShowItems && stage.main >= 4 && (
+        <BottomNavi stage={stage.main} selectionState={selectionState} setSelectionState={setSelectionState} uiState={uiState} setUIState={setUIState} />
+      )}
     </StageLayout>
   );
 }

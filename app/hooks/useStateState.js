@@ -35,7 +35,7 @@ export function useStageState() {
     currentChocolateIndex: 0,
     currentTabIndex: 0,
     currentColor: "milk",
-    currentTopping: "",
+    currentTopping: "sprinkle",
   });
 
   // 💝 툴 관련 상태

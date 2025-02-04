@@ -34,6 +34,7 @@ export const createStageHandlers = (store) => {
 
     5: (type, variant, index) => {
       const handlers = {
+        
         mouseOver: () => handleMouseOver(setSelectionState, index),
         mouseLeave: () => handleMouseLeave(setSelectionState, null),
         zoomMode: () => handleZoomMode(setUIState),

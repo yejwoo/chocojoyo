@@ -1,32 +1,17 @@
 import { bottomNaviConfig } from "@/data/Stage";
 import Image from "next/image";
-import { useMemo, useCallback } from "react";
+import { useMemo } from "react";
+import { handleTabClick, handleColorSelection, handleToppingSelection } from "@/app/handlers/generalHandlers";
 
 export const BottomNaviItem = ({ naviData, selectionState, setSelectionState, currentTabIndex }) => {
-  const handleColorSelection = useCallback(
-    (color) => {
-      setSelectionState((prev) => ({ ...prev, currentColor: color }));
-    },
-    [setSelectionState]
-  );
-
-  const handleToppingSelection = useCallback(
-    (topping) => {
-      setSelectionState((prev) => ({ ...prev, currentTopping: topping }));
-    },
-    [setSelectionState]
-  );
-
   if (naviData.type === "color") {
     return Object.keys(naviData.data)
       .filter((item) => item !== "default")
       .map((item, subIndex) => (
         <div
           key={`${naviData.type}-${item}-${subIndex}`}
-          onClick={() => handleColorSelection(item)}
-          className={`cursor-pointer flex-shrink-0 rounded-full border-2 w-8 h-8 ${
-            selectionState.currentColor === item ? "ring-4 ring-brand-200" : ""
-          } 
+          onClick={() => handleColorSelection(item, setSelectionState)}
+          className={`cursor-pointer flex-shrink-0 rounded-full border-2 w-8 h-8 ${selectionState.currentColor === item ? "ring-4 ring-brand-200" : ""} 
           ${currentTabIndex === naviData.index ? "opacity-100 visible" : "opacity-0 invisible absolute"}`}
           style={{
             backgroundColor: naviData.data[item].fill,
@@ -38,20 +23,14 @@ export const BottomNaviItem = ({ naviData, selectionState, setSelectionState, cu
 
   if (naviData.type === "image") {
     return (
-      <div
-        className={`flex gap-7 ${
-          currentTabIndex === naviData.index ? "opacity-100 visible" : "opacity-0 invisible absolute"
-        }`}
-      >
+      <div className={`flex gap-7 ${currentTabIndex === naviData.index ? "opacity-100 visible" : "opacity-0 invisible absolute"}`}>
         {naviData.data.map((item, subIndex) => (
           <Image
             key={`${naviData.type}-${subIndex}-${item.imgSrc}`}
             src={item.imgSrc}
             alt={item.alt || "토핑 이미지"}
-            onClick={() => handleToppingSelection(item.name)}
-            className={`w-8 h-8 cursor-pointer rounded-sm ${
-              selectionState.currentTopping === item.name ? "ring-4 ring-brand-200" : ""
-            }`}
+            onClick={() => handleToppingSelection(item.name, setSelectionState)}
+            className={`w-8 h-8 cursor-pointer rounded-sm ${selectionState.currentTopping === item.name ? "ring-4 ring-brand-200" : ""}`}
           />
         ))}
       </div>
@@ -61,7 +40,7 @@ export const BottomNaviItem = ({ naviData, selectionState, setSelectionState, cu
   return null;
 };
 
-export const BottomNavi = ({ stage, selectionState, setSelectionState }) => {
+export const BottomNavi = ({ stage, selectionState, setSelectionState, uiState, setUIState }) => {
   const naviData = bottomNaviConfig[stage];
 
   const naviItems = useMemo(() => {
@@ -84,7 +63,7 @@ export const BottomNavi = ({ stage, selectionState, setSelectionState }) => {
           {naviData.map((item, index) => (
             <div
               key={index}
-              onClick={() => setSelectionState((prev) => ({ ...prev, currentTabIndex: index }))}
+              onClick={() => handleTabClick(index, selectionState, setSelectionState, uiState, setUIState)}
               className={`cursor-pointer ${
                 selectionState.currentTabIndex === index ? "bg-popup-100" : "bg-gray-warm-50 text-gray-warm-200"
               } w-20 flex items-center justify-center text-xl rounded-tl-xl rounded-tr-xl`}
@@ -96,9 +75,7 @@ export const BottomNavi = ({ stage, selectionState, setSelectionState }) => {
       )}
 
       {/* ✅ 선택된 탭의 네비 데이터 */}
-      <div className="absolute bg-popup-100 left-0 right-0 h-16 bottom-0 flex gap-7 justify-center items-center">
-        {naviItems}
-      </div>
+      <div className="absolute bg-popup-100 left-0 right-0 h-16 bottom-0 flex gap-7 justify-center items-center">{naviItems}</div>
     </div>
   );
 };
