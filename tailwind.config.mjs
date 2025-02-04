@@ -25,6 +25,20 @@ export default {
             animationTimingFunction: "cubic-bezier(0, 0, 0.2, 1)",
           },
         },
+        bounceUpOnceMiddle:{
+          "0%": {
+            transform: "translateY(0, 0%)",
+            animationTimingFunction: "ease-in",
+          },
+          "30%": {
+            transform: "translate(0, -30%)",
+            animationTimingFunction: "cubic-bezier(0.8, 0, 1, 1)",
+          },
+          "100%": {
+            transform: "translate(0, 0%)",
+            animationTimingFunction: "cubic-bezier(0, 0, 0.2, 1)",
+          },
+        },
         bounceDown: {
           "0%, 100%": { transform: "translate(-50%, 0)", animationTimingFunction: "cubic-bezier(0.8, 0, 1, 1)" },
           "50%": { transform: "translate(-50%, -10%)", animationTimingFunction: "cubic-bezier(0, 0, 0.2, 1)" },
@@ -37,8 +51,9 @@ export default {
       animation: {
         "bounce-up": "bounceUp 2.5s linear infinite",
         "bounce-up-once": "bounceUpOnce 0.5s linear",
+        "bounce-up-once-middle": "bounceUpOnceMiddle 0.5s linear",
         "bounce-down": "bounceDown 4s linear infinite",
-        heartbeat: "heartbeat 3s ease-in-out infinite",
+        "heartbeat": "heartbeat 3s ease-in-out infinite",
         "heartbeat-fast": "heartbeat 1s ease-in-out infinite",
       },
       colors: {
@@ -114,7 +129,7 @@ export default {
         },
         popup: {
           100: "#FEF9E1",
-          200: "#F3E086",
+          200: "#FDE882",
         },
         disabled: {
           100: "#F0A7B4",
