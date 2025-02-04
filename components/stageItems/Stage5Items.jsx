@@ -32,12 +32,21 @@ export default function Stage5Items({ currentData, chocolateInfo, selectionState
             const isSelected = selectionState.currentChocolateIndex === index;
             const isChocoPenMode = selectionState.currentTabIndex === 0;
             const cursorImage = isChocoPenMode
-              ? `/images/stage5/cursor-chocopen-${selectionState.currentColor}.png`
-              : `/images/stage5/cursor-topping-${selectionState.currentTopping}.svg`;
+              ? `/images/stage5/cursors/cursor-chocopen-${selectionState.currentColor}.png`
+              : `/images/stage5/cursors/cursor-topping-${selectionState.currentTopping}.svg`;
 
             return ShapeComponent ? (
               <div
                 key={index}
+                onClick={(e) => {
+                  if (!uiState.isMobile) handleEvent("clickTopping", "_", index);
+                }}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => {
+                  const x = e.clientX - e.target.offsetParent.offsetLeft;
+                  const y = e.clientY - e.target.offsetParent.offsetTop;
+                  handleEvent("dragEndTopping", "_", index, x, y);
+                }}
                 onMouseOver={() => handleEvent("mouseOver", "_", index)}
                 onMouseLeave={() => handleEvent("mouseLeave", "_", null)}
                 onDragStart={(e) => e.preventDefault()}
@@ -66,6 +75,23 @@ export default function Stage5Items({ currentData, chocolateInfo, selectionState
                   strokeColor={selectionState.currentColor}
                   onSave={(e) => handleEvent("saveDrawing", e)}
                 />
+                {/* 토핑 렌더링 */}
+                {chocolateInfo.toppings[index] && (
+                  <Image
+                  className="z-30"
+                    src={`/images/stage5/toppings/topping-${chocolateInfo.toppings[index].name}.svg`}
+                    alt="토핑"
+                    width={32}
+                    height={32}
+                    style={{
+                      position: "absolute",
+                      left: `${chocolateInfo.toppings[index].x}px`,
+                      top: `${chocolateInfo.toppings[index].y}px`,
+                    }}
+                    draggable
+                    onDragStart={() => handleEvent("dragStartTopping")}
+                  />
+                )}
               </div>
             ) : (
               console.warn(`${name} 컴포넌트 없음`) || null

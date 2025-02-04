@@ -2,10 +2,10 @@ import { bottomNaviConfig } from "@/data/Stage";
 import Image from "next/image";
 import { useMemo } from "react";
 import { handleTabClick, handleColorSelection, handleToppingSelection } from "@/app/handlers/generalHandlers";
-import { handleZoomMode } from "@/app/handlers/stageHandlers/stage5Handlers";
+import { handleDragStartTopping, handleZoomMode } from "@/app/handlers/stageHandlers/stage5Handlers";
 import { magnifierActive, magnifierDefault } from "@/public/images/stage5";
 
-export const BottomNaviItem = ({ naviData, selectionState, setSelectionState, currentTabIndex }) => {
+export const BottomNaviItem = ({ naviData, uiState, selectionState, setSelectionState, currentTabIndex }) => {
   if (naviData.type === "color") {
     return Object.keys(naviData.data)
       .filter((item) => item !== "default")
@@ -31,8 +31,12 @@ export const BottomNaviItem = ({ naviData, selectionState, setSelectionState, cu
             key={`${naviData.type}-${subIndex}-${item.imgSrc}`}
             src={item.imgSrc}
             alt={item.alt || "토핑 이미지"}
-            onClick={() => handleToppingSelection(item.name, setSelectionState)}
             className={`w-8 h-8 cursor-pointer rounded-sm ${selectionState.currentTopping === item.name ? "ring-4 ring-brand-200" : ""}`}
+            draggable
+            onClick={() => {
+              if (!uiState.isMobile) handleToppingSelection(item.name, setSelectionState);
+            }}
+            onDragStart={() => handleDragStartTopping(setSelectionState, item.name)}
           />
         ))}
       </div>
@@ -50,6 +54,7 @@ export const BottomNavi = ({ stage, selectionState, setSelectionState, uiState, 
       <BottomNaviItem
         key={index}
         naviData={{ ...naviItem, index }}
+        uiState={uiState}
         selectionState={selectionState}
         setSelectionState={setSelectionState}
         currentTabIndex={selectionState.currentTabIndex}

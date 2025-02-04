@@ -2,7 +2,7 @@ import { handleSelect } from "./stageHandlers/stage1Handlers";
 import { handleChop, handleToolClick } from "./stageHandlers/stage2Handlers";
 import { handleStir } from "./stageHandlers/stage3Handlers";
 import { handleChocolateClick, handleChocolatePress, updatePastryBagPosition, updatePastryBagVisibility } from "./stageHandlers/stage4Handlers";
-import { handleZoomMode, handleMouseLeave, handleMouseOver, handleSaveDrawing } from "./stageHandlers/stage5Handlers";
+import { handleMouseLeave, handleMouseOver, handleSaveDrawing, handleDragEndTopping, handleDragStartTopping, handleToppingPlacement } from "./stageHandlers/stage5Handlers";
 
 export const createStageHandlers = (store) => {
   const { setChocolateInfo, setUIState, setGameState, setToolState, setSelectionState, chocolateInfo, gameState, selectionState, currentData, intervalRef } =
@@ -32,13 +32,14 @@ export const createStageHandlers = (store) => {
       updatePastryBagPosition(selectionState, chocolateInfo, currentData, setSelectionState, setToolState, setUIState);
     },
 
-    5: (type, variant, index) => {
+    5: (type, _, index, x, y) => {
       const handlers = {
-        
         mouseOver: () => handleMouseOver(setSelectionState, index),
         mouseLeave: () => handleMouseLeave(setSelectionState, null),
-        zoomMode: () => handleZoomMode(setUIState),
-        saveDrawing: () => handleSaveDrawing(variant, setChocolateInfo, selectionState.currentChocolateIndex),
+        saveDrawing: (imageData) => handleSaveDrawing(imageData, setChocolateInfo, index),
+        clickTopping: () => handleToppingPlacement(setChocolateInfo, selectionState.currentTopping, index),
+        dragStartTopping: () => handleDragStartTopping(setSelectionState, selectionState.currentTopping),
+        dragEndTopping: () => handleDragEndTopping(setChocolateInfo, index, x, y),
       };
 
       if (handlers[type]) handlers[type]();
