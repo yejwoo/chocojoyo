@@ -36,7 +36,6 @@ export default function Navi({ currentStage, completedStages }) {
 
           return (
             <li key={stage.id} className={`stage${stage.id} w-12 h-14 relative flex-shrink-0 flex items-center justify-center`}>
-              {/* <div className="absolute bottom-[2px] w-[52px] h-[52px] bg-white shadow-pink rounded-lg"></div> */}
               {/* Off 상태 */}
               {showOff && <Image className="z-10" src={stage.off} alt={`${stage.id}단계`} />}
               {/* On 상태 */}
@@ -48,7 +47,7 @@ export default function Navi({ currentStage, completedStages }) {
                 />
               )}
               {/* 완료 체크 */}
-              {isCompleted && <Image src={check} alt="완료" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-20" />}
+              <Image src={check} alt="완료" className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-20 ${isCompleted ? "opacity-100 visible" : "opacity-0 invisible"}`} />
             </li>
           );
         })}

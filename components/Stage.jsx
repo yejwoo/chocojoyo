@@ -70,34 +70,35 @@ export default function Stage() {
 
   useEffect(() => {
     if (stage.main === 5 && stage.sub === "init") {
+      setUIState((prev) => ({...prev, isCompleteEvent: true}))
       const runOnboarding = async () => {
-        await delay(5000); 
+        await delay(5000);
         setUIState((prev) => ({
           ...prev,
           isOnboarding: true,
           highlightedElement: "item0",
         }));
-        await delay(3000); 
-  
+        await delay(3000);
+
         setUIState((prev) => ({
           ...prev,
           highlightedElement: "item1",
         }));
-        await delay(3000); 
+        await delay(3000);
 
         setUIState((prev) => ({
           ...prev,
           highlightedElement: "item2",
         }));
-        await delay(3000); 
-  
+        await delay(3000);
+
         setUIState((prev) => ({
           ...prev,
           isOnboarding: false,
           highlightedElement: null,
         }));
       };
-  
+
       runOnboarding();
     }
   }, [stage]);
@@ -253,9 +254,8 @@ export default function Stage() {
       {/* 온보딩 오버레이 */}
       {uiState.isOnboarding && <div className="absolute inset-0 bg-black bg-opacity-60 z-40"></div>}
 
-
       {/* 말풍선 */}
-      {uiState.isTalkBubbleShow && <TalkBubble dialogue={currentData?.dialogue || "안녕하세요!"} />}
+      <TalkBubble uiState={uiState} dialogue={currentData?.dialogue || "안녕하세요!"} />
 
       {/* 스테이지별 메인 아이템 */}
       {uiState.isShowItems && (
@@ -270,29 +270,27 @@ export default function Stage() {
       )}
 
       {/* 버튼 */}
-      {uiState.isShowButton && (
-        <div className="absolute right-3 bottom-[360px]">
-          <Button
-            disabled={!uiState.isCompleteEvent}
-            onClick={handleNextMainStage}
-            shape={buttonConfig.shape}
-            type={buttonConfig.type}
-            message={buttonConfig.message}
-          />
-        </div>
-      )}
+      <div
+        className={`absolute right-3 bottom-[360px] transition duration-300 ease-in-out ${uiState.isCompleteEvent ? "opacity-100 visible" : "opacity-0 invisible"}`}
+      >
+        <Button
+          // disabled={!uiState.isCompleteEvent}
+          onClick={handleNextMainStage}
+          shape={buttonConfig.shape}
+          type={buttonConfig.type}
+          message={buttonConfig.message}
+        />
+      </div>
 
       {/* 상단 네비게이션 */}
-      {uiState.isShowNavi && (
-        <>
-          <Navi currentStage={stage.main} completedStages={gameState.completedStages} />
-          {stage.main >= 2 && stage.main <= 4 && (
-            <div className="absolute top-[72px] left-1/2 -translate-x-1/2 z-10">
-              <ProgressBar chocolateInfo={chocolateInfo} gameState={gameState} totalItems={currentData.items.length - 1} stageId={stage.main} />
-            </div>
-          )}
-        </>
-      )}
+      <>
+        <Navi uiState={uiState} currentStage={stage.main} completedStages={gameState.completedStages} />
+        {stage.main >= 2 && stage.main <= 4 && (
+          <div className="absolute top-[72px] left-1/2 -translate-x-1/2 z-10">
+            <ProgressBar chocolateInfo={chocolateInfo} gameState={gameState} totalItems={currentData.items.length - 1} stageId={stage.main} />
+          </div>
+        )}
+      </>
 
       {/* 하단 네비게이션 */}
       {/* && stage.sub === "description" -> 이 조건은 대사 다 정하고 추가 */}

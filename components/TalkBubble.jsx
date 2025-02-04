@@ -2,9 +2,9 @@
 import { talkBubble } from "@/public/images/common";
 import Image from "next/image";
 
-export default function TalkBubble({ dialogue }) {
+export default function TalkBubble({ dialogue, uiState }) {
   return (
-    <div id="talk-bubble">
+    <div id="talk-bubble" className={`${uiState.isTalkBubbleShow ? "opacity-100 visible" : "opacity-0 invisible"}`}>
       <div className="absolute bottom-[400px] right-4 w-56">
         <Image src={talkBubble} alt="말풍선" />
         <p
