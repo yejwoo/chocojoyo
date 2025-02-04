@@ -3,7 +3,7 @@ import { stageData } from "@/data/Stage";
 
 export function useStageState() {
   // 💝 현재 스테이지 상태
-  const [stage, setStage] = useState({ main: 1, sub: "init" });
+  const [stage, setStage] = useState({ main: 5, sub: "init" });
 
   // 현재 스테이지 데이터
   const currentData = stageData[stage.main][stage.sub];

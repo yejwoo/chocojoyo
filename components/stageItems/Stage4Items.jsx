@@ -31,7 +31,7 @@ export default function Stage4Items({
 
   return (
     <>
-      <div className="relative w-72 h-[182px]">
+      <div className="relative w-[280px] h-[182px]">
         <Image
           src={mold}
           alt="초콜릿 틀"

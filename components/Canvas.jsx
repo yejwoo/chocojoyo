@@ -1,11 +1,11 @@
-import { bottomNaviConfig, stageData } from "@/data/Stage";
+import { bottomNaviConfig } from "@/data/Stage";
 import React, { useRef, useEffect, useState } from "react";
 
 const Canvas = ({ isSelected, isZoomMode, strokeColor = "vanilla", onSave, className }) => {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
-  const chocoPenColors = bottomNaviData.stage5[0].data;
+  const chocoPenColors = bottomNaviConfig[5][0].data;
 
   useEffect(() => {
     if (!canvasRef.current) return;
