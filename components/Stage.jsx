@@ -231,7 +231,12 @@ export default function Stage() {
 
       {/* 스테이지별 메인 아이템 */}
       {uiState.isShowItems && (
-        <div id="main-items" className={`absolute ${stage.main === 5  ? "bottom-[132px]" : "bottom-[120px]"}  left-1/2 w-[296px] -translate-x-1/2 flex justify-center gap-6 flex-wrap animate-bounce-up-once`}>
+        <div
+          id="main-items"
+          className={`absolute ${
+            stage.main === 5 ? "bottom-[132px]" : "bottom-[120px]"
+          }  left-1/2 w-[296px] -translate-x-1/2 flex justify-center gap-6 flex-wrap animate-bounce-up-once`}
+        >
           <StageItems state={state} setState={setState} handleEvent={stageHandlers[stage.main]} />
         </div>
       )}
@@ -253,9 +258,14 @@ export default function Stage() {
       {uiState.isShowNavi && (
         <>
           <Navi currentStage={stage.main} completedStages={gameState.completedStages} />
-          {(stage.main === 2 || stage.main === 3) && (
+          {stage.main >= 2 && stage.main <= 4 && (
             <div className="absolute top-[72px] left-1/2 -translate-x-1/2 z-10">
-              <ProgressBar gameState={gameState} totalItems={stage.main === 2 ? currentData.items.length - 1 : 8} stageId={stage.main} />
+              <ProgressBar
+                chocolateInfo={chocolateInfo}
+                gameState={gameState}
+                totalItems={currentData.items.length - 1}
+                stageId={stage.main}
+              />
             </div>
           )}
         </>

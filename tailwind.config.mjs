@@ -58,7 +58,7 @@ export default {
           },
           vanilla: {
             100: "#FFF5BA",
-            200: "#C6BB7C",
+            200: "#D1C593",
           },
           ruby: {
             100: "#FEACB1",
