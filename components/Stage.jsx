@@ -15,6 +15,7 @@ import { handleStir } from "@/app/handlers/stageHandlers/stage3Handlers";
 import { handleChocolateClick, handleChocolatePress } from "@/app/handlers/stageHandlers/stage4Handlers";
 import { handleSaveDrawing } from "@/app/handlers/generalHandlers";
 import ProgressBar from "./ProgressBar";
+import { createActionHandlers } from "@/app/handlers/actionHandlers";
 
 export default function Stage() {
   const [stage, setStage] = useState({ main: 4, sub: "init" });
@@ -65,8 +66,9 @@ export default function Stage() {
   //   box: "", // 컬러 인덱스?
   // });
 
+  // 💝 TEST용 더미 데이터
   const [chocolateInfo, setChocolateInfo] = useState({
-    shapes: ["heart","heart","heart","heart","heart","heart"],
+    shapes: ["heart", "heart", "heart", "heart", "heart", "heart"],
     colors: [],
     sizes: [],
     drawings: [],
@@ -88,43 +90,9 @@ export default function Stage() {
     card: "",
   });
 
-  // 💝 ref 관련 정보
-  const hasMovedRef = useRef(new Set());
-  const moldRef = useRef(null);
-
-  const actionHandlers = {
-    delay: async (value) => await delay(value),
-
-    showButton: (value) => {
-      setUIState((prev) => ({
-        ...prev,
-        isShowButton: true,
-      }));
-
-      setButtonConfig({
-        shape: value.shape,
-        type: value.type,
-        message: value.message,
-      });
-    },
-
-    showModal: () =>
-      setUIState((prev) => ({
-        ...prev,
-        isShowModal: true,
-      })),
-
-    showItems: () =>
-      setUIState((prev) => ({
-        ...prev,
-        isShowItems: true,
-      })),
-
-    nextSubStage: () => handleNextSubStage(),
-    nextMainStage: () => handleNextMainStage(),
-  };
-
   useEffect(() => {
+    const handlers = createActionHandlers({ setUIState, setButtonConfig, handleNextSubStage, handleNextMainStage });
+
     const runSequence = async () => {
       await delay(1200);
       setUIState((prev) => ({
@@ -144,7 +112,7 @@ export default function Stage() {
 
       if (sequence) {
         for (let action of sequence) {
-          const handler = actionHandlers[action.type];
+          const handler = handlers[action.type];
           if (handler) {
             await handler(action.value);
           } else {
@@ -161,10 +129,6 @@ export default function Stage() {
   useEffect(() => {
     console.log("💝 chocolateInfo", chocolateInfo);
   }, [chocolateInfo]);
-
-  // useEffect(() => {
-  //   console.log("current data: ", currentData);
-  // }, [currentData]);
 
   // 스테이지 관리
   const handleNextSubStage = () => {
@@ -232,7 +196,7 @@ export default function Stage() {
 
     // 초콜릿 개수가 6개 미만이면 반복해서 채우기
     setChocolateInfo((prev) => {
-      if (prev.shapes.length < 6) {
+      if (prev.shapes.length > 0 && prev.shapes.length < 6) {
         const repeatedShapes = Array.from({ length: 6 }, (_, i) => prev.shapes[i % prev.shapes.length]);
         return { ...prev, shapes: repeatedShapes };
       }
@@ -311,32 +275,17 @@ export default function Stage() {
     }
   }, [currentData]);
 
-  // const handleInputChange = (e) => {
-  //   const value = e.target.value;
-  //   setInputValue(value);
-  //   setIsSubmitEnabled(value.length > 0);
-  // };
+  useEffect(() => {
+    if (stage.main >= 3) {
+      document.body.classList.add("block-scroll");
+    } else {
+      document.body.classList.remove("block-scroll");
+    }
 
-  // useEffect(() => {
-  //   const mainStage = Number(stage.main.split("stage")[1]);
-  //   if (mainStage >= 3) {
-  //     document.body.classList.add("block-scroll");
-  //   } else {
-  //     document.body.classList.remove("block-scroll");
-  //   }
-
-  //   if (mainStage === 4) {
-  //     setShapes(
-  //       Array(6)
-  //         .fill(null)
-  //         .map((_, i) => chocolateInfo.shapes[i % chocolateInfo.shapes.length]) // 순환 적용
-  //     );
-  //   }
-
-  //   return () => {
-  //     document.body.classList.remove("block-scroll");
-  //   };
-  // }, [stage.main, chocolateInfo.shapes]);
+    return () => {
+      document.body.classList.remove("block-scroll");
+    };
+  }, [stage.main, chocolateInfo.shapes]);
 
   return (
     <StageLayout
@@ -349,7 +298,7 @@ export default function Stage() {
             type={modalConfig.type}
             maxLength={modalConfig.maxLength}
             value={formState.inputValue}
-            onChange={handleInputChange}
+            // onChange={handleInputChange}
             // onClose={handleCloseModal}
           >
             <Button message={"작성 완료"} size="full" disabled={!uiState.isSubmitEnabled} onClick={handleFormData} />
