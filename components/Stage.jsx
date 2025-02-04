@@ -1,5 +1,5 @@
 import StageLayout from "./StageLayout";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 import Button from "./Button";
 import Modal from "./Modal";
 import Navi from "./Navi";
@@ -12,90 +12,15 @@ import StageItems from "./StageItems";
 import ProgressBar from "./ProgressBar";
 import { createActionHandlers } from "@/app/handlers/createActionHandlers";
 import { createStageHandlers } from "@/app/handlers/createStageHandlers";
+import { useStageState } from "@/app/hooks/useStateState";
 
 export default function Stage() {
-  const [stage, setStage] = useState({ main: 4, sub: "init" });
-  const [buttonConfig, setButtonConfig] = useState({
-    shape: "rectangle",
-    type: null,
-    message: "",
-  });
-
-  const currentData = stageData[stage.main][stage.sub];
-
-  // 💝 UI 상태
-  const [uiState, setUIState] = useState({
-    isTalkBubbleShow: false,
-    isShowButton: false,
-    isShowModal: false,
-    isShowItems: false,
-    isShowNavi: false,
-    isCompleteEvent: false,
-    isDragging: false,
-    isRotating: false,
-    isPastryBagHidden: false,
-    isSubmitEnabled: false,
-    isZoomMode: false,
-  });
-
-  // 💝 현재 선택 관련 상태
-  const [selectionState, setSelectionState] = useState({
-    currentChocolateIndex: null,
-    currentTabIndex: 0,
-    currentColor: "milk",
-    currentTopping: "",
-  });
-
-  // 💝 툴 관련 상태
-  const [toolState, setToolState] = useState({
-    position: { x: 0, y: 0 },
-    size: 1,
-    rotation: 0,
-  });
-
-  // 💝 초콜릿 정보
-  // const [chocolateInfo, setChocolateInfo] = useState({
-  //   shapes: [],
-  //   colors: [],
-  //   sizes: [],
-  //   drawings: [],
-  //   toppings: [],
-  //   box: "", // 컬러 인덱스?
-  // });
-
-  // 💝 TEST용 더미 데이터
-  const [chocolateInfo, setChocolateInfo] = useState({
-    shapes: ["heart", "heart", "heart", "heart", "heart", "heart"],
-    colors: Array(6).fill("brown"),
-    sizes: Array(6).fill(0),
-    drawings: [],
-    toppings: [],
-    box: "", // 컬러 인덱스?
-  });
-
-  // 💝 게임 진행 상태
-  const [gameState, setGameState] = useState({
-    currentItemIndex: 0,
-    completedStages: [],
-    stirCount: 0,
-  });
-
-  // 💝 폼 관련 정보
-  const [formState, setFormState] = useState({
-    inputValue: "",
-    username: "",
-    card: "",
-  });
-
-  // 💝 Ref
-  const intervalRef = useRef(null);
+  const { state, setState, intervalRef } = useStageState();
+  const { buttonConfig, stage, currentData, selectionState, toolState, chocolateInfo, gameState, uiState } = state;
+  const { setStage, setButtonConfig, setUIState, setToolState, setSelectionState, setChocolateInfo, setGameState } = setState;
 
   const stageHandlers = createStageHandlers({
-    setChocolateInfo,
-    setUIState,
-    setGameState,
-    setToolState,
-    setSelectionState,
+    ...setState,
     gameState,
     selectionState,
     currentData,
@@ -307,18 +232,7 @@ export default function Stage() {
       {/* 스테이지별 메인 아이템 */}
       {uiState.isShowItems && (
         <div id="main-items" className="absolute bottom-[120px] left-1/2 w-[296px] -translate-x-1/2 flex justify-center gap-6 flex-wrap animate-bounce-up-once">
-          <StageItems
-            currentData={currentData}
-            stage={stage}
-            handleEvent={handleEvent}
-            selectionState={selectionState}
-            toolState={toolState}
-            chocolateInfo={chocolateInfo}
-            gameState={gameState}
-            uiState={uiState}
-            setToolState={setToolState}
-            setUIState={setUIState}
-          />
+          <StageItems state={state} setState={setState} handleEvent={stageHandlers[stage.main]} />
         </div>
       )}
 

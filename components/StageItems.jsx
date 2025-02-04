@@ -5,18 +5,7 @@ import Stage4Items from "./stageItems/Stage4Items";
 import Stage5Items from "./stageItems/Stage5Items";
 import Stage6Items from "./stageItems/Stage6Items";
 
-export default function StageItems({
-  stage,
-  currentData,
-  handleEvent,
-  selectionState,
-  toolState,
-  chocolateInfo,
-  gameState,
-  uiState,
-  setUIState,
-  setToolState,
-}) {
+export default function StageItems({ state, setState, handleEvent }) {
   const stageComponents = {
     1: Stage1Items,
     2: Stage2Items,
@@ -26,19 +15,9 @@ export default function StageItems({
     6: Stage6Items,
   };
 
-  const StageComponent = stageComponents[stage.main];
+  const StageComponent = stageComponents[state.stage.main];
 
   return StageComponent ? (
-    <StageComponent
-      currentData={currentData}
-      handleEvent={handleEvent}
-      selectionState={selectionState}
-      toolState={toolState}
-      chocolateInfo={chocolateInfo}
-      gameState={gameState}
-      uiState={uiState}
-      setUIState={setUIState}
-      setToolState={setToolState}
-    />
+    <StageComponent {...state} {...setState} handleEvent={handleEvent} />
   ) : null;
 }
