@@ -5,7 +5,7 @@ export default function Modal({ size = "sm", title, type = "card", value = "", m
 
   return (
     <div className="fixed inset-0 z-[900] flex items-center justify-center bg-black bg-opacity-50">
-      <div className="flex flex-col justify-center items-center gap-3 z-[999]">
+      <div className="fixed z-[999] flex flex-col justify-center items-center gap-3">
         <div className="relative w-[343px] bg-popup-100 px-4 py-6 border-4 border-default rounded-lg overflow-hidden">
           {/* 제목 */}
           <h1 className="text-4xl text-center">{title}</h1>

@@ -13,6 +13,7 @@ import ProgressBar from "./ProgressBar";
 import { createActionHandlers } from "@/app/handlers/createActionHandlers";
 import { createStageHandlers } from "@/app/handlers/createStageHandlers";
 import { useStageState } from "@/app/hooks/useStateState";
+import { handleReset } from "@/app/handlers/stageHandlers/stage5Handlers";
 
 export default function Stage() {
   const { state, setState, intervalRef } = useStageState();
@@ -254,15 +255,31 @@ export default function Stage() {
       {/* 온보딩 오버레이 */}
       {uiState.isOnboarding && <div className="absolute inset-0 bg-black bg-opacity-60 z-40"></div>}
 
+      {uiState.isResetPopupOpen && (
+        <Modal
+          type="confirm"
+          title="초콜릿 다시 꾸미기"
+          onCancel={() => setUIState((prev) => ({ ...prev, isResetPopupOpen: false, isResetBtnClicked: !prev.isResetBtnClicked, isZoomMode: false }))}
+          onConfirm={() => {
+            handleReset(setChocolateInfo, setUIState);
+            setUIState((prev) => ({
+              ...prev,
+              isZoomMode: false, // 리셋할 때도 줌 해제
+            }));
+          }}
+        >
+          그린 그림과 토핑이 사라져요.
+          <br />
+          처음부터 다시 꾸며볼까요?
+        </Modal>
+      )}
+
       {/* 말풍선 */}
       <TalkBubble uiState={uiState} dialogue={currentData?.dialogue || "안녕하세요!"} />
 
       {/* 스테이지별 메인 아이템 */}
       {uiState.isShowItems && (
-        <div
-          id="main-items"
-          className="w-full h-[290px] absolute bottom-14 flex justify-center items-center animate-bounce-up-once"
-        >
+        <div id="main-items" className="w-full h-[290px] absolute bottom-14 flex justify-center items-center animate-bounce-up-once">
           <StageItems state={state} setState={setState} handleEvent={stageHandlers[stage.main]} />
         </div>
       )}

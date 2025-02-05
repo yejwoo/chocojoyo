@@ -95,7 +95,7 @@ const Canvas = ({ isToppingMode, isSelected, isZoomMode, strokeColor = "vanilla"
     <canvas
       ref={canvasRef}
       className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 ${className} ${
-        isSelected && isZoomMode ? "scale-[2.2] transition duration-200 ease-in-out" : ""
+        isSelected && isZoomMode && !uiState.isResetPopupOpen ? "scale-[2.2] transition duration-200 ease-in-out" : ""
       }`}
       width={64}
       height={56}

@@ -2,9 +2,8 @@ import { bottomNaviConfig } from "@/data/Stage";
 import Image from "next/image";
 import { useEffect, useMemo } from "react";
 import { handleTabClick, handleColorSelection, handleToppingSelection } from "@/app/handlers/generalHandlers";
-import { handleReset, handleZoomMode } from "@/app/handlers/stageHandlers/stage5Handlers";
+import { handleZoomMode } from "@/app/handlers/stageHandlers/stage5Handlers";
 import { magnifierActive, magnifierDefault, resetActive, resetDefault } from "@/public/images/stage5";
-import Modal from "./Modal";
 import arrow from "@/public/icons/arrow.svg";
 
 export const BottomNaviItem = ({ naviData, stage, uiState, selectionState, setSelectionState, setUIState, currentTabIndex }) => {
@@ -136,25 +135,6 @@ export const BottomNavi = ({ stage, selectionState, setSelectionState, setChocol
               </button>
             </div>
           </div>
-          {/* ✅ 리셋 팝업(모달) */}
-          {uiState.isResetPopupOpen && (
-            <Modal
-              type="confirm"
-              title="초콜릿 다시 꾸미기"
-              onCancel={() => setUIState((prev) => ({ ...prev, isResetPopupOpen: false, isResetBtnClicked: !prev.isResetBtnClicked, isZoomMode: false }))}
-              onConfirm={() => {
-                handleReset(setChocolateInfo, setUIState);
-                setUIState((prev) => ({
-                  ...prev,
-                  isZoomMode: false, // 리셋할 때도 줌 해제
-                }));
-              }}
-            >
-              그린 그림과 토핑이 사라져요.
-              <br />
-              처음부터 다시 꾸며볼까요?
-            </Modal>
-          )}
         </>
       )}
 

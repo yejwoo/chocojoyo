@@ -32,10 +32,9 @@ export default function Stage5Items({ chocolateInfo, selectionState, uiState, se
             const color = chocolateInfo.colors[index];
             const isSelected = selectionState.currentChocolateIndex === index;
             const isChocoPenMode = selectionState.currentTabIndex === 0;
-            const cursorImage =
-              isChocoPenMode
-                ? `/images/stage5/cursors/cursor-chocopen-${selectionState.currentColor}.png`
-                : `/images/stage5/cursors/cursor-topping-${selectionState.currentTopping}.svg`;
+            const cursorImage = isChocoPenMode
+              ? `/images/stage5/cursors/cursor-chocopen-${selectionState.currentColor}.png`
+              : `/images/stage5/cursors/cursor-topping-${selectionState.currentTopping}.svg`;
 
             return ShapeComponent ? (
               <div
@@ -86,7 +85,7 @@ export default function Stage5Items({ chocolateInfo, selectionState, uiState, se
                 {/* 토핑 렌더링 */}
                 {chocolateInfo.toppings[index] && (
                   <Image
-                    className={`z-30 ${uiState.isZoomMode && isSelected ? "scale-[2] transition duration-200 ease-in-out" : ""}`}
+                    className={`z-30 ${uiState.isZoomMode && isSelected && !uiState.isResetPopupOpen ? "scale-[2.2] transition duration-200 ease-in-out" : ""}`}
                     src={`/images/stage5/toppings/topping-${chocolateInfo.toppings[index].name}.svg`}
                     alt="토핑"
                     width={32}
