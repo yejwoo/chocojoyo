@@ -40,13 +40,13 @@ export const createStageHandlers = (store) => {
     },
 
     5: (type, imageData, index, x, y) => {
-      console.log("🔥 `createStageHandlers` 실행됨! type:", type, "imageData:", imageData, "index:", index);
+      // console.log("🔥 `createStageHandlers` 실행됨! type:", type, "imageData:", imageData, "index:", index);
 
       const handlers = {
         mouseOver: () => handleMouseOver(setSelectionState, index),
         mouseLeave: () => handleMouseLeave(setSelectionState, null),
         saveDrawing: (imageData) => {
-          console.log("🖼 saveDrawing 실행됨! imageData:", imageData, "index:", index);
+          // console.log("🖼 saveDrawing 실행됨! imageData:", imageData, "index:", index);
 
           const validImageData = imageData || "data:image/png;base64,"; // 기본값 설정
 
@@ -56,7 +56,7 @@ export const createStageHandlers = (store) => {
       };
 
       if (handlers[type]) {
-        console.log("✅ 핸들러 실행: ", type);
+        // console.log("✅ 핸들러 실행: ", type);
       
         if (type === "saveDrawing" && !imageData) {
           console.error("❌ saveDrawing 실행 전에 imageData가 undefined입니다!");

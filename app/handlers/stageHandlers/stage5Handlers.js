@@ -28,18 +28,16 @@ export const handleMouseLeave = (setSelectionState, reset) => {
   setSelectionState((prev) => ({ ...prev, currentChocolateIndex: reset }));
 };
 
-
-
 export const handleToppingPlacement = (setChocolateInfo, topping, index) => {
   setChocolateInfo((prev) => {
     const updatedToppings = [...prev.toppings];
-    updatedToppings[index] = { name: topping, x: 24, y: 22 }; 
+    updatedToppings[index] = { name: topping, x: 24, y: 22 };
     return { ...prev, toppings: updatedToppings };
   });
 };
 
 export const handleReset = (setChocolateInfo, setUIState) => {
-  setChocolateInfo((prev) => ({ 
+  setChocolateInfo((prev) => ({
     ...prev,
     drawings: [],
     toppings: [],
@@ -49,6 +47,6 @@ export const handleReset = (setChocolateInfo, setUIState) => {
     ...prev,
     isResetPopupOpen: false,
     isClearCanvas: true,
-    isResetBtnClicked: !prev.isResetBtnClicked 
+    isResetBtnClicked: !prev.isResetBtnClicked,
   }));
 };
