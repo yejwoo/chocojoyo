@@ -2,7 +2,14 @@ import { handleSelect } from "./stageHandlers/stage1Handlers";
 import { handleChop, handleToolClick } from "./stageHandlers/stage2Handlers";
 import { handleStir } from "./stageHandlers/stage3Handlers";
 import { handleChocolateClick, handleChocolatePress, updatePastryBagPosition, updatePastryBagVisibility } from "./stageHandlers/stage4Handlers";
-import { handleMouseLeave, handleMouseOver, handleSaveDrawing, handleDragEndTopping, handleDragStartTopping, handleToppingPlacement } from "./stageHandlers/stage5Handlers";
+import {
+  handleMouseLeave,
+  handleMouseOver,
+  handleSaveDrawing,
+  handleDragEndTopping,
+  handleDragStartTopping,
+  handleToppingPlacement,
+} from "./stageHandlers/stage5Handlers";
 
 export const createStageHandlers = (store) => {
   const { setChocolateInfo, setUIState, setGameState, setToolState, setSelectionState, chocolateInfo, gameState, selectionState, currentData, intervalRef } =
@@ -32,15 +39,35 @@ export const createStageHandlers = (store) => {
       updatePastryBagPosition(selectionState, chocolateInfo, currentData, setSelectionState, setToolState, setUIState);
     },
 
-    5: (type, _, index, x, y) => {
+    5: (type, imageData, index, x, y) => {
+      console.log("🔥 `createStageHandlers` 실행됨! type:", type, "imageData:", imageData, "index:", index);
+
       const handlers = {
         mouseOver: () => handleMouseOver(setSelectionState, index),
         mouseLeave: () => handleMouseLeave(setSelectionState, null),
-        saveDrawing: (imageData) => handleSaveDrawing(imageData, setChocolateInfo, index),
+        saveDrawing: (imageData) => {
+          console.log("🖼 saveDrawing 실행됨! imageData:", imageData, "index:", index);
+
+          const validImageData = imageData || "data:image/png;base64,"; // 기본값 설정
+
+          handleSaveDrawing(validImageData, setChocolateInfo, index);
+        },
         clickTopping: () => handleToppingPlacement(setChocolateInfo, selectionState.currentTopping, index),
       };
 
-      if (handlers[type]) handlers[type]();
+      if (handlers[type]) {
+        console.log("✅ 핸들러 실행: ", type);
+      
+        if (type === "saveDrawing" && !imageData) {
+          console.error("❌ saveDrawing 실행 전에 imageData가 undefined입니다!");
+          return;
+        }
+      
+        handlers[type](imageData);
+      } else {
+        console.error(`❌ 이벤트 핸들러 없음! type: ${type}`);
+      }
+      
     },
   };
 };
