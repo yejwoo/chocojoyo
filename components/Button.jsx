@@ -1,11 +1,12 @@
 import Image from "next/image";
 
-export default function Button({ shape = "rectangle", message, color = "main", type = "arrow", size = "default", onClick, disabled = false }) {
+export default function Button({ shape = "rectangle", message, color = "main", type = "arrow", size = "default", onClick, disabled = false}) {
   const buttonShape = shape === "circle" ? "w-16 rounded-full" : "rounded-lg overflow-hidden";
   const buttonSizes = {
     half: "w-1/2",
     full: "w-full",
     default: "min-w-48",
+    md: "w-[328px]",
     sm: "w-24"
   };
   const buttonColors = {
@@ -39,6 +40,7 @@ export default function Button({ shape = "rectangle", message, color = "main", t
       ${isShapeRect && size in buttonSizes && buttonSizes[size]} text-3xl border-4 border-default focus:scale-95 
       ${disabled && isShapeRect && disalbedStyle.rectangle}
       ${disabled && isShapeCircle && disalbedStyle.circle}
+      
       `}
     >
       {isShapeCircle && (

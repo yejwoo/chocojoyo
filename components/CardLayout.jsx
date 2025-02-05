@@ -1,98 +1,135 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import box from "@/public/images/stage5/box.svg";
+import { Shapes } from "@/public/icons/shapes";
+import { bgPatterns } from "@/public/images/card";
 import Button from "./Button";
 import Image from "next/image";
-import { bgPatterns } from "@/public/images/card";
 
 export default function CardLayout({ chocolateInfo, onComplete }) {
-  const [formData, setFormData] = useState({
-    message: "",
-  });
-
-  const [selectedIcons, setSelectedIcons] = useState([]);
+  const [formData, setFormData] = useState({ message: "" });
+  const [selectedIcon, setSelectedIcon] = useState("heart");
   const [isCompleted, setIsCompleted] = useState(false);
 
-  // 글자가 1자 이상 입력되면 완료 버튼 활성화
+
+  // 아이콘별 배경색 설정
+  const backgroundColors = {
+    heart: "bg-cards-heart",
+    clover: "bg-cards-clover",
+    cake: "bg-cards-cake",
+    flower: "bg-cards-flower",
+    smile: "bg-cards-smile",
+    fire: "bg-cards-fire",
+  };
+
   useEffect(() => {
     setIsCompleted(formData.message.length > 0);
   }, [formData.message]);
 
-  // 입력값 변경 핸들러
   const handleInputChange = (e) => {
-    setFormData({ ...formData, message: e.target.value });
-  };
+    const value = e.target.value;
 
-  // 아이콘 선택/해제
-  const toggleIconSelection = (icon) => {
-    setSelectedIcons((prev) =>
-      prev.includes(icon) ? prev.filter((item) => item !== icon) : [...prev, icon]
-    );
-  };
+    // **50자 제한 & 3줄 이상 입력 방지**
+    const lines = value.split("\n");
+    if (lines.length > 3) return;
 
-  // 편지 완성 시 공유 페이지로 이동
-  const handleSubmit = () => {
-    if (!isCompleted) return;
-    onComplete(formData);
+    setFormData({ ...formData, message: value.slice(0, 50) });
   };
 
   return (
-    <main className="relative bg-pink-100 w-full h-full flex flex-col items-center justify-between p-4">
-      {/* 💌 배경 패턴 (선택한 아이콘 애니메이션) */}
-      <div className="absolute inset-0 pointer-events-none animate-fall">
-        {selectedIcons.map((icon, index) => (
-          <Image
-            key={index}
-            src={bgPatterns[icon]}
-            alt="배경 패턴"
-            className="absolute"
-            style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              width: "30px",
-              height: "30px",
-              opacity: Math.random() * 0.5 + 0.5,
-            }}
-          />
-        ))}
+    <main
+      className={`max-w-[400px] max-h-[800px] fixed w-full h-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ${
+        backgroundColors[selectedIcon] || "bg-pink-100"
+      } flex flex-col items-center justify-between px-6 relative`}
+    >
+      {/* 💌 배경 패턴 */}
+      <div className="absolute inset-0 grid grid-cols-4 grid-rows-6 gap-4 pointer-events-none z-0">
+        {selectedIcon &&
+          [...Array(24)].map((_, index) => (
+            <div key={index} className="flex justify-center items-center">
+              <Image src={bgPatterns[selectedIcon]} alt="패턴 아이콘" width={40} height={40} className="opacity-90" />
+            </div>
+          ))}
       </div>
 
-      {/* 🍫 초콜릿 박스 */}
-      <div className="relative w-64 h-40 bg-brown-700 rounded-lg flex flex-wrap p-2">
-        {chocolateInfo.shapes.map((shape, index) => (
-          <div key={index} className="w-1/3 p-1">
-            <div className="bg-brown-500 w-full h-full flex items-center justify-center rounded-md">
-              {shape === "heart" ? "❤️" : "🍫"}
+      {/* ✉️ 편지 & 초콜릿 박스 */}
+      <div className="absolute top-1/2 -translate-y-1/2 flex flex-col">
+        <div className="bg-white w-full px-6 pt-8 pb-6 rounded-tl-lg rounded-tr-lg">
+          {/* 🍫 초콜릿 틀 */}
+          <div className="relative z-10 w-[280px] h-[180px] flex justify-center items-center">
+            <Image src={box} alt="초콜릿 틀" width={280} height={280} className="absolute bottom-0" draggable={false} />
+
+            {/* 초콜릿들 */}
+            <div className="w-full flex justify-center items-center flex-wrap gap-x-2 gap-y-2">
+              {chocolateInfo.shapes.map((shape, index) => {
+                console.log("chocolateInfo:", chocolateInfo);
+                const ShapeComponent = Shapes[shape.charAt(0).toUpperCase() + shape.slice(1)];
+                const drawing = chocolateInfo.drawings[index]; 
+                const topping = chocolateInfo.toppings[index]; 
+
+                return ShapeComponent ? (
+                  <div key={index} className="relative w-[80px] h-[76px] bg-gray-warm-300 rounded-xl flex items-center justify-center">
+                    {/* 초콜릿 기본 형태 */}
+                    <ShapeComponent width={64} height={56} />
+
+                    {/* 🖌️ 드로잉 (사용자가 그린 그림) */}
+                    {drawing && (
+                      <canvas
+                        className="absolute top-0 left-0"
+                        width={64}
+                        height={56}
+                        style={{ background: `url(${drawing}) no-repeat center/cover` }}
+                      />
+                    )}
+
+                    {/* 🍓 토핑 */}
+                    {topping && (
+                      <Image
+                        className="absolute"
+                        src={`/images/stage5/toppings/topping-${topping.name}.svg`}
+                        alt="토핑"
+                        width={32}
+                        height={32}
+                        style={{
+                          position: "absolute",
+                          left: `${topping.x}px`,
+                          top: `${topping.y}px`,
+                        }}
+                        draggable
+                      />
+                    )}
+                  </div>
+                ) : null;
+              })}
             </div>
           </div>
-        ))}
+
+          {/* ✉️ 편지 입력 */}
+          <div className="relative z-10 w-full">
+            <textarea
+              name="message"
+              maxLength={50}
+              value={formData.message}
+              onChange={handleInputChange}
+              className="w-full h-44 bg-white border border-gray-300 px-4 py-8 rounded-lg text-center text-[28px] leading-9 resize-none flex"
+              placeholder="편지 내용을 입력하세요."
+            />
+            {/* 현재 글자 수 표시 */}
+            <span className="absolute bottom-0 right-0 text-sm text-gray-500">{formData.message.length}/50</span>
+          </div>
+        </div>
+
+        {/* 🎨 아이콘 선택 네비 */}
+        <div className="relative mb-4 z-10 w-full flex justify-center gap-3 px-2 py-3 bg-popup-100 rounded-bl-lg rounded-br-lg">
+          {Object.keys(bgPatterns).map((icon) => (
+            <button key={icon} className={`p-1 rounded-sm ${selectedIcon === icon ? "ring-4 ring-brand-200" : ""}`} onClick={() => setSelectedIcon(icon)}>
+              <Image src={bgPatterns[icon]} alt="아이콘" width={30} height={30} />
+            </button>
+          ))}
+        </div>
+
+        {/* ✅ 완료 버튼 */}
+        <Button size="md" onClick={() => isCompleted && onComplete(formData)} disabled={!isCompleted} message="완성" />
       </div>
-
-      {/* ✉️ 편지 입력 */}
-      <textarea
-        name="message"
-        maxLength={50}
-        value={formData.message}
-        onChange={handleInputChange}
-        className="w-72 h-32 bg-white border border-gray-300 p-2 rounded-lg text-center text-lg leading-6"
-        placeholder="편지 내용을 입력하세요."
-      />
-
-      {/* 🎨 아이콘 선택 네비 */}
-      <div className="w-full flex justify-center gap-2 p-2 border border-yellow-500 bg-white rounded-lg">
-        {Object.keys(bgPatterns).map((icon) => (
-          <button
-            key={icon}
-            className={`p-2 rounded-full ${
-              selectedIcons.includes(icon) ? "bg-yellow-300" : "bg-gray-100"
-            }`}
-            onClick={() => toggleIconSelection(icon)}
-          >
-            <Image src={bgPatterns[icon]} alt="아이콘" width={30} height={30} />
-          </button>
-        ))}
-      </div>
-
-      {/* ✅ 완료 버튼 */}
-      <Button onClick={handleSubmit} disabled={!isCompleted} message="완성" className="w-72 bg-red-400 text-white py-2 rounded-lg" />
     </main>
   );
 }

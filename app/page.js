@@ -8,8 +8,8 @@ import { useStageState } from "./hooks/useStateState";
 
 export default function Home() {
   const [isStarted, setIsStarted] = useState(false);
-  // const [currentStep, setCurrentStep] = useState("stage");
-  const [currentStep, setCurrentStep] = useState("card");
+  const [currentStep, setCurrentStep] = useState("stage");
+  // const [currentStep, setCurrentStep] = useState("card");
   const { state } = useStageState();
   const { chocolateInfo } = state;
 

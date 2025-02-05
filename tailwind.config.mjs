@@ -33,9 +33,10 @@ export default {
           "0%, 100%": { transform: "scale(1)" },
           "50%": { transform: "scale(1.2)" },
         },
-        fall: {
-          "0%": { transform: "translateY(-50px)", opacity: "0" },
-          "100%": { transform: "translateY(100vh)", opacity: "1" },
+        subtleMove: {
+          "0%": { transform: "translateY(0px);" },
+          "50%": { transform: "translateY(-2px);" },
+          "100%": { transform: "translateY(0px);" },
         },
       },
       animation: {
@@ -43,9 +44,9 @@ export default {
         "bounce-up-fast": "bounceUp 1.2s linear infinite",
         "bounce-up-once": "bounceUpOnce 0.5s linear",
         "bounce-down": "bounceDown 4s linear infinite",
-        "heartbeat": "heartbeat 3s ease-in-out infinite",
+        heartbeat: "heartbeat 3s ease-in-out infinite",
         "heartbeat-fast": "heartbeat 1s ease-in-out infinite",
-        "fall": "fall 5s linear infinite",
+        "subtle-move": "5s ease-in-out infinite alternate",
       },
       colors: {
         default: "#3D2505",
@@ -128,33 +129,15 @@ export default {
         },
         button: {
           100: "#894E00",
-          200: "#4C2F08"
+          200: "#4C2F08",
         },
         cards: {
-          purple: {
-            box: "#FAECBC",
-            ribbon: "#E6F4F1",
-          },
-          yellow: {
-            box: "#FFCABE",
-            ribbon: "#FAECBC",
-          },
-          beige: {
-            box: "#FEF4EA",
-            ribbon: "#B7A99A",
-          },
-          pink: {
-            box: "#FFB8D0",
-            ribbon: "#BDA5AD",
-          },
-          apricot: {
-            box: "#FFCABE",
-            ribbon: "#EDE9D0",
-          },
-          skyblue: {
-            box: "#DCFCF6",
-            ribbon: "#FFC5D9",
-          },
+          heart: "#FFC1C1",
+          clover: "#CCE9AA",
+          flower: "#FFB0D2",
+          smile: "#FFEE9C",
+          cake: "#FFC997",
+          fire: "#8CE8FD",
         },
       },
     },
