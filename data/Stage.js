@@ -12,7 +12,7 @@ const commonConfig = {
     { type: "showItems" },
     {
       type: "showButton",
-      value: { shape: "circle", type: "arrow", message: null },
+      value: { shape: "circle", type: "arrow", message: null, color: "secondary" },
     },
   ],
   isFinal: true,

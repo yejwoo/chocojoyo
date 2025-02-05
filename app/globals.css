@@ -46,6 +46,10 @@ input:focus {
   outline: none;
 }
 
+textarea::placeholder {
+  color: #C1BCB5;
+}
+
 hr {
   border: 2px solid #3D2505;
 }

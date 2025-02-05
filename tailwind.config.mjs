@@ -33,6 +33,10 @@ export default {
           "0%, 100%": { transform: "scale(1)" },
           "50%": { transform: "scale(1.2)" },
         },
+        fall: {
+          "0%": { transform: "translateY(-50px)", opacity: "0" },
+          "100%": { transform: "translateY(100vh)", opacity: "1" },
+        },
       },
       animation: {
         "bounce-up": "bounceUp 2.5s linear infinite",
@@ -41,6 +45,7 @@ export default {
         "bounce-down": "bounceDown 4s linear infinite",
         "heartbeat": "heartbeat 3s ease-in-out infinite",
         "heartbeat-fast": "heartbeat 1s ease-in-out infinite",
+        "fall": "fall 5s linear infinite",
       },
       colors: {
         default: "#3D2505",
@@ -121,7 +126,11 @@ export default {
           100: "#F0A7B4",
           200: "#D27E8E",
         },
-        boxes: {
+        button: {
+          100: "#894E00",
+          200: "#4C2F08"
+        },
+        cards: {
           purple: {
             box: "#FAECBC",
             ribbon: "#E6F4F1",

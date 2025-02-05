@@ -12,6 +12,7 @@ export default function Button({ shape = "rectangle", message, color = "main", t
     main: "bg-brand-100",
     secondary: "bg-chocolates-ruby-100",
     tertiary: "bg-gray-cool-50",
+    brown: "bg-chocolates-milk-100"
   };
   const buttonShadowColors = {
     main: "bg-brand-200",

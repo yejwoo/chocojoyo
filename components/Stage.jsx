@@ -15,7 +15,7 @@ import { createStageHandlers } from "@/app/handlers/createStageHandlers";
 import { useStageState } from "@/app/hooks/useStateState";
 import { handleReset } from "@/app/handlers/stageHandlers/stage5Handlers";
 
-export default function Stage() {
+export default function Stage({ onComplete }) {
   const { state, setState, intervalRef } = useStageState();
   const { buttonConfig, stage, currentData, selectionState, toolState, chocolateInfo, gameState, uiState } = state;
   const { setStage, setButtonConfig, setUIState, setToolState, setSelectionState, setGameState, setChocolateInfo } = setState;
@@ -69,12 +69,6 @@ export default function Stage() {
     console.log("💝 chocolateInfo", chocolateInfo);
   }, [chocolateInfo]);
 
-    useEffect(() => {
-    if (stage.main === 5 && stage.sub === "init") {
-      setUIState((prev) => ({ ...prev, isCompleteEvent: true }));
-    }
-  }, [stage]);
-
   // 온보딩
   // useEffect(() => {
   //   if (stage.main === 5 && stage.sub === "init") {
@@ -110,7 +104,12 @@ export default function Stage() {
   //     runOnboarding();
   //   }
   // }, [stage]);
-  
+
+  useEffect(() => {
+    if (stage.main === 5 && stage.sub === "init") {
+      setUIState((prev) => ({ ...prev, isCompleteEvent: true }));
+    }
+  }, [stage]);
 
   useEffect(() => {
     if (currentData?.items?.length > 0) {
@@ -178,6 +177,12 @@ export default function Stage() {
       return;
     }
 
+    if (main === 5) {
+      console.log("✅ 스테이지 5 완료 → 카드 작성 단계로 이동");
+      onComplete();
+      return;
+    }
+
     setGameState((prev) => ({
       ...prev,
       completedStages: [...prev.completedStages, main],
@@ -242,24 +247,7 @@ export default function Stage() {
   };
 
   return (
-    <StageLayout
-      backgroundSrc={bg}
-      characterSrc={currentData?.imgSrc}
-      modalContent={
-        uiState.isShowModal && (
-          <Modal
-            title={modalConfig.title}
-            type={modalConfig.type}
-            maxLength={modalConfig.maxLength}
-            value={formState.inputValue}
-            // onChange={handleInputChange}
-            // onClose={handleCloseModal}
-          >
-            <Button message={"작성 완료"} size="full" disabled={!uiState.isSubmitEnabled} onClick={handleFormData} />
-          </Modal>
-        )
-      }
-    >
+    <StageLayout backgroundSrc={bg} characterSrc={currentData?.imgSrc}>
       {/* 온보딩 오버레이 */}
       {uiState.isOnboarding && <div className="absolute inset-0 bg-black bg-opacity-60 z-40"></div>}
 
@@ -275,11 +263,7 @@ export default function Stage() {
               isZoomMode: false, // 리셋할 때도 줌 해제
             }));
           }}
-        >
-          그린 그림과 토핑이 사라져요.
-          <br />
-          처음부터 다시 꾸며볼까요?
-        </Modal>
+        />
       )}
 
       {/* 말풍선 */}

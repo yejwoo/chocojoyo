@@ -3,7 +3,7 @@ import { stageData } from "@/data/Stage";
 
 export function useStageState() {
   // 💝 현재 스테이지 상태
-  const [stage, setStage] = useState({ main: 1, sub: "init" });
+  const [stage, setStage] = useState({ main: 4, sub: "init" });
 
   // 현재 스테이지 데이터
   const currentData = stageData[stage.main][stage.sub];
@@ -13,6 +13,7 @@ export function useStageState() {
     shape: "rectangle",
     type: null,
     message: "",
+    color: "secondary"
   });
 
   // 💝 UI 상태
@@ -58,7 +59,6 @@ export function useStageState() {
     sizes: Array(6).fill(100),
     drawings: [],
     toppings: [],
-    box: "",
   });
 
   // 💝 게임 진행 상태
