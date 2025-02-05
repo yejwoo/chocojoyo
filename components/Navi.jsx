@@ -10,8 +10,8 @@ import {
   naviStage4On,
   naviStage5Off,
   naviStage5On,
-  naviStage6Off,
-  naviStage6On,
+  // naviStage6Off,
+  // naviStage6On,
   check,
 } from "@/public/images/common";
 
@@ -21,13 +21,13 @@ const stages = [
   { id: 3, off: naviStage3Off, on: naviStage3On },
   { id: 4, off: naviStage4Off, on: naviStage4On },
   { id: 5, off: naviStage5Off, on: naviStage5On },
-  { id: 6, off: naviStage6Off, on: naviStage6On },
+  // { id: 6, off: naviStage6Off, on: naviStage6On },
 ];
 
 export default function Navi({ currentStage, completedStages }) {
   return (
     <nav className="fixed left-0 right-0 top-6 flex justify-center">
-      <ul className="flex items-center justify-center gap-[10px] rounded-lg w-[343px]">
+      <ul className="flex items-center justify-center gap-4 rounded-lg w-[343px]">
         {stages.map((stage) => {
           const isCurrent = currentStage === stage.id;
           const isCompleted = completedStages.includes(stage.id);

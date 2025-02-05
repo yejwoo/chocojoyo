@@ -69,6 +69,12 @@ export default function Stage() {
     console.log("💝 chocolateInfo", chocolateInfo);
   }, [chocolateInfo]);
 
+    useEffect(() => {
+    if (stage.main === 5 && stage.sub === "init") {
+      setUIState((prev) => ({ ...prev, isCompleteEvent: true }));
+    }
+  }, [stage]);
+
   // 온보딩
   // useEffect(() => {
   //   if (stage.main === 5 && stage.sub === "init") {
@@ -104,6 +110,7 @@ export default function Stage() {
   //     runOnboarding();
   //   }
   // }, [stage]);
+  
 
   useEffect(() => {
     if (currentData?.items?.length > 0) {

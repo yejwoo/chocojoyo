@@ -2,10 +2,9 @@ import tailwindConfig from "../tailwind.config.mjs";
 import { yantoBlink, yantoHello, yantoEat, yantoSwing, yantoThumb } from "@/public/images/common";
 import { chocolate1, chocolate2, chocolate3, chocolate4, chocolate5, chocolate6, chocolate7, chocolate8, knife } from "@/public/images/stage2";
 import { doubleBoiler, meltedChocolate1, meltedChocolate2, meltedChocolate3, spatula } from "@/public/images/stage3";
+import { toppingAlmond, toppingBlueberries, toppingCoffeeBean, toppingHeart, toppingSprinkle, toppingStrawberry } from "@/public/images/stage5";
 const chocolateColorsConfig = tailwindConfig.theme.extend.colors.chocolates;
 const chocopenColorsConfig = tailwindConfig.theme.extend.colors.chocopens;
-import { PastryBag } from "@/public/images/stage4";
-import { toppingAlmond, toppingBlueberries, toppingCoffeeBean, toppingHeart, toppingSprinkle, toppingStrawberry } from "@/public/images/stage5";
 
 const commonConfig = {
   sequence: [
@@ -170,7 +169,7 @@ export const stageData = [
   {
     init: {
       imgSrc: yantoSwing,
-      dialogue: "마지막이에요. 상자를 꾸며주세요.",
+      dialogue: `마지막이에요!<br/>편지를 써주세요.`,
       ...commonConfig,
     },
   },
@@ -230,17 +229,20 @@ export const bottomNaviConfig = {
   ],
   6: [
     {
-      type: "color",
-      title: "박스 색상",
-      data: {
-        white: { fill: "#FFFFFF", border: "#CCCCCC" },
-        pink: { fill: "#FFC0CB", border: "#FF99A5" },
-      },
-    },
-    {
-      type: "text",
-      title: "카드 작성",
-      data: { placeholder: "카드에 메시지를 입력하세요.", maxLength: 100 },
+      type: "image",
+      title: "박스",
+      data: [
+        {
+          imgSrc: toppingSprinkle,
+          name: "sprinkle",
+          alt: "스프링클 토핑",
+        },
+        {
+          imgSrc: toppingHeart,
+          name: "heart",
+          alt: "하트 토핑",
+        },
+      ],
     },
   ],
 };

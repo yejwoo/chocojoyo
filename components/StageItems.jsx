@@ -3,7 +3,6 @@ import Stage2Items from "./stageItems/Stage2Items";
 import Stage3Items from "./stageItems/Stage3Items";
 import Stage4Items from "./stageItems/Stage4Items";
 import Stage5Items from "./stageItems/Stage5Items";
-import Stage6Items from "./stageItems/Stage6Items";
 
 export default function StageItems({ state, setState, handleEvent }) {
   const stageComponents = {
@@ -12,7 +11,6 @@ export default function StageItems({ state, setState, handleEvent }) {
     3: Stage3Items,
     4: Stage4Items,
     5: Stage5Items,
-    6: Stage6Items,
   };
 
   const StageComponent = stageComponents[state.stage.main];

@@ -141,7 +141,7 @@ export const BottomNavi = ({ stage, selectionState, setSelectionState, setChocol
             </div>
 
             {/* ✅ 돋보기 & 리셋 버튼 */}
-            <div className="flex items-center justify-center pl-2 mb-1" id="actions">
+            <div className={`${stage.main === 5 ? "opacity-100 visible" : "opacity-0 invisible"} flex items-center justify-center pl-2 mb-1`} id="actions">
               <button className="px-1 flex justify-center items-center" onClick={() => handleZoomMode(setUIState)}>
                 <Image width={40} height={40} src={uiState.isZoomMode && !uiState.isResetPopupOpen ? magnifierActive : magnifierDefault} alt="돋보기" />
               </button>
