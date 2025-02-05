@@ -9,7 +9,7 @@ export default function Stage5Items({ chocolateInfo, selectionState, uiState, se
   const isToppingMode = selectionState.currentTabIndex === 1;
   return (
     <>
-      <div className="absolute bottom-[72px] w-[280px] h-[180px] flex justify-center items-center">
+      <div className="absolute bottom-[82px] w-[280px] h-[180px] flex justify-center items-center">
         <Image
           src={box}
           alt="초콜릿 틀"

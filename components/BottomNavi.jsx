@@ -81,7 +81,7 @@ export const BottomNavi = ({ stage, selectionState, setSelectionState, setChocol
   }, [stage, selectionState]);
 
   return (
-    <div className={`fixed h-[104px] bottom-0 left-0 right-0 ${uiState.isOnboarding ? "z-[999] pointer-events-none" : ""}`}>
+    <div className={`fixed overflow-hidden h-[132px] bottom-0 left-0 right-0 ${uiState.isOnboarding ? "z-[999] pointer-events-none" : ""}`}>
       {/* ✅ 탭 UI (2개 이상일 때만 표시) */}
       {naviData.length > 1 && (
         <>
@@ -95,14 +95,11 @@ export const BottomNavi = ({ stage, selectionState, setSelectionState, setChocol
                   width={40}
                   height={40}
                   alt="화살표"
-                  className={`absolute ${position} top-[-32px] animate-bounce-up-fast
-          ${uiState.highlightedElement === `item${index}` ? "opacity-100" : "opacity-0"}`}
+                  className={`absolute ${position} top-[-32px] animate-bounce-up-fast 
+              ${uiState.highlightedElement === `item${index}` ? "opacity-100" : "opacity-0"}`}
                 />
               ))}
-              <div
-                className="top-[-88px] left-1/2 -translate-x-1/2 w-[343px] text-xl text-center bg-popup-100 px-3 py-2 rounded-md shadow-md absolute
-              "
-              >
+              <div className="top-[-88px] left-1/2 -translate-x-1/2 w-[343px] text-xl text-center bg-popup-100 px-3 py-2 rounded-md shadow-md absolute">
                 {uiState.highlightedElement === "item0"
                   ? "다양한 색깔로 초콜릿을 꾸며보세요!"
                   : uiState.highlightedElement === "item1"
@@ -111,25 +108,43 @@ export const BottomNavi = ({ stage, selectionState, setSelectionState, setChocol
               </div>
             </>
           )}
-          <div className="flex h-10" id="tabs">
-            {naviData.map((item, index) => (
-              <div
-                key={index}
-                id={`tab-${item.type}`}
-                onClick={() => handleTabClick(index, selectionState, setSelectionState, uiState, setUIState)}
-                className={`cursor-pointer 
-               ${selectionState.currentTabIndex === index ? "bg-popup-100" : "bg-gray-warm-50 text-gray-warm-200"} 
-               w-20 flex items-center justify-center text-xl rounded-tl-xl rounded-tr-xl`}
-              >
-                {item.title}
-              </div>
-            ))}
-            {/* ✅ 돋보기 버튼 */}
-            <div className="flex justify-center">
+
+          {/* ✅ 탭 + 버튼 컨테이너 */}
+          <div className="absolute left-[-8px] bottom-[60px] flex w-full z-10">
+            {/* ✅ 탭을 좌측 정렬 */}
+            <div className="flex" id="tabs">
+              {naviData.map((item, index) => (
+                <div key={`${item.type}-${index}-tab`}>
+                  <div
+                    key={`${index}-bottom-line`}
+                    className={`${
+                      selectionState.currentTabIndex === index ? "opacity-100 visible" : "opacity-0 invisible"}
+                      ${selectionState.currentTabIndex === 0 ? "w-[80px] left-0 " : "left-[88px] w-[76px]" }
+                     bg-popup-100 h-1 absolute top-[44px]`}
+                  ></div>
+                  <div
+                    key={index}
+                    id={`tab-${item.type}`}
+                    onClick={() => handleTabClick(index, selectionState, setSelectionState, uiState, setUIState)}
+                    className={`cursor-pointer flex items-center justify-center text-2xl w-[84px] h-12 rounded-tl-xl rounded-tr-xl
+              ${
+                selectionState.currentTabIndex === index
+                  ? "bg-popup-100 border-4 border-default"
+                  : "bg-gray-warm-50 text-gray-warm-200 border-b-4 border-b-default"
+              }
+           `}
+                  >
+                    {item.title}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* ✅ 돋보기 & 리셋 버튼 */}
+            <div className="flex items-center justify-center pl-2 mb-1" id="actions">
               <button className="px-1 flex justify-center items-center" onClick={() => handleZoomMode(setUIState)}>
                 <Image width={40} height={40} src={uiState.isZoomMode && !uiState.isResetPopupOpen ? magnifierActive : magnifierDefault} alt="돋보기" />
               </button>
-              {/* ✅ 리셋 버튼 */}
               <button className="px-1" onClick={() => setUIState((prev) => ({ ...prev, isResetPopupOpen: true, isResetBtnClicked: !prev.isResetBtnClicked }))}>
                 <Image width={40} height={40} src={uiState.isResetBtnClicked ? resetActive : resetDefault} alt="돋보기" />
               </button>
@@ -138,8 +153,8 @@ export const BottomNavi = ({ stage, selectionState, setSelectionState, setChocol
         </>
       )}
 
-      {/* ✅ 선택된 탭의 네비 데이터 */}
-      <div className="absolute bg-popup-100 left-0 right-0 h-16 bottom-0 flex gap-7 justify-center items-center">{naviItems}</div>
+      {/* ✅ 네비 데이터 (색깔 선택 부분) */}
+      <div className="absolute  bg-popup-100 left-0 right-0 h-16 bottom-0 flex gap-7 justify-center items-center border-t-4 border-default">{naviItems}</div>
     </div>
   );
 };

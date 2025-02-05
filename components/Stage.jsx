@@ -69,40 +69,41 @@ export default function Stage() {
     console.log("💝 chocolateInfo", chocolateInfo);
   }, [chocolateInfo]);
 
-  useEffect(() => {
-    if (stage.main === 5 && stage.sub === "init") {
-      setUIState((prev) => ({ ...prev, isCompleteEvent: true }));
-      const runOnboarding = async () => {
-        await delay(5000);
-        setUIState((prev) => ({
-          ...prev,
-          isOnboarding: true,
-          highlightedElement: "item0",
-        }));
-        await delay(3000);
+  // 온보딩
+  // useEffect(() => {
+  //   if (stage.main === 5 && stage.sub === "init") {
+  //     setUIState((prev) => ({ ...prev, isCompleteEvent: true }));
+  //     const runOnboarding = async () => {
+  //       await delay(5000);
+  //       setUIState((prev) => ({
+  //         ...prev,
+  //         isOnboarding: true,
+  //         highlightedElement: "item0",
+  //       }));
+  //       await delay(3000);
 
-        setUIState((prev) => ({
-          ...prev,
-          highlightedElement: "item1",
-        }));
-        await delay(3000);
+  //       setUIState((prev) => ({
+  //         ...prev,
+  //         highlightedElement: "item1",
+  //       }));
+  //       await delay(3000);
 
-        setUIState((prev) => ({
-          ...prev,
-          highlightedElement: "item2",
-        }));
-        await delay(3000);
+  //       setUIState((prev) => ({
+  //         ...prev,
+  //         highlightedElement: "item2",
+  //       }));
+  //       await delay(3000);
 
-        setUIState((prev) => ({
-          ...prev,
-          isOnboarding: false,
-          highlightedElement: null,
-        }));
-      };
+  //       setUIState((prev) => ({
+  //         ...prev,
+  //         isOnboarding: false,
+  //         highlightedElement: null,
+  //       }));
+  //     };
 
-      runOnboarding();
-    }
-  }, [stage]);
+  //     runOnboarding();
+  //   }
+  // }, [stage]);
 
   useEffect(() => {
     if (currentData?.items?.length > 0) {
