@@ -7,6 +7,8 @@ import Canvas from "../Canvas";
 export default function Stage5Items({ chocolateInfo, selectionState, uiState, setUIState, handleEvent }) {
   const chocolateColors = bottomNaviConfig[4][0].data;
   const isToppingMode = selectionState.currentTabIndex === 1;
+  const isZoomMode = uiState.isZoomMode;
+
   return (
     <>
       <div className="absolute bottom-[82px] w-[280px] h-[180px] flex justify-center items-center">
@@ -31,8 +33,7 @@ export default function Stage5Items({ chocolateInfo, selectionState, uiState, se
             const ShapeComponent = Shapes[name];
             const color = chocolateInfo.colors[index];
             const isSelected = selectionState.currentChocolateIndex === index;
-            const isChocoPenMode = selectionState.currentTabIndex === 0;
-            const cursorImage = isChocoPenMode
+            const cursorImage = !isToppingMode
               ? `/images/stage5/cursors/cursor-chocopen-${selectionState.currentColor}.png`
               : `/images/stage5/cursors/cursor-topping-${selectionState.currentTopping}.svg`;
 
@@ -40,7 +41,7 @@ export default function Stage5Items({ chocolateInfo, selectionState, uiState, se
               <div
                 key={index}
                 onClick={() => {
-                  if (isToppingMode) {
+                  if (isToppingMode && !isZoomMode) {
                     handleEvent("clickTopping", "_", index);
                   }
                 }}
@@ -60,13 +61,13 @@ export default function Stage5Items({ chocolateInfo, selectionState, uiState, se
               >
                 <div
                   className={`${
-                    uiState.isZoomMode && isSelected && !uiState.isResetPopupOpen ? "z-10" : ""
+                    isZoomMode && isSelected && !uiState.isResetPopupOpen ? "z-10" : ""
                   } absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2`}
                 >
                   <ShapeComponent
                     draggable={false}
                     onDragStart={(e) => e.preventDefault()}
-                    className={uiState.isZoomMode && isSelected && !uiState.isResetPopupOpen ? "scale-[2.2] transition duration-200 ease-in-out" : ""}
+                    className={isZoomMode && isSelected && !uiState.isResetPopupOpen ? "scale-[2.2] transition duration-200 ease-in-out" : ""}
                     width={(64 * (chocolateInfo.sizes[index] || 0)) / 100}
                     height={(56 * (chocolateInfo.sizes[index] || 0)) / 100}
                     fillColor={chocolateColors[color]?.fill}
@@ -75,7 +76,7 @@ export default function Stage5Items({ chocolateInfo, selectionState, uiState, se
                 </div>
                 <Canvas
                   isSelected={isSelected}
-                  isZoomMode={uiState.isZoomMode}
+                  isZoomMode={isZoomMode}
                   isToppingMode={isToppingMode}
                   strokeColor={selectionState.currentColor}
                   onSave={(imageData) => handleEvent("saveDrawing", imageData, index)}
@@ -85,7 +86,7 @@ export default function Stage5Items({ chocolateInfo, selectionState, uiState, se
                 {/* 토핑 렌더링 */}
                 {chocolateInfo.toppings[index] && (
                   <Image
-                    className={`z-30 ${uiState.isZoomMode && isSelected && !uiState.isResetPopupOpen ? "scale-[2.2] transition duration-200 ease-in-out" : ""}`}
+                    className={`z-30 ${isZoomMode && isSelected && !uiState.isResetPopupOpen ? "scale-[2.2] transition duration-200 ease-in-out" : ""}`}
                     src={`/images/stage5/toppings/topping-${chocolateInfo.toppings[index].name}.svg`}
                     alt="토핑"
                     width={32}
@@ -96,7 +97,7 @@ export default function Stage5Items({ chocolateInfo, selectionState, uiState, se
                       top: `${chocolateInfo.toppings[index].y}px`,
                     }}
                     draggable
-                    onDragStart={() => handleEvent("dragStartTopping")}
+                    // onDragStart={() => handleEvent("dragStartTopping")}
                   />
                 )}
               </div>
