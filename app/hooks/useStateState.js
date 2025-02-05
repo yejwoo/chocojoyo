@@ -57,7 +57,7 @@ export function useStageState() {
     colors: [],
     // sizes: Array(6).fill(0),
     sizes: Array(6).fill(100),
-    drawings: [],
+    drawings: {},
     toppings: [],
   });
 

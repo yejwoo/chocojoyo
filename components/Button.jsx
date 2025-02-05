@@ -6,7 +6,7 @@ export default function Button({ shape = "rectangle", message, color = "main", t
     half: "w-1/2",
     full: "w-full",
     default: "min-w-48",
-    md: "w-[328px]",
+    md: "w-[343px]",
     sm: "w-24"
   };
   const buttonColors = {

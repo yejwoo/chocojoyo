@@ -5,7 +5,7 @@ import { bgPatterns } from "@/public/images/card";
 import Button from "./Button";
 import Image from "next/image";
 
-export default function CardLayout({ chocolateInfo, onComplete }) {
+export default function CardLayout({ chocolateInfo, formState, setFormState, onComplete }) {
   const [formData, setFormData] = useState({ message: "" });
   const [selectedIcon, setSelectedIcon] = useState("heart");
   const [isCompleted, setIsCompleted] = useState(false);
@@ -52,7 +52,7 @@ export default function CardLayout({ chocolateInfo, onComplete }) {
       </div>
 
       {/* ✉️ 편지 & 초콜릿 박스 */}
-      <div className="absolute top-1/2 -translate-y-1/2 flex flex-col">
+      <div className="absolute top-1/2 -translate-y-1/2 flex flex-col w-[343px]">
         <div className="bg-white w-full px-6 pt-8 pb-6 rounded-tl-lg rounded-tr-lg">
           {/* 🍫 초콜릿 틀 */}
           <div className="relative z-10 w-[280px] h-[180px] flex justify-center items-center">

@@ -78,7 +78,7 @@ export default function Stage5Items({ chocolateInfo, selectionState, uiState, se
                   isZoomMode={uiState.isZoomMode}
                   isToppingMode={isToppingMode}
                   strokeColor={selectionState.currentColor}
-                  onSave={(e) => handleEvent("saveDrawing", e)}
+                  onSave={(imageData) => handleEvent("saveDrawing", imageData, index)}
                   uiState={uiState}
                   setUIState={setUIState}
                 />

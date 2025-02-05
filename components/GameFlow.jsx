@@ -1,5 +1,5 @@
 import StageLayout from "./StageLayout";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "./Button";
 import Modal from "./Modal";
 import Navi from "./Navi";
@@ -14,11 +14,13 @@ import { createActionHandlers } from "@/app/handlers/createActionHandlers";
 import { createStageHandlers } from "@/app/handlers/createStageHandlers";
 import { useStageState } from "@/app/hooks/useStateState";
 import { handleReset } from "@/app/handlers/stageHandlers/stage5Handlers";
+import CardLayout from "./CardLayout";
 
 export default function Stage({ onComplete }) {
   const { state, setState, intervalRef } = useStageState();
-  const { buttonConfig, stage, currentData, selectionState, toolState, chocolateInfo, gameState, uiState } = state;
-  const { setStage, setButtonConfig, setUIState, setToolState, setSelectionState, setGameState, setChocolateInfo } = setState;
+  const { buttonConfig, stage, currentData, selectionState, toolState, chocolateInfo, gameState, uiState, formState } = state;
+  const { setStage, setButtonConfig, setUIState, setToolState, setSelectionState, setGameState, setChocolateInfo, setFormState } = setState;
+  const [currentStep, setCurrentStep] = useState("stage");
 
   const stageHandlers = createStageHandlers({
     ...setState,
@@ -177,9 +179,9 @@ export default function Stage({ onComplete }) {
       return;
     }
 
-    if (main === 5) {
+    if (stage.main === 5) {
       console.log("✅ 스테이지 5 완료 → 카드 작성 단계로 이동");
-      onComplete();
+      setCurrentStep("card");
       return;
     }
 
@@ -247,72 +249,84 @@ export default function Stage({ onComplete }) {
   };
 
   return (
-    <StageLayout backgroundSrc={bg} characterSrc={currentData?.imgSrc}>
-      {/* 온보딩 오버레이 */}
-      {uiState.isOnboarding && <div className="absolute inset-0 bg-black bg-opacity-60 z-40"></div>}
+    <>
+      {currentStep === "stage" && (
+        <StageLayout backgroundSrc={bg} characterSrc={currentData?.imgSrc}>
+          {/* 온보딩 오버레이 */}
+          {uiState.isOnboarding && <div className="absolute inset-0 bg-black bg-opacity-60 z-40"></div>}
 
-      {uiState.isResetPopupOpen && (
-        <Modal
-          type="confirm"
-          title="초콜릿 다시 꾸미기"
-          onCancel={() => setUIState((prev) => ({ ...prev, isResetPopupOpen: false, isResetBtnClicked: !prev.isResetBtnClicked, isZoomMode: false }))}
-          onConfirm={() => {
-            handleReset(setChocolateInfo, setUIState);
-            setUIState((prev) => ({
-              ...prev,
-              isZoomMode: false, // 리셋할 때도 줌 해제
-            }));
-          }}
-        />
-      )}
+          {uiState.isResetPopupOpen && (
+            <Modal
+              type="confirm"
+              title="초콜릿 다시 꾸미기"
+              onCancel={() => setUIState((prev) => ({ ...prev, isResetPopupOpen: false, isResetBtnClicked: !prev.isResetBtnClicked, isZoomMode: false }))}
+              onConfirm={() => {
+                handleReset(setChocolateInfo, setUIState);
+                setUIState((prev) => ({
+                  ...prev,
+                  isZoomMode: false, // 리셋할 때도 줌 해제
+                }));
+              }}
+            />
+          )}
 
-      {/* 말풍선 */}
-      <TalkBubble uiState={uiState} dialogue={currentData?.dialogue || "안녕하세요!"} />
+          {/* 말풍선 */}
+          <TalkBubble uiState={uiState} dialogue={currentData?.dialogue || "안녕하세요!"} />
 
-      {/* 스테이지별 메인 아이템 */}
-      {uiState.isShowItems && (
-        <div id="main-items" className="w-full h-[290px] absolute bottom-14 flex justify-center items-center animate-bounce-up-once">
-          <StageItems state={state} setState={setState} handleEvent={stageHandlers[stage.main]} />
-        </div>
-      )}
+          {/* 스테이지별 메인 아이템 */}
+          {uiState.isShowItems && (
+            <div id="main-items" className="w-full h-[290px] absolute bottom-14 flex justify-center items-center animate-bounce-up-once">
+              <StageItems state={state} setState={setState} handleEvent={stageHandlers[stage.main]} />
+            </div>
+          )}
 
-      {/* 버튼 */}
-      <div
-        className={`absolute right-5 bottom-[324px] transition duration-300 ease-in-out ${
-          uiState.isShowButton && uiState.isCompleteEvent ? "opacity-100 visible" : "opacity-0 invisible"
-        }`}
-      >
-        <Button
-          // disabled={!uiState.isCompleteEvent}
-          onClick={handleNextMainStage}
-          shape={buttonConfig.shape}
-          type={buttonConfig.type}
-          message={buttonConfig.message}
-        />
-      </div>
-
-      {/* 상단 네비게이션 */}
-      <>
-        <Navi uiState={uiState} currentStage={stage.main} completedStages={gameState.completedStages} />
-        {stage.main >= 2 && stage.main <= 4 && (
-          <div className="absolute top-[72px] left-1/2 -translate-x-1/2 z-10">
-            <ProgressBar chocolateInfo={chocolateInfo} gameState={gameState} totalItems={currentData.items.length - 1} stageId={stage.main} />
+          {/* 버튼 */}
+          <div
+            className={`absolute right-5 bottom-[324px] transition duration-300 ease-in-out ${
+              uiState.isShowButton && uiState.isCompleteEvent ? "opacity-100 visible" : "opacity-0 invisible"
+            }`}
+          >
+            <Button
+              // disabled={!uiState.isCompleteEvent}
+              onClick={handleNextMainStage}
+              shape={buttonConfig.shape}
+              type={buttonConfig.type}
+              message={buttonConfig.message}
+            />
           </div>
-        )}
-      </>
 
-      {/* 하단 네비게이션 */}
-      {/* && stage.sub === "description" -> 이 조건은 대사 다 정하고 추가 */}
-      {uiState.isShowItems && stage.main >= 4 && (
-        <BottomNavi
-          stage={stage}
-          selectionState={selectionState}
-          setSelectionState={setSelectionState}
-          uiState={uiState}
-          setUIState={setUIState}
-          setChocolateInfo={setChocolateInfo}
-        />
+          {/* 상단 네비게이션 */}
+          <>
+            <Navi uiState={uiState} currentStage={stage.main} completedStages={gameState.completedStages} />
+            {stage.main >= 2 && stage.main <= 4 && (
+              <div className="absolute top-[72px] left-1/2 -translate-x-1/2 z-10">
+                <ProgressBar chocolateInfo={chocolateInfo} gameState={gameState} totalItems={currentData.items.length - 1} stageId={stage.main} />
+              </div>
+            )}
+          </>
+
+          {/* 하단 네비게이션 */}
+          {/* && stage.sub === "description" -> 이 조건은 대사 다 정하고 추가 */}
+          {uiState.isShowItems && stage.main >= 4 && (
+            <BottomNavi
+              stage={stage}
+              selectionState={selectionState}
+              setSelectionState={setSelectionState}
+              uiState={uiState}
+              setUIState={setUIState}
+              setChocolateInfo={setChocolateInfo}
+            />
+          )}
+        </StageLayout>
       )}
-    </StageLayout>
+
+      {/* ✅ 카드 작성 단계 */}
+      {currentStep === "card" && (
+        <CardLayout chocolateInfo={chocolateInfo} formState={formState} setFormState={setFormState} onComplete={() => setCurrentStep("share")} />
+      )}
+
+      {/* ✅ 공유 단계 */}
+      {currentStep === "share" && <div>공유 구현 예정</div>}
+    </>
   );
 }
