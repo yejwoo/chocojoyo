@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import box from "@/public/images/stage5/box.svg";
 import { Shapes } from "@/public/icons/shapes";
 import { bgPatterns } from "@/public/images/card";
@@ -9,6 +9,7 @@ export default function CardLayout({ chocolateInfo, formState, setFormState, onC
   const [formData, setFormData] = useState({ message: "" });
   const [selectedIcon, setSelectedIcon] = useState("heart");
   const [isCompleted, setIsCompleted] = useState(false);
+  const chocolateInfoRef = useRef(chocolateInfo); 
 
 
   // 아이콘별 배경색 설정
@@ -20,6 +21,11 @@ export default function CardLayout({ chocolateInfo, formState, setFormState, onC
     smile: "bg-cards-smile",
     fire: "bg-cards-fire",
   };
+
+  useEffect(() => {
+    chocolateInfoRef.current = chocolateInfo; // 정보가 바뀔 때만 업데이트
+    console.log(chocolateInfo)
+  }, [chocolateInfo]);
 
   useEffect(() => {
     setIsCompleted(formData.message.length > 0);
@@ -61,7 +67,7 @@ export default function CardLayout({ chocolateInfo, formState, setFormState, onC
             {/* 초콜릿들 */}
             <div className="w-full flex justify-center items-center flex-wrap gap-x-2 gap-y-2">
               {chocolateInfo.shapes.map((shape, index) => {
-                console.log("chocolateInfo:", chocolateInfo);
+                // console.log("chocolateInfo:", chocolateInfo);
                 const ShapeComponent = Shapes[shape.charAt(0).toUpperCase() + shape.slice(1)];
                 const drawing = chocolateInfo.drawings[index]; 
                 const topping = chocolateInfo.toppings[index]; 
@@ -74,7 +80,7 @@ export default function CardLayout({ chocolateInfo, formState, setFormState, onC
                     {/* 🖌️ 드로잉 (사용자가 그린 그림) */}
                     {drawing && (
                       <canvas
-                        className="absolute top-0 left-0"
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
                         width={64}
                         height={56}
                         style={{ background: `url(${drawing}) no-repeat center/cover` }}
@@ -110,11 +116,11 @@ export default function CardLayout({ chocolateInfo, formState, setFormState, onC
               maxLength={50}
               value={formData.message}
               onChange={handleInputChange}
-              className="w-full h-44 bg-white border border-gray-300 px-4 py-8 rounded-lg text-center text-[28px] leading-9 resize-none flex"
+              className="w-full h-44 bg-white border border-gray-300 px-4 py-8 rounded-lg text-center text-[28px] leading-9 resize-none flex overflow-hidden whitespace-pre-wrap"
               placeholder="편지 내용을 입력하세요."
             />
             {/* 현재 글자 수 표시 */}
-            <span className="absolute bottom-0 right-0 text-sm text-gray-500">{formData.message.length}/50</span>
+            <span className="absolute bottom-[-16px] right-[-12px] text-sm text-gray-500">{formData.message.length}/50</span>
           </div>
         </div>
 
