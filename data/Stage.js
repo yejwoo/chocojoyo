@@ -86,15 +86,15 @@ export const stageData = [
       dialogue: "이제 칼을 눌러서<br/> 초콜릿을 썰어주세요.",
       ...commonConfig,
       items: [
-        { imgSrc: knife, alt: "칼", variant: null, position: { x: 180, y: 100 } },
-        { imgSrc: chocolate1, alt: "초콜릿 썰기", variant: null, position: { x: 135, y: 100 } },
-        { imgSrc: chocolate2, alt: "초콜릿 썰기", variant: null, position: { x: 90, y: 100 } },
-        { imgSrc: chocolate3, alt: "초콜릿 썰기", variant: null, position: { x: 64, y: 100 } },
-        { imgSrc: chocolate4, alt: "초콜릿 썰기", variant: null, position: { x: 120, y: 100 } },
-        { imgSrc: chocolate5, alt: "초콜릿 썰기", variant: null, position: { x: 120, y: 100 } },
-        { imgSrc: chocolate6, alt: "초콜릿 썰기", variant: null, position: { x: 120, y: 100 } },
-        { imgSrc: chocolate7, alt: "초콜릿 썰기", variant: null, position: { x: 120, y: 100 } },
-        { imgSrc: chocolate8, alt: "초콜릿 썰기", variant: null, position: { x: 120, y: 100 } },
+        { imgSrc: knife, alt: "칼", variant: null, position: { x: 180, y: 40 } },
+        { imgSrc: chocolate1, alt: "초콜릿 썰기", variant: null, position: { x: 135, y: 40 } },
+        { imgSrc: chocolate2, alt: "초콜릿 썰기", variant: null, position: { x: 90, y: 40 } },
+        { imgSrc: chocolate3, alt: "초콜릿 썰기", variant: null, position: { x: 64, y: 40 } },
+        { imgSrc: chocolate4, alt: "초콜릿 썰기", variant: null, position: { x: 120, y: 40 } },
+        { imgSrc: chocolate5, alt: "초콜릿 썰기", variant: null, position: { x: 120, y: 40 } },
+        { imgSrc: chocolate6, alt: "초콜릿 썰기", variant: null, position: { x: 120, y: 40 } },
+        { imgSrc: chocolate7, alt: "초콜릿 썰기", variant: null, position: { x: 120, y: 40 } },
+        { imgSrc: chocolate8, alt: "초콜릿 썰기", variant: null, position: { x: 120, y: 40 } },
       ],
     },
   },
@@ -108,7 +108,7 @@ export const stageData = [
           imgSrc: spatula,
           alt: "스패츌라",
           variant: null,
-          position: { x: 80, y: 36 },
+          position: { x: 80, y: 24 },
         },
         {
           imgSrc: doubleBoiler,
@@ -139,22 +139,22 @@ export const stageData = [
       dialogue: "짤주머니를 꾹 눌러<br/>초콜릿을 채워주세요.",
       items: [
         {
-          position: { x: 54, y: 96 },
+          position: { x: 24, y: 12 },
         },
         {
-          position: { x: 142, y: 96 },
+          position: { x: 110, y: 12 },
         },
         {
-          position: { x: 230, y: 96 },
+          position: { x: 196, y: 12 },
         },
         {
-          position: { x: 54, y: 180 },
+          position: { x: 24, y: 92 },
         },
         {
-          position: { x: 142, y: 180 },
+          position: { x: 110, y: 92 },
         },
         {
-          position: { x: 230, y: 180 },
+          position: { x: 196, y: 92 },
         },
       ],
       ...commonConfig,

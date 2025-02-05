@@ -4,18 +4,18 @@ import { Shapes } from "@/public/icons/shapes";
 import { bottomNaviConfig } from "@/data/Stage";
 import Canvas from "../Canvas";
 
-export default function Stage5Items({ currentData, chocolateInfo, selectionState, uiState, setChocolateInfo, setUIState, handleEvent }) {
+export default function Stage5Items({ chocolateInfo, selectionState, uiState, setUIState, handleEvent }) {
   const chocolateColors = bottomNaviConfig[4][0].data;
   const isToppingMode = selectionState.currentTabIndex === 1;
   return (
     <>
-      <div className="relative w-[280px] h-[182px]">
+      <div className="absolute bottom-[72px] w-[280px] h-[180px] flex justify-center items-center">
         <Image
           src={box}
           alt="초콜릿 틀"
           width={280}
           height={280}
-          className="absolute bottom-0 left-1/2 -translate-x-1/2"
+          className="absolute bottom-0"
           onDragStart={(e) => e.preventDefault()}
           draggable={false}
           style={{
@@ -25,16 +25,17 @@ export default function Stage5Items({ currentData, chocolateInfo, selectionState
           }}
         />
         {/* 초콜릿들 */}
-        <div className="w-full flex justify-center items-center flex-wrap absolute gap-x-2 gap-y-2 top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
+        <div className="w-full flex justify-center items-center flex-wrap gap-x-2 gap-y-2">
           {chocolateInfo.shapes.map((item, index) => {
             const name = item[0].toUpperCase() + item.slice(1);
             const ShapeComponent = Shapes[name];
             const color = chocolateInfo.colors[index];
             const isSelected = selectionState.currentChocolateIndex === index;
             const isChocoPenMode = selectionState.currentTabIndex === 0;
-            const cursorImage = isChocoPenMode
-              ? `/images/stage5/cursors/cursor-chocopen-${selectionState.currentColor}.png`
-              : `/images/stage5/cursors/cursor-topping-${selectionState.currentTopping}.svg`;
+            const cursorImage =
+              isChocoPenMode
+                ? `/images/stage5/cursors/cursor-chocopen-${selectionState.currentColor}.png`
+                : `/images/stage5/cursors/cursor-topping-${selectionState.currentTopping}.svg`;
 
             return ShapeComponent ? (
               <div
@@ -45,7 +46,9 @@ export default function Stage5Items({ currentData, chocolateInfo, selectionState
                   }
                 }}
                 onDragOver={(e) => e.preventDefault()}
-                onMouseOver={() => handleEvent("mouseOver", "_", index)}
+                onMouseOver={() => {
+                  if (!uiState.isResetPopupOpen) handleEvent("mouseOver", "_", index);
+                }}
                 // onMouseLeave={() => handleEvent("mouseLeave", "_", null)}
                 onDragStart={(e) => e.preventDefault()}
                 draggable={false}
@@ -56,11 +59,15 @@ export default function Stage5Items({ currentData, chocolateInfo, selectionState
                   TouchAction: "none",
                 }}
               >
-                <div className={`${uiState.isZoomMode && isSelected ? "z-10" : ""} absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2`}>
+                <div
+                  className={`${
+                    uiState.isZoomMode && isSelected && !uiState.isResetPopupOpen ? "z-10" : ""
+                  } absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2`}
+                >
                   <ShapeComponent
                     draggable={false}
                     onDragStart={(e) => e.preventDefault()}
-                    className={uiState.isZoomMode && isSelected ? "scale-[2.2] transition duration-200 ease-in-out" : ""}
+                    className={uiState.isZoomMode && isSelected && !uiState.isResetPopupOpen ? "scale-[2.2] transition duration-200 ease-in-out" : ""}
                     width={(64 * (chocolateInfo.sizes[index] || 0)) / 100}
                     height={(56 * (chocolateInfo.sizes[index] || 0)) / 100}
                     fillColor={chocolateColors[color]?.fill}
@@ -100,7 +107,6 @@ export default function Stage5Items({ currentData, chocolateInfo, selectionState
           })}
         </div>
       </div>
-       
     </>
   );
 }

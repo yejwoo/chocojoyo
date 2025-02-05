@@ -70,7 +70,7 @@ export default function Stage() {
 
   useEffect(() => {
     if (stage.main === 5 && stage.sub === "init") {
-      setUIState((prev) => ({...prev, isCompleteEvent: true}))
+      setUIState((prev) => ({ ...prev, isCompleteEvent: true }));
       const runOnboarding = async () => {
         await delay(5000);
         setUIState((prev) => ({
@@ -261,9 +261,7 @@ export default function Stage() {
       {uiState.isShowItems && (
         <div
           id="main-items"
-          className={`absolute ${
-            stage.main === 5 ? "bottom-[132px]" : "bottom-[120px]"
-          }  left-1/2 w-[296px] -translate-x-1/2 flex justify-center gap-6 flex-wrap animate-bounce-up-once`}
+          className="w-full h-[290px] absolute bottom-14 flex justify-center items-center animate-bounce-up-once"
         >
           <StageItems state={state} setState={setState} handleEvent={stageHandlers[stage.main]} />
         </div>
@@ -271,7 +269,9 @@ export default function Stage() {
 
       {/* 버튼 */}
       <div
-        className={`absolute right-5 bottom-[324px] transition duration-300 ease-in-out ${uiState.isShowButton && uiState.isCompleteEvent ? "opacity-100 visible" : "opacity-0 invisible"}`}
+        className={`absolute right-5 bottom-[324px] transition duration-300 ease-in-out ${
+          uiState.isShowButton && uiState.isCompleteEvent ? "opacity-100 visible" : "opacity-0 invisible"
+        }`}
       >
         <Button
           // disabled={!uiState.isCompleteEvent}

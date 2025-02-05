@@ -13,21 +13,7 @@ export default {
         },
         bounceUpOnce: {
           "0%": {
-            transform: "translate(-50%, 0%)",
-            animationTimingFunction: "ease-in",
-          },
-          "30%": {
-            transform: "translate(-50%, -30%)",
-            animationTimingFunction: "cubic-bezier(0.8, 0, 1, 1)",
-          },
-          "100%": {
-            transform: "translate(-50%, 0%)",
-            animationTimingFunction: "cubic-bezier(0, 0, 0.2, 1)",
-          },
-        },
-        bounceUpOnceMiddle:{
-          "0%": {
-            transform: "translateY(0, 0%)",
+            transform: "translate(0, 0%)",
             animationTimingFunction: "ease-in",
           },
           "30%": {
@@ -52,7 +38,6 @@ export default {
         "bounce-up": "bounceUp 2.5s linear infinite",
         "bounce-up-fast": "bounceUp 1.2s linear infinite",
         "bounce-up-once": "bounceUpOnce 0.5s linear",
-        "bounce-up-once-middle": "bounceUpOnceMiddle 0.5s linear",
         "bounce-down": "bounceDown 4s linear infinite",
         "heartbeat": "heartbeat 3s ease-in-out infinite",
         "heartbeat-fast": "heartbeat 1s ease-in-out infinite",

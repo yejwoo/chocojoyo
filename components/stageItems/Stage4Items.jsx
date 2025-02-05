@@ -104,7 +104,7 @@ export default function Stage4Items({
 
       {/* ✅ 짤주머니 렌더링 및 위치 업데이트 */}
       {!uiState.isPastryBagHidden && (
-        <div className="w-[343px] h-96 bottom-[-20px] pastry-bag-area absolute" style={{ pointerEvents: "none" }}>
+        <div className="w-[280px] h-[332px] bottom-0 pastry-bag-area absolute" style={{ pointerEvents: "none" }}>
           <PastryBag
             fillColor={chocolateColors[selectionState.currentColor]?.fill}
             className={`${uiState.isPastryBagHidden ? "hidden" : ""}`}

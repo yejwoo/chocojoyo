@@ -9,8 +9,8 @@ export default function Stage3Items({ currentData, gameState, handleEvent, toolS
   const rotationRef = useRef(false);
 
   return (
-    <>
-      <div className="absolute w-60 h-56 bottom-[-32px]">
+    <div className="relative w-60 h-72">
+      <div className="absolute w-full h-[230px] top-1/2 -translate-y-1/2 ">
         {/* 초콜릿 중탕기 */}
         <Image src={doubleBoiler.imgSrc} alt={doubleBoiler.alt} className="absolute bottom-0" />
 
@@ -28,28 +28,27 @@ export default function Stage3Items({ currentData, gameState, handleEvent, toolS
             />
           ))}
         </div>
-
-        {/* 스패츌라  */}
-        <div id="tool-container" className="w-full h-72 absolute bottom-0">
-          <Image
-            style={{
-              position: "absolute",
-              cursor: "grab",
-              left: `${toolState.position.x}px`,
-              top: `${toolState.position.y}px`,
-              WebkitTouchCallout: "none",
-              touchAction: "none",
-            }}
-            className="w-24 cursor-pointer"
-            onMouseDown={(e) => handleEvent("stirStart", null, null, e, rotationRef)}
-            onTouchStart={(e) => handleEvent("stirStart", null, null, e, rotationRef)}
-            onDragStart={(e) => e.preventDefault()}
-            draggable={false}
-            src={tool.imgSrc}
-            alt={tool.alt}
-          />
-        </div>
       </div>
-    </>
+      {/* 스패츌라  */}
+      <div id="tool-container" className="w-full h-72 absolute bottom-0">
+        <Image
+          style={{
+            position: "absolute",
+            cursor: "grab",
+            left: `${toolState.position.x}px`,
+            top: `${toolState.position.y}px`,
+            WebkitTouchCallout: "none",
+            touchAction: "none",
+          }}
+          className="w-24 cursor-pointer"
+          onMouseDown={(e) => handleEvent("stirStart", null, null, e, rotationRef)}
+          onTouchStart={(e) => handleEvent("stirStart", null, null, e, rotationRef)}
+          onDragStart={(e) => e.preventDefault()}
+          draggable={false}
+          src={tool.imgSrc}
+          alt={tool.alt}
+        />
+      </div>
+    </div>
   );
 }

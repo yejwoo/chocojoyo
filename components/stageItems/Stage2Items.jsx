@@ -1,14 +1,12 @@
 import Image from "next/image";
-import ProgressBar from "../ProgressBar";
 
 export default function Stage2Items({ currentData, handleEvent, toolState, gameState }) {
   const items = currentData.items.slice(1);
   const tool = currentData.items[0];
-  const totalItems = items.length;
 
   return (
-    <div className="ralative w-full h-72">
-      <div className="absolute w-full h-full bottom-0">
+    <div className="relative w-72 h-72">
+      <div className="absolute w-full h-40 top-1/2 -translate-y-1/2">
         {items.map((item, i) => (
           <Image
             key={i}

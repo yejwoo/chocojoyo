@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function Stage1Items({ currentData, handleEvent, selectionState, chocolateInfo }) {
   return (
-    <div id="stage1-items" style={{ display: "contents" }}>
+    <div id="stage1-items" className="flex flex-wrap w-72 h-48 justify-between items-center">
       {currentData.items.map((item, index) => {
         const ShapeComponent = Shapes[item.imgKey];
 

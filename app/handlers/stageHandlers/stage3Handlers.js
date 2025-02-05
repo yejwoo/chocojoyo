@@ -14,7 +14,7 @@ export const handleStir = (e, actionType, rotationRef, gameState, setGameState, 
       setUIState((prev) => ({ ...prev, isRotating: true }));
 
       const centerX = 80; // 원 중심 X
-      const centerY = 48; // 원 중심 Y
+      const centerY = 24; // 원 중심 Y
       const radius = 30; // 원 반지름
       let startTime = null;
       const duration = 700; 

@@ -7,12 +7,21 @@ import { magnifierActive, magnifierDefault, resetActive, resetDefault } from "@/
 import Modal from "./Modal";
 import arrow from "@/public/icons/arrow.svg";
 
-export const BottomNaviItem = ({ naviData, stage, uiState, selectionState, setSelectionState, setChocolateInfo, currentTabIndex }) => {
+export const BottomNaviItem = ({ naviData, stage, uiState, selectionState, setSelectionState, setUIState, currentTabIndex }) => {
   useEffect(() => {
     if (stage.main === 5 && stage.sub === "init" && uiState.highlightedElement === "item1") {
       setSelectionState((prev) => ({ ...prev, currentTabIndex: 1 }));
     }
   }, [stage, uiState.highlightedElement]);
+
+  useEffect(() => {
+    if (uiState.isResetPopupOpen) {
+      setUIState((prev) => ({
+        ...prev,
+        isZoomMode: false,
+      }));
+    }
+  }, [uiState.isResetPopupOpen]);
 
   if (naviData.type === "color") {
     return Object.keys(naviData.data)
@@ -65,7 +74,8 @@ export const BottomNavi = ({ stage, selectionState, setSelectionState, setChocol
         uiState={uiState}
         selectionState={selectionState}
         setSelectionState={setSelectionState}
-        setChocolateInfo={setChocolateInfo}
+        setUIState={setUIState}
+        // setChocolateInfo={setChocolateInfo}
         currentTabIndex={selectionState.currentTabIndex}
       />
     ));
@@ -118,7 +128,7 @@ export const BottomNavi = ({ stage, selectionState, setSelectionState, setChocol
             {/* ✅ 돋보기 버튼 */}
             <div className="flex justify-center">
               <button className="px-1 flex justify-center items-center" onClick={() => handleZoomMode(setUIState)}>
-                <Image width={40} height={40} src={uiState.isZoomMode ? magnifierActive : magnifierDefault} alt="돋보기" />
+                <Image width={40} height={40} src={uiState.isZoomMode && !uiState.isResetPopupOpen ? magnifierActive : magnifierDefault} alt="돋보기" />
               </button>
               {/* ✅ 리셋 버튼 */}
               <button className="px-1" onClick={() => setUIState((prev) => ({ ...prev, isResetPopupOpen: true, isResetBtnClicked: !prev.isResetBtnClicked }))}>
@@ -131,8 +141,14 @@ export const BottomNavi = ({ stage, selectionState, setSelectionState, setChocol
             <Modal
               type="confirm"
               title="초콜릿 다시 꾸미기"
-              onCancel={() => setUIState((prev) => ({ ...prev, isResetPopupOpen: false, isResetBtnClicked: !prev.isResetBtnClicked }))}
-              onConfirm={() => handleReset(setChocolateInfo, setUIState)}
+              onCancel={() => setUIState((prev) => ({ ...prev, isResetPopupOpen: false, isResetBtnClicked: !prev.isResetBtnClicked, isZoomMode: false }))}
+              onConfirm={() => {
+                handleReset(setChocolateInfo, setUIState);
+                setUIState((prev) => ({
+                  ...prev,
+                  isZoomMode: false, // 리셋할 때도 줌 해제
+                }));
+              }}
             >
               그린 그림과 토핑이 사라져요.
               <br />
