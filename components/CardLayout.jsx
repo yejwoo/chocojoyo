@@ -45,7 +45,7 @@ export default function CardLayout({ chocolateInfo, formState, setFormState, onC
     <main
       className={`max-w-[400px] max-h-[800px] fixed w-full h-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ${
         backgroundColors[selectedIcon] || "bg-pink-100"
-      } flex flex-col items-center justify-between px-6 relative`}
+      } flex flex-col items-center justify-between relative`}
     >
       {/* 💌 배경 패턴 */}
       <div className="absolute inset-0 grid grid-cols-4 grid-rows-6 gap-4 pointer-events-none z-0">
@@ -61,7 +61,7 @@ export default function CardLayout({ chocolateInfo, formState, setFormState, onC
       <div className="absolute top-1/2 -translate-y-1/2 flex flex-col w-[343px]">
         <div className="bg-white w-full px-6 pt-8 pb-6 rounded-tl-lg rounded-tr-lg">
           {/* 🍫 초콜릿 틀 */}
-          <div className="relative z-10 w-[280px] h-[180px] flex justify-center items-center">
+          <div className="relative z-10 w-[280px] h-[182px] flex justify-center items-center mx-auto">
             <Image src={box} alt="초콜릿 틀" width={280} height={280} className="absolute bottom-0" draggable={false} />
 
             {/* 초콜릿들 */}
@@ -116,11 +116,14 @@ export default function CardLayout({ chocolateInfo, formState, setFormState, onC
               maxLength={50}
               value={formData.message}
               onChange={handleInputChange}
-              className="w-full h-44 bg-white border border-gray-300 px-4 py-8 rounded-lg text-center text-[28px] leading-9 resize-none flex overflow-hidden whitespace-pre-wrap"
+              className="w-[280px] mx-auto mt-4 h-44 bg-white border border-gray-300 rounded-lg text-center text-[28px] leading-9 resize-none flex overflow-hidden whitespace-pre-wrap break-all"
               placeholder="편지 내용을 입력하세요."
+              style={{
+                maxHeight: "124px"
+              }}
             />
             {/* 현재 글자 수 표시 */}
-            <span className="absolute bottom-[-16px] right-[-12px] text-sm text-gray-500">{formData.message.length}/50</span>
+            <span className="absolute bottom-[-8px] right-0 text-sm text-gray-500">{formData.message.length}/50</span>
           </div>
         </div>
 
