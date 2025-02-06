@@ -16,7 +16,6 @@ import { createStageHandlers } from "@/app/handlers/createStageHandlers";
 import { useStageState } from "@/app/hooks/useStateState";
 import { handleReset } from "@/app/handlers/stageHandlers/stage5Handlers";
 import CardLayout from "./CardLayout";
-import ShareLayout from "./ShareLayout";
 import { handleComplete } from "@/app/handlers/generalHandlers";
 import { useRouter } from "next/navigation";
 
@@ -333,10 +332,7 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
             setCurrentStep("share");
           }}
         />
-      )}
-
-      {/* ✅ 공유 단계 */}
-      {currentStep === "share" && <ShareLayout />}
+      )}      
     </>
   );
 }

@@ -75,7 +75,7 @@ export default function CardLayout({ chocolateInfo, onComplete }) {
             {/* 초콜릿들 */}
             <div className="w-full flex justify-center items-center flex-wrap gap-x-2 gap-y-2">
               {chocolateInfo.shapes.map((shape, index) => {
-                console.log("chocolateInfo:", chocolateInfo);
+                // console.log("chocolateInfo:", chocolateInfo);
                 const ShapeComponent = Shapes[shape.charAt(0).toUpperCase() + shape.slice(1)];
                 const drawing = chocolateInfo.drawings[index];
                 const topping = chocolateInfo.toppings[index];

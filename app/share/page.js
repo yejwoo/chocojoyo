@@ -1,10 +1,12 @@
+"use client";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import box from "@/public/images/stage5/box.svg";
 import { Shapes } from "@/public/icons/shapes";
 import { bgPatterns } from "@/public/images/card";
-import Image from "next/image";
-import Button from "./Button";
+import { supabase } from "@/lib/supabaseClient";
+import Button from "@/components/Button";
 
 export default function ShareLayout() {
   const searchParams = useSearchParams();
@@ -13,18 +15,21 @@ export default function ShareLayout() {
 
   useEffect(() => {
     if (id) {
-      const storedData = sessionStorage.getItem("card-data");
+      const fetchCard = async () => {
+        const { data, error } = await supabase
+          .from('cards')
+          .select('*')
+          .eq('id', id)
+          .single();
 
-      if (storedData) {
-        try {
-          const parsedData = JSON.parse(storedData);
-          if (parsedData.id === id) {
-            setCardData(parsedData);
-          }
-        } catch (error) {
-          console.error("세션스토리지 데이터 파싱 오류:", error);
+        if (error) {
+          console.error('Error fetching card:', error);
+        } else {
+          setCardData(data);
         }
-      }
+      };
+
+      fetchCard();
     }
   }, [id]);
 
