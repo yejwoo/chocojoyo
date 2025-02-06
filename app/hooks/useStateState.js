@@ -52,11 +52,11 @@ export function useStageState() {
 
   // 💝 초콜릿 정보
   const [chocolateInfo, setChocolateInfo] = useState({
-    shapes: ["heart", "heart", "heart", "heart", "heart", "heart"],
-    // shapes: [],
+    // shapes: ["heart", "heart", "heart", "heart", "heart", "heart"],
+    shapes: [],
     colors: [],
-    // sizes: Array(6).fill(0),
-    sizes: Array(6).fill(100),
+    sizes: Array(6).fill(0),
+    // sizes: Array(6).fill(100),
     drawings: {},
     toppings: [],
   });
