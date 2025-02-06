@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import Script from "next/script";
 
 const myFont = localFont({
-  src: "./meetme.ttf",
+  src: "../public/fonts/meetme.ttf",
   display: "swap",
 });
 
