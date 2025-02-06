@@ -4,6 +4,7 @@ import box from "@/public/images/stage5/box.svg";
 import { Shapes } from "@/public/icons/shapes";
 import { bgPatterns } from "@/public/images/card";
 import Image from "next/image";
+import Button from "./Button";
 
 export default function ShareLayout() {
   const searchParams = useSearchParams();
@@ -78,16 +79,11 @@ export default function ShareLayout() {
                       {/* 🍓 토핑 */}
                       {topping && (
                         <Image
-                          className="absolute"
-                          src={`/images/stage5/toppings/topping-${topping.name}.svg`}
+                          className="absolute  left-6 top-[22px]"
+                          src={`/images/stage5/toppings/topping-${topping}.svg`}
                           alt="토핑"
                           width={32}
                           height={32}
-                          style={{
-                            position: "absolute",
-                            left: `${topping.x}px`,
-                            top: `${topping.y}px`,
-                          }}
                           draggable
                         />
                       )}
@@ -108,6 +104,13 @@ export default function ShareLayout() {
               <span className="text-left">{cardData.name}</span>
             </div>
           </div>
+        </div>
+        <div className="flex justify-center gap-2">
+          {/* 카톡 공유, 링크 복사, 이미지 저장, 다시 하기 */}
+          <Button shape="circle" size="full" />
+          <Button shape="circle" size="full" />
+          <Button shape="circle" size="full" />
+          <Button shape="circle" size="full" />
         </div>
       </div>
     </main>

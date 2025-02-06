@@ -31,7 +31,7 @@ export const handleMouseLeave = (setSelectionState, reset) => {
 export const handleToppingPlacement = (setChocolateInfo, topping, index) => {
   setChocolateInfo((prev) => {
     const updatedToppings = [...prev.toppings];
-    updatedToppings[index] = { name: topping, x: 24, y: 22 };
+    updatedToppings[index] = topping;
     return { ...prev, toppings: updatedToppings };
   });
 };

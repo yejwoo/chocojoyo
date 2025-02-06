@@ -99,16 +99,11 @@ export default function CardLayout({ chocolateInfo, onComplete }) {
                     {/* 🍓 토핑 */}
                     {topping && (
                       <Image
-                        className="absolute"
-                        src={`/images/stage5/toppings/topping-${topping.name}.svg`}
+                        className="absolute left-6 top-[22px]"
+                        src={`/images/stage5/toppings/topping-${topping}.svg`}
                         alt="토핑"
                         width={32}
                         height={32}
-                        style={{
-                          position: "absolute",
-                          left: `${topping.x}px`,
-                          top: `${topping.y}px`,
-                        }}
                         draggable
                       />
                     )}

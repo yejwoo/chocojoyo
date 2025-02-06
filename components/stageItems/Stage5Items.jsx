@@ -86,16 +86,11 @@ export default function Stage5Items({ chocolateInfo, selectionState, uiState, se
                 {/* 토핑 렌더링 */}
                 {chocolateInfo.toppings[index] && (
                   <Image
-                    className={`z-30 ${isZoomMode && isSelected && !uiState.isResetPopupOpen ? "scale-[2.2] transition duration-200 ease-in-out" : ""}`}
-                    src={`/images/stage5/toppings/topping-${chocolateInfo.toppings[index].name}.svg`}
+                    className={`absolute left-6 top-[22px] z-30 ${isZoomMode && isSelected && !uiState.isResetPopupOpen ? "scale-[2.2] transition duration-200 ease-in-out" : ""}`}
+                    src={`/images/stage5/toppings/topping-${chocolateInfo.toppings[index]}.svg`}
                     alt="토핑"
                     width={32}
                     height={32}
-                    style={{
-                      position: "absolute",
-                      left: `${chocolateInfo.toppings[index].x}px`,
-                      top: `${chocolateInfo.toppings[index].y}px`,
-                    }}
                     draggable
                     // onDragStart={() => handleEvent("dragStartTopping")}
                   />

@@ -30,7 +30,7 @@ const Canvas = ({ isToppingMode, isSelected, isZoomMode, strokeColor = "vanilla"
     ctx.lineWidth = 2;
     contextRef.current = ctx;
 
-    console.log(ctx)
+    // console.log(ctx)
   }, []);
 
   useEffect(() => {
