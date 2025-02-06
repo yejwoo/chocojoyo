@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Cafe24Ssurround";
+  src: url("/app/Cafe24Ssurround.otf");
+}
+
 html,
 body {
   height: 100%;
@@ -47,7 +52,6 @@ textarea {
   word-break: break-all;
 }
 
-
 input:focus {
   outline: none;
 }
@@ -61,12 +65,17 @@ hr {
   border: 2px solid #3d2505;
 }
 
+button {
+  font-family: "Cafe24Ssurround";
+  font-size: 1rem;
+}
+
 .overflow-scroll {
   overflow: auto;
   touch-action: pan-x pan-y;
   -webkit-overflow-scrolling: touch;
 }
 
-.shadow-pink {
-  box-shadow: 4px 4px rgb(244, 152, 166);
+.text-shadow {
+  text-shadow: -2px 0 #3D2505, 0 2px #3D2505, 2px 0 #3D2505, 0 -2px #3D2505;
 }
