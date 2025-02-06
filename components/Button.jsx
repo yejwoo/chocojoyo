@@ -1,3 +1,4 @@
+import { arrow, close, replay } from "@/public/icons/buttons";
 import Image from "next/image";
 
 export default function Button({ shape = "rectangle", message, color = "main", type = "arrow", size = "default", onClick, disabled = false }) {
@@ -13,23 +14,25 @@ export default function Button({ shape = "rectangle", message, color = "main", t
 
   const buttonColorClass =
     {
-      main: "bg-button-100",
-      secondary: "bg-chocolates-ruby-100",
+      main: "bg-button-100", // 갈색
+      brand: "bg-brand-100", // 진한 핑크색
+      secondary: "bg-chocolates-ruby-100", // 연한 핑크색
       tertiary: "bg-gray-cool-50",
-      brown: "bg-chocolates-milk-100",
     }[color] || "bg-button-100";
 
   const buttonShadowClass =
     {
       main: "bg-button-200",
+      brand: "bg-brand-200",
       secondary: "bg-chocolates-ruby-200",
       tertiary: "bg-gray-cool-100",
     }[color] || "bg-button-200";
 
   const buttonIcon = {
-    arrow: <Image src="/icons/buttons/arrow.svg" width={32} height={32} alt="다음" />,
-    close: <Image src="/icons/buttons/close.svg" width={32} height={32} alt="닫기" />,
-  }[type] || <Image src="/icons/buttons/arrow.svg" width={32} height={32} alt="다음" />;
+    arrow: <Image src={arrow} width={32} height={32} alt="다음" />,
+    close: <Image src={close} width={32} height={32} alt="닫기" />,
+    replay: <Image src={replay} width={32} height={32} alt="다시 시작" />,
+  }[type] || <Image src={arrow} width={32} height={32} alt="다음" />;
 
   const disabledStyle = "disabled:bg-gray-cool-50 disabled:cursor-not-allowed";
 
@@ -42,7 +45,7 @@ export default function Button({ shape = "rectangle", message, color = "main", t
         ${buttonColorClass} 
         ${buttonShape} 
         ${shape === "rectangle" ? buttonSizeClass : ""} 
-        text-white text-2xl border-4 border-default 
+        text-white text-xl border-4 border-default 
         ${disabled ? disabledStyle : ""}
         focus:outline-none
       `}

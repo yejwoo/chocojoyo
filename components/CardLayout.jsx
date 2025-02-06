@@ -66,8 +66,8 @@ export default function CardLayout({ chocolateInfo, onComplete }) {
       </div>
 
       {/* ✉️ 편지 & 초콜릿 박스 */}
-      <div className="absolute rounded-lg shadow-lg top-1/2 -translate-y-1/2 flex flex-col w-[343px]">
-        <div className="bg-white w-full px-6 pt-8 pb-6 rounded-tl-lg rounded-tr-lg flex flex-col gap-3 justify-center items-center">
+      <div className="absolute rounded-lg shadow-lg top-1/2 -translate-y-1/2 flex flex-col w-[320px]">
+        <div className="bg-white w-full p-6 rounded-tl-lg rounded-tr-lg flex flex-col gap-3 justify-center items-center">
           {/* 🍫 초콜릿 틀 */}
           <div className="relative z-10 w-[280px] h-[182px] flex justify-center items-center mx-auto">
             <Image src={box} alt="초콜릿 틀" width={280} height={280} className="absolute bottom-0" draggable={false} />
