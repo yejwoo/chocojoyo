@@ -8,13 +8,13 @@ body {
   margin: 0;
   padding: 0;
   font-size: 16px;
-  color: #3D2505;
+  color: #3d2505;
   background: #fec4c4;
   -webkit-touch-callout: none;
   user-select: none;
   -webkit-user-select: none;
-  -moz-user-select: none; 
-  -ms-user-select: none; 
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 body.block-scroll {
@@ -28,7 +28,7 @@ body.block-scroll {
 
 .no-scrollbar {
   -ms-overflow-style: none;
-  scrollbar-width: none;  
+  scrollbar-width: none;
 }
 
 textarea {
@@ -38,20 +38,27 @@ textarea {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
-  resize: none; 
+  resize: none;
   vertical-align: middle;
+  max-height: 108px;
+  word-wrap: normal;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-all;
 }
+
 
 input:focus {
   outline: none;
 }
 
+input::placeholder,
 textarea::placeholder {
-  color: #C1BCB5;
+  color: #c1bcb5;
 }
 
 hr {
-  border: 2px solid #3D2505;
+  border: 2px solid #3d2505;
 }
 
 .overflow-scroll {
@@ -61,5 +68,5 @@ hr {
 }
 
 .shadow-pink {
-  box-shadow: 4px 4px rgb(244, 152, 166)
+  box-shadow: 4px 4px rgb(244, 152, 166);
 }
