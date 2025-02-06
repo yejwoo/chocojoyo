@@ -23,12 +23,14 @@ const Canvas = ({ isToppingMode, isSelected, isZoomMode, strokeColor = "vanilla"
     const canvas = canvasRef.current;
     canvas.width = 64;
     canvas.height = 56;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
 
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
     ctx.lineWidth = 2;
     contextRef.current = ctx;
+
+    console.log(ctx)
   }, []);
 
   useEffect(() => {
@@ -77,11 +79,22 @@ const Canvas = ({ isToppingMode, isSelected, isZoomMode, strokeColor = "vanilla"
     contextRef.current.stroke();
   };
 
+
+  const isCanvasEmpty = () => {
+    if (!canvasRef.current || !contextRef.current) return true;
+
+    const ctx = contextRef.current;
+    const { width, height } = canvasRef.current;
+    const imageData = ctx.getImageData(0, 0, width, height).data;
+
+    return !imageData.some((pixel) => pixel !== 0); 
+  };
+
   const stopDrawing = () => {
     setIsDrawing(false);
     contextRef.current.closePath();
 
-    if (canvasRef.current) {
+    if (canvasRef.current && !isCanvasEmpty()) {
       const imageData = canvasRef.current.toDataURL();
       if (onSave) {
         onSave(imageData);
