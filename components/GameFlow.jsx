@@ -1,3 +1,4 @@
+"use client";
 import StageLayout from "./StageLayout";
 import React, { useEffect, useState } from "react";
 import Button from "./Button";
@@ -15,12 +16,15 @@ import { createStageHandlers } from "@/app/handlers/createStageHandlers";
 import { useStageState } from "@/app/hooks/useStateState";
 import { handleReset } from "@/app/handlers/stageHandlers/stage5Handlers";
 import CardLayout from "./CardLayout";
+import ShareLayout from "./ShareLayout";
+import { handleComplete } from "@/app/handlers/generalHandlers";
+import { useRouter } from "next/navigation";
 
-export default function Stage({ onComplete }) {
+export default function GameFlow({ currentStep, setCurrentStep }) {
   const { state, setState, intervalRef } = useStageState();
-  const { buttonConfig, stage, currentData, selectionState, toolState, chocolateInfo, gameState, uiState, formState } = state;
-  const { setStage, setButtonConfig, setUIState, setToolState, setSelectionState, setGameState, setChocolateInfo, setFormState } = setState;
-  const [currentStep, setCurrentStep] = useState("stage");
+  const { buttonConfig, stage, currentData, selectionState, toolState, chocolateInfo, gameState, uiState } = state;
+  const { setStage, setButtonConfig, setUIState, setToolState, setSelectionState, setGameState, setChocolateInfo } = setState;
+  const router = useRouter();
 
   const stageHandlers = createStageHandlers({
     ...setState,
@@ -180,7 +184,7 @@ export default function Stage({ onComplete }) {
     }
 
     if (stage.main === 5) {
-      console.log("✅ 스테이지 5 완료 → 카드 작성 단계로 이동");
+      // console.log("✅ 스테이지 5 완료 → 카드 작성 단계로 이동");
       setCurrentStep("card");
       return;
     }
@@ -322,11 +326,17 @@ export default function Stage({ onComplete }) {
 
       {/* ✅ 카드 작성 단계 */}
       {currentStep === "card" && (
-        <CardLayout chocolateInfo={chocolateInfo} formState={formState} setFormState={setFormState} onComplete={() => setCurrentStep("share")} />
+        <CardLayout
+          chocolateInfo={chocolateInfo}
+          onComplete={(formData) => {
+            handleComplete(chocolateInfo, formData, router);
+            setCurrentStep("share");
+          }}
+        />
       )}
 
       {/* ✅ 공유 단계 */}
-      {currentStep === "share" && <div>공유 구현 예정</div>}
+      {currentStep === "share" && <ShareLayout />}
     </>
   );
 }

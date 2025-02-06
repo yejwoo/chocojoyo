@@ -3,7 +3,7 @@ import { stageData } from "@/data/Stage";
 
 export function useStageState() {
   // 💝 현재 스테이지 상태
-  const [stage, setStage] = useState({ main: 4, sub: "init" });
+  const [stage, setStage] = useState({ main: 1, sub: "init" });
 
   // 현재 스테이지 데이터
   const currentData = stageData[stage.main][stage.sub];
@@ -68,13 +68,6 @@ export function useStageState() {
     stirCount: 0,
   });
 
-  // 💝 폼 관련 상태
-  const [formState, setFormState] = useState({
-    inputValue: "",
-    username: "",
-    card: "",
-  });
-
   // 💝 Ref (인터벌 관리)
   const intervalRef = useRef(null);
 
@@ -98,7 +91,6 @@ export function useStageState() {
     setSelectionState,
     setChocolateInfo,
     setGameState,
-    setFormState,
     setButtonConfig
   };
 

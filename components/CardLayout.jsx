@@ -126,7 +126,7 @@ export default function CardLayout({ chocolateInfo, onComplete }) {
                 placeholder="편지는 세 줄까지 쓸 수 있어요."
               />
             </div>
-            {/* <span className="bottom-[-8px] text-sm text-gray-500"></span> */}
+
             {/* 보내는이 */}
             <div className="border-b-2 border-default">
               <span className="text-lg">from. </span>
