@@ -5,7 +5,7 @@ import GameFlow from "@/components/GameFlow";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [isStarted, setIsStarted] = useState(null); 
+  const [isStarted, setIsStarted] = useState(null);
   const [currentStep, setCurrentStep] = useState("stage");
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export default function Home() {
     sessionStorage.setItem("currentStep", currentStep);
   }, [currentStep]);
 
-  if (isStarted === null) return null;
+  if (isStarted === null) return null; 
 
   return (
     <>

@@ -6,24 +6,30 @@ import box from "@/public/images/stage5/box.svg";
 import { Shapes } from "@/public/icons/shapes";
 import { bgPatterns } from "@/public/images/card";
 import { supabase } from "@/lib/supabaseClient";
+import KakaoShareButton from "@/components/KakaoShareButton";
+import { shareLink, shareReplay } from "@/public/icons/share";
 import Button from "@/components/Button";
+import Modal from "@/components/Modal";
+import { useRouter } from "next/navigation";
+import { copyToClipboard } from "@/utils/copyToClipboard";
+import { DOMAIN } from "@/constants";
 
 export default function ShareLayout() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
+  const url = DOMAIN + `/share?id=${id}`;
   const [cardData, setCardData] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     if (id) {
       const fetchCard = async () => {
-        const { data, error } = await supabase
-          .from('cards')
-          .select('*')
-          .eq('id', id)
-          .single();
+        const { data, error } = await supabase.from("cards").select("*").eq("id", id).single();
 
         if (error) {
-          console.error('Error fetching card:', error);
+          console.error("Error fetching card:", error);
         } else {
           setCardData(data);
         }
@@ -32,6 +38,16 @@ export default function ShareLayout() {
       fetchCard();
     }
   }, [id]);
+
+  const handleOpenModal = (type) => {
+    setModalType(type);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setModalType("");
+  };
 
   if (!cardData) return <p>초콜릿 데이터를 불러오는 중...</p>;
 
@@ -110,14 +126,42 @@ export default function ShareLayout() {
             </div>
           </div>
         </div>
-        <div className="flex justify-center gap-2">
-          {/* 카톡 공유, 링크 복사, 이미지 저장, 다시 하기 */}
-          <Button shape="circle" size="full" />
-          <Button shape="circle" size="full" />
-          <Button shape="circle" size="full" />
-          <Button shape="circle" size="full" />
+        {/* 공유 버튼 */}
+        <div className="flex justify-center items-center gap-2">
+          <Button size="half" color="" message={"공유하기"} onClick={() => handleOpenModal("share")} />
+          <Button size="half" color="" message={"초코 저장"} onClick={() => handleOpenModal("download")} />
         </div>
       </div>
+      {/* 모달 */}
+      {isModalOpen && (
+        <Modal title={modalType === "share" ? "공유하기" : "다운로드"} onCancel={handleCloseModal} type={modalType}>
+          {modalType === "share" && (
+            <div className="flex gap-8 w-full justify-center">
+              <KakaoShareButton />
+              <button className="text-sm flex flex-col gap-2 items-center justify-normal" type="button"  onClick={()=>{copyToClipboard(url)}}>
+                <div className="w-12 h-12 bg-gray-300 rounded-full flex justify-center items-center">
+                  <Image className="" src={shareLink} alt="링크 복사" />
+                </div>
+                <span>링크 복사</span>
+              </button>
+            </div>
+          )}
+          {modalType === "download" && (
+            <div className="flex gap-2">
+              <button className="bg-white p-2 rounded-md shadow-md" type="button">
+                <span>편지 + 초콜릿 저장</span>
+              </button>
+              <button className="bg-white p-2 rounded-md shadow-md" type="button">
+                <span>개별 초콜릿 저장</span>
+              </button>
+            </div>
+          )}
+        </Modal>
+      )}
+      {/* 다시하기 */}
+      <button className="bg-white p-2 rounded-md shadow-md absolute bottom-4 right-4" type="button" onClick={() => router.push("/")}>
+        <Image src={shareReplay} alt="다시 하기" />
+      </button>
     </main>
   );
 }

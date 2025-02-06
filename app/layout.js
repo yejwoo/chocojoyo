@@ -1,10 +1,11 @@
 import "./globals.css";
-import localFont from 'next/font/local';
+import localFont from "next/font/local";
+import Script from "next/script";
 
 const myFont = localFont({
-  src: './meetme.ttf',
-  display: 'swap'
-})
+  src: "./meetme.ttf",
+  display: "swap",
+});
 
 export const metadata = {
   title: "Create Next App",
@@ -16,12 +17,13 @@ export const viewport = {
   initialScae: 1,
   maximumScale: 1,
   userScalable: false,
-}
+};
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={myFont.className}>
+        <Script src="https://developers.kakao.com/sdk/js/kakao.js" strategy="afterInteractive" />
         {children}
       </body>
     </html>
