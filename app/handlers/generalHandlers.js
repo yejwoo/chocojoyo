@@ -1,7 +1,6 @@
-'use client';
+"use client";
 
-import { v4 as uuidv4 } from "uuid";
-import { useRouter } from 'next/navigation';
+import { supabase } from "@/lib/supabaseClient";
 
 export const handleTabClick = (index, selectionState, setSelectionState, uiState, setUIState) => {
   setSelectionState((prev) => ({ ...prev, currentTabIndex: index }));
@@ -19,10 +18,22 @@ export const handleToppingSelection = (topping, setSelectionState) => {
   setSelectionState((prev) => ({ ...prev, currentTopping: topping }));
 };
 
-export const handleComplete = (chocolateInfo, formData, router) => { // router를 인자로 받음
-  const id = uuidv4();
-  const cardData = { id, ...chocolateInfo, ...formData };
-  sessionStorage.setItem("card-data", JSON.stringify(cardData)); 
-  
-  router.push(`/?id=${id}`);
+export const handleComplete = async (chocolateInfo, formData, router) => {
+  const response = await fetch("/api/cards", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ formData, chocolateInfo }),
+  });
+
+  const result = await response.json();
+
+  if (result.error) {
+    console.error("Error:", result.error);
+    return;
+  }
+
+  const newCardId = result.data[0].id;
+  router.push(`/share?id=${newCardId}`);
 };
