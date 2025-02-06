@@ -8,18 +8,10 @@ export function useStageState() {
   // 현재 스테이지 데이터
   const currentData = stageData[stage.main][stage.sub];
 
-  // 버튼 정보
-  const [buttonConfig, setButtonConfig] = useState({
-    shape: "rectangle",
-    type: null,
-    message: "",
-    color: "secondary"
-  });
 
   // 💝 UI 상태
   const [uiState, setUIState] = useState({
     isTalkBubbleShow: false,
-    isShowButton: false,
     isShowModal: false,
     isShowItems: false,
     isShowNavi: false,
@@ -27,7 +19,6 @@ export function useStageState() {
     isDragging: false,
     isRotating: false,
     isPastryBagHidden: false,
-    isSubmitEnabled: false,
     isZoomMode: false,
     isResetPopupOpen: false,
     isClearCanvas: false,
@@ -80,7 +71,6 @@ export function useStageState() {
     chocolateInfo,
     gameState,
     uiState,
-    buttonConfig
   };
 
   // ************ set함수 모음
@@ -91,7 +81,6 @@ export function useStageState() {
     setSelectionState,
     setChocolateInfo,
     setGameState,
-    setButtonConfig
   };
 
   return { state, setState, intervalRef };

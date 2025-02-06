@@ -6,7 +6,7 @@ import { Shapes } from "@/public/icons/shapes";
 import { bgPatterns } from "@/public/images/card";
 import { supabase } from "@/lib/supabaseClient";
 import KakaoShareButton from "@/components/KakaoShareButton";
-import { choco, chocoBox, chocoPng, chocoWithCard, shareLink } from "@/public/icons/share";
+import { chocoBox, chocoPng, chocoWithCard, shareLink } from "@/public/icons/share";
 import Button from "@/components/Button";
 import Modal from "@/components/Modal";
 import { useRouter } from "next/navigation";

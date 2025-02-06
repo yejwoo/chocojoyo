@@ -128,7 +128,7 @@ export default function CardLayout({ chocolateInfo, onComplete }) {
           {/* 보내는이 */}
           <div className="border-b-2 border-default">
             <span className="text-lg">from. </span>
-            <input onChange={(e) => handleInputChange(e, "name")} className="text-left " type="text" placeholder="이름은 열 글자까지!" maxLength={10} />
+            <input onChange={(e) => handleInputChange(e, "name")} className="text-left" type="text" placeholder="이름은 열 글자까지!" maxLength={10} />
           </div>
         </div>
 

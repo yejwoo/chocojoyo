@@ -10,10 +10,6 @@ const commonConfig = {
   sequence: [
     { type: "delay", value: 1000 },
     { type: "showItems" },
-    {
-      type: "showButton",
-      value: { shape: "circle", type: "arrow", message: null, color: "secondary" },
-    },
   ],
   isFinal: true,
 };

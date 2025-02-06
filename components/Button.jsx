@@ -8,7 +8,7 @@ export default function Button({ shape = "rectangle", message, color = "main", t
       half: "w-1/2",
       full: "w-full",
       default: "min-w-48",
-      md: "w-[343px]",
+      md: "w-[320px]",
       sm: "w-24",
     }[size] || "min-w-48";
 
@@ -18,7 +18,7 @@ export default function Button({ shape = "rectangle", message, color = "main", t
       brand: "bg-brand-100", // 진한 핑크색
       secondary: "bg-chocolates-ruby-100", // 연한 핑크색
       tertiary: "bg-gray-cool-50",
-    }[color] || "bg-button-100";
+    }[color] || "bg-brand-100";
 
   const buttonShadowClass =
     {
@@ -26,7 +26,7 @@ export default function Button({ shape = "rectangle", message, color = "main", t
       brand: "bg-brand-200",
       secondary: "bg-chocolates-ruby-200",
       tertiary: "bg-gray-cool-100",
-    }[color] || "bg-button-200";
+    }[color] || "bg-brand-200";
 
   const buttonIcon = {
     arrow: <Image src={arrow} width={32} height={32} alt="다음" />,
@@ -34,7 +34,7 @@ export default function Button({ shape = "rectangle", message, color = "main", t
     replay: <Image src={replay} width={32} height={32} alt="다시 시작" />,
   }[type] || <Image src={arrow} width={32} height={32} alt="다음" />;
 
-  const disabledStyle = "disabled:bg-gray-cool-50 disabled:cursor-not-allowed";
+  const disabledStyle = "disabled:bg-gray-cool-50 disabled:cursor-not-allowed text-gray-cool-100";
 
   return (
     <button
@@ -45,9 +45,9 @@ export default function Button({ shape = "rectangle", message, color = "main", t
         ${buttonColorClass} 
         ${buttonShape} 
         ${shape === "rectangle" ? buttonSizeClass : ""} 
-        text-white text-xl border-4 border-default 
-        ${disabled ? disabledStyle : ""}
-        focus:outline-none
+        text-xl border-4 border-default 
+        ${disabled ? disabledStyle : "text-white "}
+        focus:outline-none transition-all duration-200
       `}
     >
       {shape === "circle" ? (
@@ -55,13 +55,13 @@ export default function Button({ shape = "rectangle", message, color = "main", t
       ) : (
         <>
           <p className="h-12 text-shadow flex justify-center items-center">{message}</p>
-          <div 
+          <div
             className={`
               ${disabled ? "bg-gray-cool-100" : buttonShadowClass} 
               w-full h-1
               transition-all duration-200
-            `}>
-          </div>
+            `}
+          ></div>
         </>
       )}
     </button>

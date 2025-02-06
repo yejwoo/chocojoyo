@@ -22,7 +22,7 @@ import { useRouter } from "next/navigation";
 export default function GameFlow({ currentStep, setCurrentStep }) {
   const { state, setState, intervalRef } = useStageState();
   const { buttonConfig, stage, currentData, selectionState, toolState, chocolateInfo, gameState, uiState } = state;
-  const { setStage, setButtonConfig, setUIState, setToolState, setSelectionState, setGameState, setChocolateInfo } = setState;
+  const { setStage, setUIState, setToolState, setSelectionState, setGameState, setChocolateInfo } = setState;
   const router = useRouter();
 
   const stageHandlers = createStageHandlers({
@@ -35,7 +35,7 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
   });
 
   useEffect(() => {
-    const handlers = createActionHandlers({ setUIState, setButtonConfig, handleNextSubStage, handleNextMainStage });
+    const handlers = createActionHandlers({ setUIState, handleNextSubStage, handleNextMainStage });
 
     const runSequence = async () => {
       await delay(1200);
@@ -162,7 +162,6 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
     setUIState((prev) => ({
       ...prev,
       isTalkBubbleShow: false,
-      isShowButton: false,
       isShowModal: false,
       isShowItems: false,
     }));
@@ -172,6 +171,10 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
       currentItemIndex: 0,
     }));
   };
+
+  useEffect(() => {
+    console.log("Button Config:", buttonConfig);
+  }, [buttonConfig]);
 
   const handleNextMainStage = () => {
     const { main } = stage;
@@ -224,7 +227,6 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
     setUIState((prev) => ({
       ...prev,
       isTalkBubbleShow: false,
-      isShowButton: false,
       isShowModal: false,
       isShowItems: false,
       isCompleteEvent: stage.main === 5 ? true : false, // 5단계 꾸미기는 선택이므로
@@ -236,13 +238,6 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
       currentChocolateIndex: nextMainStage === 5 ? null : 0,
       currentColor: "milk",
     }));
-
-    // 버튼 상태 초기화
-    setButtonConfig({
-      shape: "rectangle",
-      type: null,
-      message: "",
-    });
 
     // 게임 진행 상태 초기화
     setGameState((prev) => ({
@@ -286,15 +281,15 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
           {/* 버튼 */}
           <div
             className={`absolute right-5 bottom-[324px] transition duration-300 ease-in-out ${
-              uiState.isShowButton && uiState.isCompleteEvent ? "opacity-100 visible" : "opacity-0 invisible"
+              uiState.isCompleteEvent ? "opacity-100 visible" : "opacity-0 invisible"
             }`}
           >
             <Button
               // disabled={!uiState.isCompleteEvent}
               onClick={handleNextMainStage}
-              shape={buttonConfig.shape}
-              type={buttonConfig.type}
-              message={buttonConfig.message}
+              shape="circle"
+              type="arrow"
+              color="brand"
             />
           </div>
 
@@ -332,7 +327,7 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
             setCurrentStep("share");
           }}
         />
-      )}      
+      )}
     </>
   );
 }
