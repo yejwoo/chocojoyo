@@ -186,7 +186,6 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
     }
 
     if (stage.main === 5) {
-      // console.log("✅ 스테이지 5 완료 → 카드 작성 단계로 이동");
       setCurrentStep("card");
       return;
     }

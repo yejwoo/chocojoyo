@@ -17,7 +17,7 @@ const KakaoShareButton = () => {
 
   const handleShare = () => {
     const { Kakao } = window;
-    console.log(Kakao);
+    // console.log(Kakao);
 
     Kakao.Share.sendDefault({
       objectType: 'feed',
