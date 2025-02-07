@@ -1,9 +1,10 @@
 import Image from "next/image";
 import Button from "./Button";
-import { logo, yanto, bg, startBtn, heart, choco1, choco2, choco3, cloud1, cloud2 } from "@/public/images/main";
+import { logo, yanto, heart, choco1, choco2, choco3, cloud1, cloud2 } from "@/public/images/main";
+import Loading from "./CustomLoading";
 export default function Main({ onStart }) {
   return (
-    <main className="xs:border xs:border-disabled-200 bg-white max-w-[400px] max-h-[800px] absolute w-full h-[100dvh] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden">
+    <main className=" bg-white max-w-[400px] max-h-[800px] absolute w-full h-[100dvh] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden">
       <div className="absolute w-full h-full">
         <div className="bg-main w-full h-full"></div>
 

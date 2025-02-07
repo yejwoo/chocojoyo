@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { copyToClipboard } from "@/utils/copyToClipboard";
 import { DOMAIN } from "@/constants";
 import html2canvas from "html2canvas";
+import CustomLoading from "./CustomLoading";
 
 export default function ShareLayout() {
   const searchParams = useSearchParams();
@@ -106,11 +107,11 @@ export default function ShareLayout() {
     document.body.removeChild(chocoContainer);
   };
 
-  if (!cardData) return <p>초콜릿 데이터를 불러오는 중...</p>;
+  if (!cardData) return <CustomLoading/>;
 
   return (
     <main
-      className={`xs:border xs:border-disabled-200 max-w-[400px] max-h-[800px] fixed w-full h-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ${
+      className={` max-w-[400px] max-h-[800px] fixed w-full h-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ${
         bgPatterns[cardData.theme] || "bg-pink-100"
       } flex flex-col items-center justify-between relative`}
     >

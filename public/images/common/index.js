@@ -22,4 +22,5 @@ export { default as yantoHello } from "./yanto-hello.gif";
 export { default as yantoSwing } from "./yanto-swing.gif";
 export { default as yantoThumb } from "./yanto-thumb.gif";
 export { default as heart } from "./heart.svg"
+export { default as loading } from "./loading.gif"
 

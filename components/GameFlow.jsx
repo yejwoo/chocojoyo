@@ -1,5 +1,5 @@
 "use client";
-import StageLayout from "./StageLayout";
+import StageLayout from "./layout/StageLayout";
 import React, { useEffect, useState } from "react";
 import Button from "./Button";
 import Modal from "./Modal";
@@ -15,9 +15,10 @@ import { createActionHandlers } from "@/app/handlers/createActionHandlers";
 import { createStageHandlers } from "@/app/handlers/createStageHandlers";
 import { useStageState } from "@/app/hooks/useStateState";
 import { handleReset } from "@/app/handlers/stageHandlers/stage5Handlers";
-import CardLayout from "./CardLayout";
+import CardLayout from "./layout/CardLayout";
 import { handleComplete } from "@/app/handlers/generalHandlers";
 import { useRouter } from "next/navigation";
+import CustomLoading from "./CustomLoading";
 
 export default function GameFlow({ currentStep, setCurrentStep }) {
   const { state, setState, intervalRef } = useStageState();
@@ -109,6 +110,17 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
   //     runOnboarding();
   //   }
   // }, [stage]);
+
+  // 카드 작성 페이지로 넘어갈 때 로딩 추가
+  useEffect(() => {
+    if (currentStep === "card") {
+      setUIState((prev) => ({ ...prev, isCardLoading: true }));
+      const timer = setTimeout(() => {
+        setUIState((prev) => ({ ...prev, isCardLoading: false }));
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [currentStep]);
 
   useEffect(() => {
     if (stage.main === 5 && uiState.isShowItems) {
@@ -247,6 +259,7 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
 
   return (
     <>
+      {uiState.isCardLoading && <CustomLoading />}
       {currentStep === "stage" && (
         <StageLayout backgroundSrc={bg} characterSrc={currentData?.imgSrc}>
           {/* 온보딩 오버레이 */}
@@ -278,7 +291,10 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
 
           {/* 스테이지별 메인 아이템 */}
           {uiState.isShowItems && (
-            <div id="main-items" className="w-full h-[290px] max-h-sm:h-[200px] absolute bottom-14 max-h-sm:bottom-20 flex justify-center items-center animate-bounce-up-once">
+            <div
+              id="main-items"
+              className="w-full h-[290px] max-h-sm:h-[200px] absolute bottom-14 max-h-sm:bottom-20 flex justify-center items-center animate-bounce-up-once"
+            >
               <StageItems state={state} setState={setState} handleEvent={stageHandlers[stage.main]} />
             </div>
           )}
@@ -322,9 +338,8 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
           )}
         </StageLayout>
       )}
-
       {/* ✅ 카드 작성 단계 */}
-      {currentStep === "card" && (
+      {currentStep === "card" && !uiState.isCardLoading && (
         <CardLayout
           chocolateInfo={chocolateInfo}
           onComplete={(formData) => {
