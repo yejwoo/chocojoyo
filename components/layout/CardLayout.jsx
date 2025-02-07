@@ -1,27 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import box from "@/public/images/stage5/box.svg";
 import { Shapes } from "@/public/icons/shapes";
-import { bgPatterns } from "@/public/images/card";
 import Button from "../Button";
 import Image from "next/image";
 import { bottomNaviConfig } from "@/data/Stage";
+import { bg, bgBrown } from "@/public/images/common";
 
 export default function CardLayout({ chocolateInfo, onComplete }) {
-  const [formData, setFormData] = useState({ message: "", name: "", theme: "heart" });
+  const [formData, setFormData] = useState({ message: "", name: ""});
   const [isCompleted, setIsCompleted] = useState(false);
   const chocolateInfoRef = useRef(chocolateInfo);
   const MAX_LENTH = 60;
   const chocolateColors = bottomNaviConfig[4][0].data;
-
-  // 아이콘별 배경색 설정
-  const backgroundColors = {
-    heart: "bg-cards-heart",
-    clover: "bg-cards-clover",
-    cake: "bg-cards-cake",
-    flower: "bg-cards-flower",
-    smile: "bg-cards-smile",
-    fire: "bg-cards-fire",
-  };
 
   useEffect(() => {
     chocolateInfoRef.current = chocolateInfo;
@@ -45,31 +35,19 @@ export default function CardLayout({ chocolateInfo, onComplete }) {
     }
   };
 
-  const handleThemeChange = (icon) => {
-    setFormData((prev) => ({ ...prev, theme: icon }));
-  };
+  // const handleThemeChange = (icon) => {
+  //   setFormData((prev) => ({ ...prev, theme: icon }));
+  // };
 
   return (
-    <main
-      className={` max-w-[400px] max-h-[800px] fixed w-full h-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ${
-        backgroundColors[formData.theme] || "bg-pink-100"
-      } flex flex-col items-center justify-between relative`}
-    >
-      {/* 💌 배경 패턴 */}
-      <div className="absolute inset-0 grid grid-cols-4 grid-rows-6 gap-4 pointer-events-none z-0">
-        {formData.theme &&
-          [...Array(24)].map((_, index) => (
-            <div key={index} className="flex justify-center items-center">
-              <Image src={bgPatterns[formData.theme]} alt="패턴 아이콘" width={40} height={40} className="opacity-90" />
-            </div>
-          ))}
-      </div>
+    <main className="max-w-[400px] max-h-[800px] fixed w-full h-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-between">
+      <Image src={bgBrown} alt="초콜릿 틀" className="absolute bottom-0" draggable={false} />
 
       <div className="absolute top-1/2 -translate-y-1/2 flex flex-col gap-3">
         {/* ✉️ 편지 & 초콜릿 박스 */}
-        <div className="rounded-lg shadow-lg w-[320px]">
-          <div className="bg-white w-full p-6 rounded-tl-lg rounded-tr-lg flex flex-col gap-3 justify-center items-center">
-            {/* 🍫 초콜릿 틀 */}
+        <div className="shadow-lg bg-white rounded-lg">
+          {/* 🍫 초콜릿 틀 */}
+          <div className="w-full py-5">
             <div className="relative z-10 w-[280px] h-[182px] flex justify-center items-center mx-auto">
               <Image src={box} alt="초콜릿 틀" width={280} height={280} className="absolute bottom-0" draggable={false} />
 
@@ -113,34 +91,35 @@ export default function CardLayout({ chocolateInfo, onComplete }) {
                 })}
               </div>
             </div>
-
-            {/* ✉️ 편지 입력 */}
+          </div>
+          {/* ✉️ 편지 입력 */}
+          <div className="w-full flex flex-col justify-center items-center pb-4">
             <div className="relative z-10 w-full">
               <textarea
                 name="message"
                 maxLength={MAX_LENTH}
                 value={formData.message}
                 onChange={(e) => handleInputChange(e, "message")}
-                className="w-[280px] bg-white mx-auto h-[108px] text-left text-2xl leading-9 flex"
+                className="w-[280px] mx-auto h-[108px] text-left text-2xl leading-9 flex"
                 placeholder="편지는 세 줄까지 쓸 수 있어요."
               />
             </div>
 
             {/* 보내는이 */}
-            <div className="relative top-2 border-b-2 border-gray-warm-100">
+            <div className="mt-2 relative text-center border-b border-gray-warm-100">
               <span className="text-lg">from. </span>
-              <input onChange={(e) => handleInputChange(e, "name")} className="text-left" type="text" placeholder="이름은 열 글자까지!" maxLength={10} />
+              <input onChange={(e) => handleInputChange(e, "name")} className="text-left" type="text" placeholder="이름은 최대 열 글자" maxLength={10} />
             </div>
           </div>
 
           {/* 🎨 아이콘 선택 네비 */}
-          <div className="relative z-10 w-full flex justify-center gap-3 px-2 py-3 bg-popup-100 rounded-bl-lg rounded-br-lg">
-            {Object.keys(bgPatterns).map((icon) => (
+          {/* <div className="relative z-10 w-full flex justify-center gap-3 px-2 py-3 bg-white border-t-default rounded-bl-lg rounded-br-lg">
+            {Object.keys(cardIcons).map((icon) => (
               <button key={icon} className={`p-1 rounded-sm ${formData.theme === icon ? "ring-4 ring-brand-200" : ""}`} onClick={() => handleThemeChange(icon)}>
-                <Image src={bgPatterns[icon]} alt="아이콘" width={30} height={30} />
+                <Image src={cardIcons[icon]} alt="아이콘" width={30} height={30} />
               </button>
             ))}
-          </div>
+          </div> */}
         </div>
 
         {/* ✅ 완료 버튼 */}

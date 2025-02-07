@@ -107,23 +107,12 @@ export default function ShareLayout() {
     document.body.removeChild(chocoContainer);
   };
 
-  if (!cardData) return <CustomLoading/>;
+  if (!cardData) return <CustomLoading />;
 
   return (
-    <main
-      className={` max-w-[400px] max-h-[800px] fixed w-full h-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ${
-        bgPatterns[cardData.theme] || "bg-pink-100"
-      } flex flex-col items-center justify-between relative`}
-    >
-      {/* 💌 배경 패턴 */}
-      <div className="absolute inset-0 grid grid-cols-4 grid-rows-6 gap-4 pointer-events-none z-0">
-        {cardData.theme &&
-          [...Array(24)].map((_, index) => (
-            <div key={index} className="flex justify-center items-center">
-              <Image src={bgPatterns[cardData.theme]} alt="패턴 아이콘" width={40} height={40} className="opacity-90" />
-            </div>
-          ))}
-      </div>
+    <main className="max-w-[400px] max-h-[800px] fixed w-full h-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-between">
+      {/* @TODO: 카드 레이아웃으로 변경 */}
+      {/* 근데 이제 하단 네비를 없앤. */}
 
       {/* ✉️ 편지 & 초콜릿 박스 */}
       <div className="absolute top-1/2 -translate-y-1/2 flex flex-col w-[320px] max-h-sm:top-4 max-h-sm:translate-y-0">
@@ -192,6 +181,7 @@ export default function ShareLayout() {
           <Button size="half" color="main" message={"사진 저장"} onClick={() => handleOpenModal("download")} />
         </div>
       </div>
+
       {/* 모달 */}
       {isModalOpen && (
         <Modal title={modalType === "share" ? "공유하기" : "사진 저장"} onCancel={handleCloseModal} type={modalType}>

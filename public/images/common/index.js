@@ -1,4 +1,5 @@
 export { default as bg } from "./bg.svg";
+export { default as bgBrown } from "./bg-brown.svg";
 export { default as bgCounterTop } from "./bg-countertop.svg";
 export { default as check } from "./check.svg";
 export { default as naviStage1Off } from "./navi-stage1-off.svg";

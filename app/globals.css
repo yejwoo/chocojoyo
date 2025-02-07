@@ -15,7 +15,7 @@ body {
   font-size: 16px;
   color: #3d2505;
   /* background: #FFF8E7; */
-  background: linear-gradient(to bottom, #FFE4E1, #FFC1CC);
+  background: linear-gradient(to bottom, #ffe4e1, #ffc1cc);
   -webkit-touch-callout: none;
   user-select: none;
   -webkit-user-select: none;
@@ -51,6 +51,11 @@ textarea {
   text-overflow: ellipsis;
   overflow: hidden;
   word-break: break-all;
+  background: none;
+}
+
+input {
+  background-color: transparent;
 }
 
 input:focus,
@@ -67,7 +72,7 @@ select:focus {
 
 input::selection,
 textarea::selection {
-  background: transparent;
+  /* background: transparent; */
 }
 
 input:-webkit-autofill {

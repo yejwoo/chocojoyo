@@ -164,14 +164,7 @@ export default {
           100: "#894E00",
           200: "#4C2F08",
         },
-        cards: {
-          heart: "#FFC1C1",
-          clover: "#CCE9AA",
-          flower: "#FFB0D2",
-          smile: "#FFEE9C",
-          cake: "#FFC997",
-          fire: "#8CE8FD",
-        },
+       
       },
     },
   },
