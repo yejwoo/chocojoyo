@@ -14,6 +14,7 @@ import { copyToClipboard } from "@/utils/copyToClipboard";
 import { DOMAIN } from "@/constants";
 import html2canvas from "html2canvas";
 import CustomLoading from "./CustomLoading";
+import CardLayout from "./layout/CardLayout";
 
 export default function ShareLayout() {
   const searchParams = useSearchParams();
@@ -23,9 +24,9 @@ export default function ShareLayout() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("");
   const router = useRouter();
-  const cardRef = useRef(null);
-  const boxRef = useRef(null);
-  const chocoRefs = useRef([]);
+  const cardLayoutRef = useRef(null);
+  const btnSytle =
+    "transform transition-all duration-150 ease-in-out hover:brightness-90 focus:brightness-90 focus:scale-95 active:brightness-75 active:scale-95";
 
   useEffect(() => {
     if (id) {
@@ -54,7 +55,12 @@ export default function ShareLayout() {
   };
 
   const downloadImage = async (element, filename) => {
-    const canvas = await html2canvas(element, { backgroundColor: null, scale: 2 });
+    const canvas = await html2canvas(element, {
+      backgroundColor: null,
+      scale: 2,
+      useCORS: true,
+      ignoreElements: (el) => el.classList.contains("no-capture"), // 이 클래스는 캡처에서 제외
+    });
     const link = document.createElement("a");
     link.href = canvas.toDataURL("image/png");
     link.download = filename;
@@ -62,40 +68,48 @@ export default function ShareLayout() {
   };
 
   const handleDownloadCard = () => {
-    if (cardRef.current) {
-      downloadImage(cardRef.current, "card_with_choco.png");
-    }
+    const cardElement = cardLayoutRef.current?.getCardElement();
+    if (cardElement) downloadImage(cardElement, "card_with_choco.png");
   };
 
   const handleDownloadBox = () => {
-    if (boxRef.current) {
-      downloadImage(boxRef.current, "choco_box.png");
-    }
+    const boxElement = cardLayoutRef.current?.getBoxElement();
+    if (boxElement) downloadImage(boxElement, "choco_box.png");
   };
 
   const handleDownloadIndividualChoco = async () => {
-    const chocoContainer = document.createElement("div");
-    // 화면에 보이지 않도록 고정
-    chocoContainer.style.position = "fixed";
-    chocoContainer.style.top = "100vh"; // 화면 바깥 아래쪽으로 이동
-    chocoContainer.style.left = "100vw"; // 화면 바깥 오른쪽으로 이동
+    const chocoElements = cardLayoutRef.current?.getChocoElements();
+    if (!chocoElements) return;
 
+    // 배경 숨기기
+    chocoElements.forEach((ref) => {
+      if (ref) {
+        const bgElement = ref.querySelector(".choco-bg");
+        if (bgElement) {
+          bgElement.style.display = "none";
+        }
+      }
+    });
+
+    // 저장을 위한 컨테이너 생성
+    const chocoContainer = document.createElement("div");
+    chocoContainer.style.position = "fixed";
+    chocoContainer.style.top = "100vh";
+    chocoContainer.style.left = "100vw";
     chocoContainer.style.display = "flex";
-    chocoContainer.style.flexWrap = "wrap"; // 줄바꿈 활성화
-    chocoContainer.style.justifyContent = "center"; // 가운데 정렬
+    chocoContainer.style.flexWrap = "wrap";
+    chocoContainer.style.justifyContent = "center";
     chocoContainer.style.alignItems = "center";
     chocoContainer.style.gap = "4px";
-
-    chocoContainer.style.width = "640px"; // 캔버스 크기 설정
+    chocoContainer.style.width = "640px";
     chocoContainer.style.height = "440px";
     chocoContainer.style.backgroundColor = "transparent";
     chocoContainer.style.padding = "20px";
 
-    chocoRefs.current.forEach((ref) => {
+    // 초콜릿 요소 복제 및 추가
+    chocoElements.forEach((ref) => {
       if (ref) {
         const clone = ref.cloneNode(true);
-        clone.querySelector(".bg-gray-warm-300").style.display = "none";
-
         clone.style.width = "160px";
         clone.style.height = "152px";
         chocoContainer.appendChild(clone);
@@ -105,82 +119,23 @@ export default function ShareLayout() {
     document.body.appendChild(chocoContainer);
     await downloadImage(chocoContainer, "individual_chocos.png");
     document.body.removeChild(chocoContainer);
+
+    // 저장 후 배경 다시 표시
+    chocoElements.forEach((ref) => {
+      if (ref) {
+        const bgElement = ref.querySelector(".choco-bg");
+        if (bgElement) {
+          bgElement.style.display = "block";
+        }
+      }
+    });
   };
 
   if (!cardData) return <CustomLoading />;
 
   return (
     <main className="max-w-[400px] max-h-[800px] fixed w-full h-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-between">
-      {/* @TODO: 카드 레이아웃으로 변경 */}
-      {/* 근데 이제 하단 네비를 없앤. */}
-
-      {/* ✉️ 편지 & 초콜릿 박스 */}
-      <div className="absolute top-1/2 -translate-y-1/2 flex flex-col w-[320px] max-h-sm:top-4 max-h-sm:translate-y-0">
-        <div ref={cardRef} className="mb-4 max-h-sm:mb-3 rounded-lg shadow-lg">
-          <div className="bg-white w-full p-6 rounded-lg flex flex-col gap-3 justify-center items-center">
-            {/* 🍫 초콜릿 틀 */}
-            <div ref={boxRef} className="relative z-10 w-[280px] h-[182px] flex justify-center items-center mx-auto">
-              <Image src={box} alt="초콜릿 틀" width={280} height={280} className="absolute bottom-0" draggable={false} />
-
-              {/* 초콜릿들 */}
-              <div className="w-full flex justify-center items-center flex-wrap gap-x-2 gap-y-2">
-                {cardData.shapes.map((shape, index) => {
-                  const ShapeComponent = Shapes[shape.charAt(0).toUpperCase() + shape.slice(1)];
-                  const drawing = cardData.drawings[index];
-                  const topping = cardData.toppings[index];
-
-                  return ShapeComponent ? (
-                    <div key={index} ref={(el) => (chocoRefs.current[index] = el)} className="relative w-[80px] h-[76px] flex items-center justify-center">
-                      <div className="absolute w-full h-full bg-gray-warm-300 rounded-xl"></div>
-                      {/* 초콜릿 기본 형태 */}
-                      <div className="relative w-full h-full flex justify-center items-center">
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                          <ShapeComponent width={64} height={56} />
-                        </div>
-                        {/* 🖌️ 드로잉 (사용자가 그린 그림) */}
-                        {drawing && (
-                          <canvas className="absolute z-10" width={64} height={56} style={{ background: `url(${drawing}) no-repeat center/cover` }} />
-                        )}
-
-                        {/* 🍓 토핑 */}
-                        {topping && (
-                          <div
-                            className="absolute z-20"
-                            style={{
-                              width: "32px",
-                              height: "32px",
-                              background: `url(/images/stage5/toppings/topping-${topping}.svg) no-repeat center/cover`,
-                              top: "50%",
-                              left: "50%",
-                              transform: "translate(-50%, -50%)",
-                            }}
-                          />
-                        )}
-                      </div>
-                    </div>
-                  ) : null;
-                })}
-              </div>
-            </div>
-
-            {/* ✉️ 편지 내용 */}
-            <div className="relative z-10 w-full">
-              <p className="w-[280px] bg-white mx-auto h-[108px] text-left text-2xl leading-9 flex whitespace-pre-line">{cardData.message}</p>
-            </div>
-
-            {/* 보내는이 */}
-            <div>
-              <span className="text-lg">from. </span>
-              <span className="text-left">{cardData.name}</span>
-            </div>
-          </div>
-        </div>
-        {/* 공유 버튼 */}
-        <div className="flex justify-center items-center gap-2">
-          <Button size="half" color="main" message={"공유하기"} onClick={() => handleOpenModal("share")} />
-          <Button size="half" color="main" message={"사진 저장"} onClick={() => handleOpenModal("download")} />
-        </div>
-      </div>
+      <CardLayout mode="share" id={searchParams.get("id")} onOpen={handleOpenModal} ref={cardLayoutRef} />
 
       {/* 모달 */}
       {isModalOpen && (
@@ -189,7 +144,7 @@ export default function ShareLayout() {
             <div className="flex gap-8 w-full justify-center">
               <KakaoShareButton />
               <button
-                className="text-sm flex flex-col gap-2 items-center"
+                className={`text-sm flex flex-col gap-2 items-center ${btnSytle}`}
                 type="button"
                 onClick={() => {
                   copyToClipboard(url);
@@ -204,20 +159,20 @@ export default function ShareLayout() {
           )}
           {modalType === "download" && (
             <div className="flex gap-2 w-full justify-center">
-              <button className="p-2 rounded-md text-sm flex flex-col gap-2 items-center" type="button" onClick={handleDownloadCard}>
-                <div className="w-12 h-12 bg-gray-warm-50 rounded-full flex justify-center items-center">
+              <button className="p-2 rounded-md text-sm flex flex-col gap-2 items-center " type="button" onClick={handleDownloadCard}>
+                <div className={`w-12 h-12 bg-gray-warm-50 rounded-full flex justify-center items-center ${btnSytle}`}>
                   <Image className="" src={chocoWithCard} alt="편지 저장" />
                 </div>
                 <span>초콜릿 + 편지</span>
               </button>
-              <button className="p-2 rounded-md text-sm flex flex-col gap-2 items-center" type="button" onClick={handleDownloadBox}>
-                <div className="w-12 h-12 bg-gray-warm-50 rounded-full flex justify-center items-center">
+              <button className="p-2 rounded-md text-sm flex flex-col gap-2 items-center " type="button" onClick={handleDownloadBox}>
+                <div className={`w-12 h-12 bg-gray-warm-50 rounded-full flex justify-center items-center ${btnSytle}`}>
                   <Image className="" src={chocoBox} alt="초콜릿 저장" />
                 </div>
                 <span>초콜릿 박스</span>
               </button>
-              <button className="p-2 rounded-md text-sm flex flex-col gap-2 items-center" type="button" onClick={handleDownloadIndividualChoco}>
-                <div className="w-12 h-12 bg-gray-warm-50 rounded-full flex justify-center items-center">
+              <button className="p-2 rounded-md text-sm flex flex-col gap-2 items-center " type="button" onClick={handleDownloadIndividualChoco}>
+                <div className={`w-12 h-12 bg-gray-warm-50 rounded-full flex justify-center items-center ${btnSytle}`}>
                   <Image className="" src={chocoPng} alt="초콜릿 저장" />
                 </div>
                 <span>개별 초콜릿</span>
@@ -226,6 +181,7 @@ export default function ShareLayout() {
           )}
         </Modal>
       )}
+
       <div className="absolute right-6 bottom-6 max-h-sm:bottom-2">
         <Button type="replay" shape="circle" color="brand" onClick={() => router.push("/")} />
       </div>

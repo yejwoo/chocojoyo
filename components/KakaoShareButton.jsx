@@ -20,12 +20,11 @@ const KakaoShareButton = () => {
     // console.log(Kakao);
 
     Kakao.Share.sendDefault({
-      objectType: 'feed',
+      objectType: "feed",
       content: {
-        title: '초코조요!',
-        description: '아메리카노, 빵, 케익',
-        imageUrl:
-          'https://mud-kage.kakao.com/dn/NTmhS/btqfEUdFAUf/FjKzkZsnoeE4o19klTOVI1/openlink_640x640s.jpg',
+        title: "초코조요!",
+        description: "아메리카노, 빵, 케익",
+        imageUrl: "https://mud-kage.kakao.com/dn/NTmhS/btqfEUdFAUf/FjKzkZsnoeE4o19klTOVI1/openlink_640x640s.jpg",
         link: {
           mobileWebUrl: shareUrl,
           webUrl: shareUrl,
@@ -35,8 +34,11 @@ const KakaoShareButton = () => {
   };
 
   return (
-    <button className="rounded-md flex flex-col items-center text-sm gap-2" type="button" onClick={handleShare}>
-      <Image src={kakaoLogo} alt="카카오톡 공유 이미지" width={48} height={48}/>
+    <button
+      className="rounded-md flex flex-col items-center text-sm gap-2 transform transition-all duration-150 ease-in-out hover:brightness-90 focus:brightness-90 focus:scale-95 active:brightness-75 active:scale-95"
+      onClick={handleShare}
+    >
+      <Image src={kakaoLogo} alt="카카오톡 공유 이미지" width={48} height={48} />
       <span>카카오톡</span>
     </button>
   );

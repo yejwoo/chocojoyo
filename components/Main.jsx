@@ -21,7 +21,7 @@ export default function Main({ onStart }) {
             <Image src={logo} className="absolute w-[324px] max-h-sm:w-[300px]" alt="초코조요" />
           </div>
           {/* 슬로건 */}
-          <p className="w-full text-center text-xl max-h-sm:hidden">내가 만든 초콜릿으로 달콤한 마음을 전해줘요</p>
+          <p className="w-full text-center text-xl max-h-sm:hidden">나만의 초콜릿으로 달콤한 마음을 전해줘요</p>
         </div>
         {/* 오브젝트들 */}
         <div className="absolute w-full h-56 bottom-[25%] max-h-sm:bottom-[20%]">
