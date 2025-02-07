@@ -130,7 +130,7 @@ export const BottomNavi = ({ stage, selectionState, setSelectionState, setChocol
               ${
                 selectionState.currentTabIndex === index
                   ? "bg-popup-100 border-4 border-default"
-                  : "bg-gray-warm-50 text-gray-warm-200 border-b-4 border-b-default"
+                  : "bg-gray-warm-50 text-gray-warm-200 border-b-4 border-t-4 border-b-default border-t-gray-warm-50"
               }
            `}
                   >
@@ -154,7 +154,7 @@ export const BottomNavi = ({ stage, selectionState, setSelectionState, setChocol
       )}
 
       {/* ✅ 네비 데이터 (색깔 선택 부분) */}
-      <div className="absolute  bg-popup-100 left-0 right-0 h-16 bottom-0 flex gap-7 justify-center items-center border-t-4 border-default">{naviItems}</div>
+      <div className="absolute bg-popup-100 left-0 right-0 h-16 bottom-0 flex gap-7 justify-center items-center border-t-4 border-default">{naviItems}</div>
     </div>
   );
 };

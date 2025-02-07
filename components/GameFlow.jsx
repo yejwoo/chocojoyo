@@ -265,7 +265,13 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
                   isZoomMode: false, // 리셋할 때도 줌 해제
                 }));
               }}
-            />
+            >
+              <p className="text-center text-2xl mt-6">
+                그린 그림과 토핑이 사라져요.
+                <br />
+                처음부터 다시 꾸밀까요?
+              </p>
+            </Modal>
           )}
 
           {/* 말풍선 */}
