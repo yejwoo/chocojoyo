@@ -5,7 +5,6 @@ import Button from "./Button";
 import Modal from "./Modal";
 import Navi from "./Navi";
 import { delay } from "@/utils/delay";
-import { bg } from "@/public/images/common";
 import { stageData } from "@/data/Stage";
 import TalkBubble from "./TalkBubble";
 import { BottomNavi } from "./BottomNavi";
@@ -19,6 +18,8 @@ import CardLayout from "./layout/CardLayout";
 import { handleComplete } from "@/app/handlers/generalHandlers";
 import { useRouter } from "next/navigation";
 import CustomLoading from "./CustomLoading";
+import Image from "next/image";
+import { bgCounterTop } from "@/public/images/common";
 
 export default function GameFlow({ currentStep, setCurrentStep }) {
   const { state, setState, intervalRef } = useStageState();
@@ -261,7 +262,7 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
     <>
       {uiState.isCardLoading && <CustomLoading />}
       {currentStep === "stage" && (
-        <StageLayout backgroundSrc={bg} characterSrc={currentData?.imgSrc}>
+        <StageLayout>
           {/* 온보딩 오버레이 */}
           {uiState.isOnboarding && <div className="absolute inset-0 bg-black bg-opacity-60 z-40"></div>}
 
@@ -286,33 +287,45 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
             </Modal>
           )}
 
-          {/* 말풍선 */}
-          <TalkBubble uiState={uiState} dialogue={currentData?.dialogue || "안녕하세요!"} />
+          {/* 얀토 & 말풍선 */}
+          <div className="w-full h-[228px] bottom-[286px] max-h-sm:top-[20%] absolute">
+            
+            {/* @@@@@말풍선 & 버튼 @@@@@ */}
+            <div className="absolute w-[214px] h-[164px] right-0 flex flex-col justify-end items-end">
+              {/* 말풍선 */}
+              <TalkBubble uiState={uiState} dialogue={currentData?.dialogue || "안녕하세요!"} />
+
+              {/* 버튼 */}
+              <div
+                className={`absolute right-4 z-10 transition duration-300 ease-in-out ${
+                  uiState.isCompleteEvent ? "opacity-100 visible" : "opacity-0 invisible"
+                }`}
+              >
+                <Button
+                  // disabled={!uiState.isCompleteEvent}
+                  onClick={handleNextMainStage}
+                  shape="circle"
+                  type="arrow"
+                  color="brand"
+                />
+              </div>
+            </div>
+
+            {/* 얀토 */}
+            <div className="absolute w-[40%] max-h-sm:w-[35%] cursor-pointer ">
+              <Image className="" src={currentData?.imgSrc} alt="얀토" draggable={false} />
+            </div>
+          </div>
+
+          {/* 카운터 */}
+          <Image className="absolute bottom-0 max-h-sm:bottom-[-32px] left-1/2 -translate-x-1/2" src={bgCounterTop} alt="카운터" draggable={false} />
 
           {/* 스테이지별 메인 아이템 */}
           {uiState.isShowItems && (
-            <div
-              id="main-items"
-              className="w-full h-[290px] max-h-sm:h-[200px] absolute bottom-14 max-h-sm:bottom-20 flex justify-center items-center animate-bounce-up-once"
-            >
+            <div id="main-items" className="w-full h-[290px] max-h-sm:h-[200px] absolute bottom-14 flex justify-center items-center animate-bounce-up-once">
               <StageItems state={state} setState={setState} handleEvent={stageHandlers[stage.main]} />
             </div>
           )}
-
-          {/* 버튼 */}
-          <div
-            className={`absolute right-5 max-h-sm:right-4 bottom-[324px]  transition duration-300 ease-in-out ${
-              uiState.isCompleteEvent ? "opacity-100 visible" : "opacity-0 invisible"
-            }`}
-          >
-            <Button
-              // disabled={!uiState.isCompleteEvent}
-              onClick={handleNextMainStage}
-              shape="circle"
-              type="arrow"
-              color="brand"
-            />
-          </div>
 
           {/* 상단 네비게이션 */}
           <>

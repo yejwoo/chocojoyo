@@ -110,7 +110,7 @@ export const BottomNavi = ({ stage, selectionState, setSelectionState, setChocol
           )}
 
           {/* ✅ 탭 + 버튼 컨테이너 */}
-          <div className="absolute left-[-8px] bottom-[60px] flex w-full z-10">
+          <div className="absolute left-[-8px] bottom-[60px] max-h-sm:bottom-[52px] flex w-full z-10">
             {/* ✅ 탭을 좌측 정렬 */}
             <div className="flex" id="tabs">
               {naviData.map((item, index) => (
@@ -154,7 +154,7 @@ export const BottomNavi = ({ stage, selectionState, setSelectionState, setChocol
       )}
 
       {/* ✅ 네비 데이터 (색깔 선택 부분) */}
-      <div className="absolute bg-popup-100 left-0 right-0 h-16 bottom-0 flex gap-7 justify-center items-center border-t-4 border-default">{naviItems}</div>
+      <div className="absolute bg-popup-100 left-0 right-0 h-16 max-h-sm:h-14 bottom-0 flex gap-7 justify-center items-center border-t-4 border-default">{naviItems}</div>
     </div>
   );
 };

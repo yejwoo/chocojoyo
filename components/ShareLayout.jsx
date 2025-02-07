@@ -127,7 +127,7 @@ export default function ShareLayout() {
 
       {/* ✉️ 편지 & 초콜릿 박스 */}
       <div className="absolute top-1/2 -translate-y-1/2 flex flex-col w-[320px] max-h-sm:top-4 max-h-sm:translate-y-0">
-        <div ref={cardRef} className="mb-4 rounded-lg shadow-lg">
+        <div ref={cardRef} className="mb-4 max-h-sm:mb-3 rounded-lg shadow-lg">
           <div className="bg-white w-full p-6 rounded-lg flex flex-col gap-3 justify-center items-center">
             {/* 🍫 초콜릿 틀 */}
             <div ref={boxRef} className="relative z-10 w-[280px] h-[182px] flex justify-center items-center mx-auto">
