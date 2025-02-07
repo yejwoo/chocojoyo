@@ -4,7 +4,7 @@ export default {
   theme: {
     screens: {
       xs: "400px",
-      "max-h-sm": { raw: "(max-height: 680px)" },
+      "max-h-sm": { raw: "(max-height: 640px)" },
     },
     extend: {
       keyframes: {

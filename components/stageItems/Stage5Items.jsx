@@ -11,7 +11,7 @@ export default function Stage5Items({ chocolateInfo, selectionState, uiState, se
 
   return (
     <>
-      <div className="absolute bottom-[82px] w-[280px] h-[180px] flex justify-center items-center">
+      <div className="absolute bottom-[82px] max-h-sm:bottom-10 w-[280px] h-[180px] flex justify-center items-center">
         <Image
           src={box}
           alt="초콜릿 틀"

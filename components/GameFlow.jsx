@@ -278,7 +278,7 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
 
           {/* 스테이지별 메인 아이템 */}
           {uiState.isShowItems && (
-            <div id="main-items" className="w-full h-[290px] absolute bottom-14 flex justify-center items-center animate-bounce-up-once">
+            <div id="main-items" className="w-full h-[290px] max-h-sm:h-[200px] absolute bottom-14 max-h-sm:bottom-20 flex justify-center items-center animate-bounce-up-once">
               <StageItems state={state} setState={setState} handleEvent={stageHandlers[stage.main]} />
             </div>
           )}
