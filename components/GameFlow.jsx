@@ -111,10 +111,10 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
   // }, [stage]);
 
   useEffect(() => {
-    if (stage.main === 5 && stage.sub === "init") {
+    if (stage.main === 5 && uiState.isTalkBubbleShow) {
       setUIState((prev) => ({ ...prev, isCompleteEvent: true }));
     }
-  }, [stage]);
+  }, [stage.main, uiState.isTalkBubbleShow]);
 
   useEffect(() => {
     if (currentData?.items?.length > 0) {

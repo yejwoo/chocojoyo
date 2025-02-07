@@ -34,7 +34,7 @@ export default function Button({ shape = "rectangle", message, color = "main", t
     replay: <Image src={replay} width={32} height={32} alt="다시 시작" />,
   }[type] || <Image src={arrow} width={32} height={32} alt="다음" />;
 
-  const disabledStyle = "disabled:bg-gray-cool-50 disabled:cursor-not-allowed text-gray-cool-100";
+  const disabledStyle = "disabled:bg-gray-cool-50 disabled:cursor-not-allowed disabled:pointer-events-none text-gray-cool-200"; 
 
   return (
     <button
@@ -45,8 +45,8 @@ export default function Button({ shape = "rectangle", message, color = "main", t
         ${buttonColorClass} 
         ${buttonShape} 
         ${shape === "rectangle" ? buttonSizeClass : ""} 
-        text-xl border-4 border-default 
-        ${disabled ? disabledStyle : "text-white "}
+        text-xl border-4 border-default
+        ${disabled ? disabledStyle : "text-white"}
         transition-all duration-150 ease-in-out
         transform
         hover:brightness-90 hover:scale-95
@@ -58,7 +58,7 @@ export default function Button({ shape = "rectangle", message, color = "main", t
         <div className="h-14 flex-shrink-0 flex justify-center items-center">{buttonIcon}</div>
       ) : (
         <>
-          <p className="h-12 text-shadow flex justify-center items-center">{message}</p>
+          <p className={`h-12 ${disabled ? "" : "text-shadow"} flex justify-center items-center`}>{message}</p>
           <div
             id="btn-shadow"
             className={`

@@ -117,6 +117,7 @@ export default {
           cool: {
             50: "#BDBDBD",
             100: "#9E9C9D",
+            200: "#898989",
           },
         },
         popup: {

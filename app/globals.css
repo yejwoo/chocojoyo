@@ -52,8 +52,27 @@ textarea {
   word-break: break-all;
 }
 
-input:focus {
-  outline: none;
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;             
+  box-shadow: none;          
+  border: none;              
+  background: transparent;   
+  -webkit-box-shadow: none;  
+  -moz-box-shadow: none;     
+  -ms-box-shadow: none;      
+}
+
+input::selection,
+textarea::selection {
+  background: transparent;
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+  box-shadow: 0 0 0px 1000px transparent inset !important;
+  -webkit-text-fill-color: inherit !important;  /* 글자 색상 유지 */
 }
 
 input::placeholder,
