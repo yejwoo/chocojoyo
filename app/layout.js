@@ -22,9 +22,11 @@ export const viewport = {
   userScalable: false,
 };
 
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      
       <body className={myFont.className}>
         <Script src="https://developers.kakao.com/sdk/js/kakao.js" strategy="afterInteractive" />
         {children}
