@@ -18,7 +18,7 @@ export default function Button({ shape = "rectangle", message, color = "main", t
       brand: "bg-brand-100", // 진한 핑크색
       secondary: "bg-chocolates-ruby-100", // 연한 핑크색
       tertiary: "bg-gray-cool-50",
-    }[color] || "bg-brand-100";
+    }[color] || "bg-button-100";
 
   const buttonShadowClass =
     {
@@ -26,7 +26,7 @@ export default function Button({ shape = "rectangle", message, color = "main", t
       brand: "bg-brand-200",
       secondary: "bg-chocolates-ruby-200",
       tertiary: "bg-gray-cool-100",
-    }[color] || "bg-brand-200";
+    }[color] || "bg-button-200";
 
   const buttonIcon = {
     arrow: <Image src={arrow} width={32} height={32} alt="다음" />,

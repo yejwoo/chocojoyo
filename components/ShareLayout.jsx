@@ -144,7 +144,7 @@ export default function ShareLayout() {
                       <div key={index} ref={(el) => (chocoRefs.current[index] = el)} className="relative w-[80px] h-[76px] flex items-center justify-center">
                         <div className="absolute w-full h-full bg-gray-warm-300 rounded-xl"></div>
                         {/* 초콜릿 기본 형태 */}
-                        <div className="absolute w-full h-full flex justify-center items-center">
+                        <div className="relative w-full h-full flex justify-center items-center">
                           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                             <ShapeComponent width={64} height={56} />
                           </div>
@@ -156,8 +156,8 @@ export default function ShareLayout() {
                           {/* 🍓 토핑 */}
                           {topping && (
                             <Image
-                              className="absolute z-20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-                              src={`/images/stage5/toppings/topping-${topping}.svg`}
+                            className="absolute z-20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-contain"
+                            src={`/images/stage5/toppings/topping-${topping}.svg`}
                               alt="토핑"
                               width={32}
                               height={32}
@@ -185,8 +185,8 @@ export default function ShareLayout() {
           </div>
           {/* 공유 버튼 */}
           <div className="flex justify-center items-center gap-2">
-            <Button size="half" color="" message={"공유하기"} onClick={() => handleOpenModal("share")} />
-            <Button size="half" color="" message={"사진 저장"} onClick={() => handleOpenModal("download")} />
+            <Button size="half" color="main" message={"공유하기"} onClick={() => handleOpenModal("share")} />
+            <Button size="half" color="main" message={"사진 저장"} onClick={() => handleOpenModal("download")} />
           </div>
         </div>
         {/* 모달 */}
