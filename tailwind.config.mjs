@@ -4,6 +4,7 @@ export default {
   theme: {
     screens: {
       xs: "400px",
+      "max-h-sm": { raw: "(max-height: 680px)" },
     },
     extend: {
       keyframes: {
@@ -50,11 +51,11 @@ export default {
         },
         "cloud-left-right": {
           "0%, 100%": { transform: "translateX(0)" },
-          "50%": { transform: "translateX(20px)" },
+          "50%": { transform: "translateX(10px)" },
         },
         "cloud-right-left": {
           "0%, 100%": { transform: "translateX(0)" },
-          "50%": { transform: "translateX(-20px)" },
+          "50%": { transform: "translateX(-10px)" },
         },
         "choco-left-right": {
           "0%, 100%": { transform: "rotate(-5deg)" },
@@ -73,8 +74,8 @@ export default {
         heartbeat: "heartbeat 3s ease-in-out infinite",
         "heartbeat-fast": "heartbeat 1s ease-in-out infinite",
         "subtle-move": "subtle-move 5s ease-in-out infinite alternate",
-        "cloud-left-right": "cloud-left-right 6s ease-in-out infinite",
-        "cloud-right-left": "cloud-right-left 6s ease-in-out infinite",
+        "cloud-left-right": "cloud-left-right 10s ease-in-out infinite",
+        "cloud-right-left": "cloud-right-left 10s ease-in-out infinite",
         "choco-left-right": "choco-left-right 3s ease-in-out infinite",
         "choco-right-left": "choco-right-left 3s ease-in-out infinite",
       },

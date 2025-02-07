@@ -285,7 +285,7 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
 
           {/* 버튼 */}
           <div
-            className={`absolute right-5 bottom-[324px] transition duration-300 ease-in-out ${
+            className={`absolute right-5 max-h-sm:right-4 bottom-[324px]  transition duration-300 ease-in-out ${
               uiState.isCompleteEvent ? "opacity-100 visible" : "opacity-0 invisible"
             }`}
           >
@@ -302,7 +302,7 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
           <>
             <Navi uiState={uiState} currentStage={stage.main} completedStages={gameState.completedStages} />
             {stage.main >= 2 && stage.main <= 4 && (
-              <div className="absolute top-[72px] left-1/2 -translate-x-1/2 z-10">
+              <div className="absolute top-[72px] max-h-sm:top-12 left-1/2 -translate-x-1/2 z-10">
                 <ProgressBar chocolateInfo={chocolateInfo} gameState={gameState} totalItems={currentData.items.length - 1} stageId={stage.main} />
               </div>
             )}
