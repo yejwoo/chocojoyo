@@ -156,7 +156,7 @@ export default function ShareLayout() {
                           {/* 🍓 토핑 */}
                           {topping && (
                             <Image
-                              className="absolute z-20"
+                              className="absolute z-20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
                               src={`/images/stage5/toppings/topping-${topping}.svg`}
                               alt="토핑"
                               width={32}
