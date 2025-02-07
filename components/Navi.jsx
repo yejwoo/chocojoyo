@@ -10,8 +10,6 @@ import {
   naviStage4On,
   naviStage5Off,
   naviStage5On,
-  // naviStage6Off,
-  // naviStage6On,
   check,
 } from "@/public/images/common";
 
@@ -21,7 +19,6 @@ const stages = [
   { id: 3, off: naviStage3Off, on: naviStage3On },
   { id: 4, off: naviStage4Off, on: naviStage4On },
   { id: 5, off: naviStage5Off, on: naviStage5On },
-  // { id: 6, off: naviStage6Off, on: naviStage6On },
 ];
 
 export default function Navi({ currentStage, completedStages }) {
@@ -47,7 +44,13 @@ export default function Navi({ currentStage, completedStages }) {
                 />
               )}
               {/* 완료 체크 */}
-              <Image src={check} alt="완료" className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-20 ${isCompleted ? "opacity-100 visible" : "opacity-0 invisible"}`} />
+              <Image
+                src={check}
+                alt="완료"
+                className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-20 ${
+                  isCompleted ? "opacity-100 visible" : "opacity-0 invisible"
+                }`}
+              />
             </li>
           );
         })}

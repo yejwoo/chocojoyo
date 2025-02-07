@@ -103,29 +103,27 @@ export default function Stage4Items({
       </div>
 
       {/* ✅ 짤주머니 렌더링 및 위치 업데이트 */}
-      {!uiState.isPastryBagHidden && (
-        <div className="w-[280px] h-[332px] bottom-0 pastry-bag-area absolute" style={{ pointerEvents: "none" }}>
-          <PastryBag
-            fillColor={chocolateColors[selectionState.currentColor]?.fill}
-            className={`${uiState.isPastryBagHidden ? "hidden" : ""}`}
-            style={{
-              position: "absolute",
-              cursor: "grab",
-              left: `${toolState.position.x}px`,
-              top: `${toolState.position.y}px`,
-              WebkitTouchCallout: "none",
-              TouchAction: "none",
-              pointerEvents: "auto",
-              userSelect: "none",
-            }}
-            onClick={() => handleEvent("click", null, selectionState.currentChocolateIndex)}
-            onMouseDown={() => handleEvent("press", null, selectionState.currentChocolateIndex)}
-            onTouchStart={() => handleEvent("press", null, selectionState.currentChocolateIndex)}
-            draggable={false}
-            onDragStart={(e) => e.preventDefault()}
-          />
-        </div>
-      )}
+      <div className={`${uiState.isPastryBagHidden ? "hidden" : ""} w-[280px] h-[332px] bottom-0 pastry-bag-area absolute pointer-events-none`}>
+        <PastryBag
+          fillColor={chocolateColors[selectionState.currentColor]?.fill}
+          className={`${uiState.isPastryBagHidden ? "hidden" : ""}`}
+          style={{
+            position: "absolute",
+            cursor: "grab",
+            left: `${toolState.position.x}px`,
+            top: `${toolState.position.y}px`,
+            WebkitTouchCallout: "none",
+            TouchAction: "none",
+            pointerEvents: "auto",
+            userSelect: "none",
+          }}
+          onClick={() => handleEvent("click", null, selectionState.currentChocolateIndex)}
+          onMouseDown={() => handleEvent("press", null, selectionState.currentChocolateIndex)}
+          onTouchStart={() => handleEvent("press", null, selectionState.currentChocolateIndex)}
+          draggable={false}
+          onDragStart={(e) => e.preventDefault()}
+        />
+      </div>
     </>
   );
 }

@@ -49,7 +49,6 @@ export default function Stage5Items({ chocolateInfo, selectionState, uiState, se
                 onMouseOver={() => {
                   if (!uiState.isResetPopupOpen) handleEvent("mouseOver", "_", index);
                 }}
-                // onMouseLeave={() => handleEvent("mouseLeave", "_", null)}
                 onDragStart={(e) => e.preventDefault()}
                 draggable={false}
                 className="flex-shrink-0 relative w-[80px] h-[76px] bg-gray-warm-300 rounded-xl"
