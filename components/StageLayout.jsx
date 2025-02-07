@@ -3,7 +3,7 @@ import { bgCounterTop } from "@/public/images/common";
 
 export default function StageLayout({ backgroundSrc, characterSrc, children, modalContent }) {
   return (
-    <main className="max-w-[400px] max-h-[800px] fixed w-full h-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+    <main className="xs:border xs:border-disabled-200 max-w-[400px] max-h-[800px] fixed w-full h-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
       <div className="w-full h-full">
         {/* 배경 */}
         <Image src={backgroundSrc} alt="배경" draggable={false} />

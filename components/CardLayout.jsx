@@ -51,7 +51,7 @@ export default function CardLayout({ chocolateInfo, onComplete }) {
 
   return (
     <main
-      className={`max-w-[400px] max-h-[800px] fixed w-full h-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ${
+      className={`xs:border xs:border-disabled-200 max-w-[400px] max-h-[800px] fixed w-full h-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ${
         backgroundColors[formData.theme] || "bg-pink-100"
       } flex flex-col items-center justify-between relative`}
     >
