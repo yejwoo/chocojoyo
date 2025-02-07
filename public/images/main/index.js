@@ -2,3 +2,9 @@ export { default as bg } from './bg.png';
 export { default as logo } from './logo.png';
 export { default as yanto } from './yanto.png';
 export { default as startBtn } from './start-btn.png'
+export { default as choco1 } from './choco1.svg'
+export { default as choco2 } from './choco2.svg'
+export { default as choco3 } from './choco3.svg'
+export { default as cloud1 } from './cloud1.svg'
+export { default as cloud2 } from './cloud2.svg'
+export { default as heart } from './heart.svg'

@@ -7,11 +7,21 @@ export default {
     },
     extend: {
       keyframes: {
-        bounceUp: {
+        "bounce-up-middle": {
+          "0%, 100%": {
+            transform: "translate(-50%, -10%)",
+            animationTimingFunction: "cubic-bezier(0.42, 0, 0.58, 1)",
+          },
+          "50%": {
+            transform: "translate(-50%, 0)",
+            animationTimingFunction: "cubic-bezier(0.42, 0, 0.58, 1)",
+          },
+        },
+        "bounce-up": {
           "0%, 100%": { transform: "translateY(-15%)", animationTimingFunction: "cubic-bezier(0, 0, 0.2, 1)" },
           "50%": { transform: "translateY(0)", animationTimingFunction: "cubic-bezier(0.8, 0, 1, 1)" },
         },
-        bounceUpOnce: {
+        "bounce-up-once": {
           "0%": {
             transform: "translate(0, 0%)",
             animationTimingFunction: "ease-in",
@@ -25,7 +35,7 @@ export default {
             animationTimingFunction: "cubic-bezier(0, 0, 0.2, 1)",
           },
         },
-        bounceDown: {
+        "bounce-down": {
           "0%, 100%": { transform: "translate(-50%, 0)", animationTimingFunction: "cubic-bezier(0.8, 0, 1, 1)" },
           "50%": { transform: "translate(-50%, -10%)", animationTimingFunction: "cubic-bezier(0, 0, 0.2, 1)" },
         },
@@ -33,22 +43,43 @@ export default {
           "0%, 100%": { transform: "scale(1)" },
           "50%": { transform: "scale(1.2)" },
         },
-        subtleMove: {
+        "subtle-move": {
           "0%": { transform: "translateY(0px);" },
           "50%": { transform: "translateY(-2px);" },
           "100%": { transform: "translateY(0px);" },
         },
+        "cloud-left-right": {
+          "0%, 100%": { transform: "translateX(0)" },
+          "50%": { transform: "translateX(20px)" },
+        },
+        "cloud-right-left": {
+          "0%, 100%": { transform: "translateX(0)" },
+          "50%": { transform: "translateX(-20px)" },
+        },
+        "choco-left-right": {
+          "0%, 100%": { transform: "rotate(-5deg)" },
+          "55%": { transform: "rotate(4deg)" },
+        },
+        "choco-right-left": {
+          "0%, 100%": { transform: "rotate(5deg)" },
+          "40%": { transform: "rotate(-5deg)" },
+        },
       },
       animation: {
-        "bounce-up": "bounceUp 2.5s linear infinite",
-        "bounce-up-fast": "bounceUp 1.2s linear infinite",
-        "bounce-up-once": "bounceUpOnce 0.5s linear",
-        "bounce-down": "bounceDown 4s linear infinite",
+        "bounce-up": "bounce-up 2.5s linear infinite",
+        "bounce-up-middle": "bounce-up-middle 5s linear infinite",
+        "bounce-up-once": "bounce-up-once 0.5s linear",
+        "bounce-down": "bounce-down 4s linear infinite",
         heartbeat: "heartbeat 3s ease-in-out infinite",
         "heartbeat-fast": "heartbeat 1s ease-in-out infinite",
-        "subtle-move": "5s ease-in-out infinite alternate",
+        "subtle-move": "subtle-move 5s ease-in-out infinite alternate",
+        "cloud-left-right": "cloud-left-right 6s ease-in-out infinite",
+        "cloud-right-left": "cloud-right-left 6s ease-in-out infinite",
+        "choco-left-right": "choco-left-right 3s ease-in-out infinite",
+        "choco-right-left": "choco-right-left 3s ease-in-out infinite",
       },
       colors: {
+        main: "#FFE4EA",
         default: "#3D2505",
         brand: {
           100: "#FF6682",
