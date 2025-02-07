@@ -47,7 +47,11 @@ export default function Button({ shape = "rectangle", message, color = "main", t
         ${shape === "rectangle" ? buttonSizeClass : ""} 
         text-xl border-4 border-default 
         ${disabled ? disabledStyle : "text-white "}
-        focus:outline-none transition-all duration-200
+        transition-all duration-150 ease-in-out
+        transform
+        hover:brightness-90 hover:scale-95
+        focus:brightness-90 focus:scale-95
+        active:brightness-75 active:scale-95
       `}
     >
       {shape === "circle" ? (
@@ -56,10 +60,11 @@ export default function Button({ shape = "rectangle", message, color = "main", t
         <>
           <p className="h-12 text-shadow flex justify-center items-center">{message}</p>
           <div
+            id="btn-shadow"
             className={`
               ${disabled ? "bg-gray-cool-100" : buttonShadowClass} 
               w-full h-1
-              transition-all duration-200
+              transition-all duration-100
             `}
           ></div>
         </>
