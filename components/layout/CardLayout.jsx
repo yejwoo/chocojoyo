@@ -105,7 +105,7 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
                           <div
                             className="absolute z-30"
                             style={{
-                              background: `url(/images/stage5/toppings/topping-${topping}.svg) no-repeat center/contain`,
+                              background: `url(/images/stage5/toppings/topping-${topping}.svg) no-repeat center/cover`,
                               width: "32px",
                               height: "32px",
                             }}
