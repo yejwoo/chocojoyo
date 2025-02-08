@@ -103,14 +103,25 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
                         {/* 🍓 토핑 (가운데 정렬) */}
                         {topping && (
                           <div
-                            className="absolute inset-0 z-30"
+                            className="absolute inset-0 flex items-center justify-center z-30 overflow-hidden"
                             style={{
-                              background: `url(/images/stage5/toppings/topping-${topping}.png) no-repeat center`,
-                              backgroundSize: "32px 32px",
-                              width: "100%",
+                              width: "100%", 
                               height: "100%",
                             }}
-                          />
+                          >
+                            <img
+                              src={`/images/stage5/toppings/topping-${topping}.png`}
+                              alt={`topping-${topping}`}
+                              className="object-contain"
+                              style={{
+                                width: "32px", 
+                                height: "32px",
+                                maxWidth: "100%",
+                                maxHeight: "100%",
+                              }}
+                              draggable={false}
+                            />
+                          </div>
                         )}
                       </div>
                     ) : null;
