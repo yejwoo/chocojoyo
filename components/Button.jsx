@@ -34,7 +34,9 @@ export default function Button({ shape = "rectangle", message, color = "main", t
     replay: <Image src={replay} width={32} height={32} alt="다시 시작" />,
   }[type] || <Image src={arrow} width={32} height={32} alt="다음" />;
 
-  const disabledStyle = "disabled:bg-gray-cool-50 disabled:cursor-not-allowed disabled:pointer-events-none text-gray-cool-200"; 
+  const shadowOverlayClass = "absolute bottom-0 h-[40%] w-full bg-black bg-opacity-10 rounded-b-sm";
+
+  const disabledStyle = "disabled:bg-gray-cool-50 disabled:cursor-not-allowed disabled:pointer-events-none text-gray-cool-200";
 
   return (
     <button
@@ -58,7 +60,8 @@ export default function Button({ shape = "rectangle", message, color = "main", t
         <div className="h-14 flex-shrink-0 flex justify-center items-center">{buttonIcon}</div>
       ) : (
         <>
-          <p className={`h-12 ${disabled ? "" : "text-shadow"} flex justify-center items-center`}>{message}</p>
+          {!disabled && <div className={shadowOverlayClass}></div>}
+          <p className={`h-12 ${disabled ? "" : "text-shadow"} flex justify-center items-center relative z-10`}>{message}</p>
           <div
             id="btn-shadow"
             className={`
