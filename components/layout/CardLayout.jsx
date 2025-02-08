@@ -111,11 +111,10 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
                               left: 0,
                             }}
                           >
-                            <Image
+                            <img
                               src={`/images/stage5/toppings/topping-${topping}.svg`}
                               alt={`topping-${topping}`}
-                              width={32}
-                              height={32}
+                              style={{ width: "32px", height: "32px" }}
                             />
                           </div>
                         )}
