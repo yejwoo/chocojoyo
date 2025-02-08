@@ -90,8 +90,8 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
                         <ShapeComponent
                           width={64}
                           height={56}
-                          fillColor={chocolateColors[color]?.[100] || '#894E00'}
-                          strokeColor={chocolateColors[color]?.[200] || '#894E00'}
+                          fillColor={chocolateColors[color]?.[100] || "#894E00"}
+                          strokeColor={chocolateColors[color]?.[200] || "#894E00"}
                           className="relative z-10"
                         />
 
@@ -102,14 +102,9 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
 
                         {/* 🍓 토핑 (가운데 정렬) */}
                         {topping && (
-                          <Image
-                            className="absolute z-30"
-                            src={`/images/stage5/toppings/topping-${topping}.svg`}
-                            alt="토핑"
-                            width={32}
-                            height={32}
-                            style={{ left: "50%", top: "50%", transform: "translate(-50%, -50%)" }}
-                          />
+                          <div className="absolute z-30 w-[32px] h-[32px] flex justify-center items-center">
+                            <Image src={`/images/stage5/toppings/topping-${topping}.svg`} alt="토핑" width={32} height={32} />
+                          </div>
                         )}
                       </div>
                     ) : null;

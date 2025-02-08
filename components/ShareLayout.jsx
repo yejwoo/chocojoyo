@@ -53,6 +53,9 @@ export default function ShareLayout() {
       backgroundColor: null,
       scale: 2,
       useCORS: true,
+      allowTaint: true, // 크로스 도메인 이미지 문제 해결
+      foreignObjectRendering: true, // foreignObject 렌더링 활성화
+      removeContainer: true, // 렌더링 후 임시 컨테이너 제거
       ignoreElements: (el) => el.classList.contains("no-capture"), // 이 클래스는 캡처에서 제외
     });
     const link = document.createElement("a");
