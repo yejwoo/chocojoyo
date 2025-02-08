@@ -28,11 +28,12 @@ export default function Stage4Items({
     updatePastryBagPosition(selectionState, chocolateInfo, currentData, setSelectionState, setToolState, setUIState);
   }, [chocolateInfo.sizes, selectionState.currentChocolateIndex]);
 
-  const handleItemClick = (e) => {
+  const handleItemClick = (type) => {
     if (!uiState.isClicked) {
       setUIState((prev) => ({ ...prev, isClicked: true }));
     }
-    handleEvent("click", null, selectionState.currentChocolateIndex);
+    handleEvent(type, null, selectionState.currentChocolateIndex);
+
   };
 
   return (
@@ -130,9 +131,9 @@ export default function Stage4Items({
             pointerEvents: "auto",
             userSelect: "none",
           }}
-          onClick={handleItemClick}
-          onMouseDown={() => handleEvent("press", null, selectionState.currentChocolateIndex)}
-          onTouchStart={() => handleEvent("press", null, selectionState.currentChocolateIndex)}
+          onClick={() => handleItemClick("click")}
+          onMouseDown={() => handleItemClick("press")}
+          onTouchStart={() => handleItemClick("press")}
           draggable={false}
           onDragStart={(e) => e.preventDefault()}
         />
