@@ -14,11 +14,11 @@ import pastryBagVanilla from './pastry-bag-vanilla.svg';
 
 export const chocoepnIcons = {
   milk: chocopenMilk,
-  dark: chocopenDark,
-  greentea: chocopenGreenTea,
-  red: chocopenRed,
   ruby: chocopenRuby,
+  red: chocopenRed,
   yellow: chocopenYellow,
+  greentea: chocopenGreenTea,
+  dark: chocopenDark,
 };
 
 export const pastryBagIcons = {
