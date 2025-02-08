@@ -2,6 +2,7 @@ import Image from "next/image";
 import Button from "./Button";
 import { logo, yanto, heart, choco1, choco2, choco3, cloud1, cloud2 } from "@/public/images/main";
 import Container from "./layout/Container";
+import { SLOGAN } from "@/utils/constants";
 
 export default function Main({ onStart }) {
   return (
@@ -30,7 +31,7 @@ export default function Main({ onStart }) {
             <Image priority src={logo} className="absolute w-[324px] max-h-sm:w-[300px]" alt="초코조요" />
           </div>
           {/* 슬로건 */}
-          <p className="w-full text-center text-xl max-h-sm:hidden">나만의 초콜릿으로 달콤한 마음을 전해줘요</p>
+          <p className="w-full text-center text-xl max-h-sm:hidden">{SLOGAN}</p>
         </div>
         {/* 오브젝트들 */}
         <div className="absolute w-full h-56 bottom-[25%] max-h-sm:bottom-[20%]">

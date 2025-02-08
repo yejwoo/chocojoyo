@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import Image from "next/image";
 import kakaoLogo from "@/public/icons/share/share-kakao.svg";
+import { SLOGAN } from "@/utils/constants";
 
 const KakaoShareButton = () => {
   const shareUrl = typeof window !== "undefined" ? window.location.href : "";
@@ -23,8 +24,8 @@ const KakaoShareButton = () => {
       objectType: "feed",
       content: {
         title: "초코조요!",
-        description: "아메리카노, 빵, 케익",
-        imageUrl: "https://mud-kage.kakao.com/dn/NTmhS/btqfEUdFAUf/FjKzkZsnoeE4o19klTOVI1/openlink_640x640s.jpg",
+        description: {SLOGAN},
+        imageUrl: "https://imgur.com/udyP5Ge",
         link: {
           mobileWebUrl: shareUrl,
           webUrl: shareUrl,

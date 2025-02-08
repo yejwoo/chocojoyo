@@ -1,4 +1,5 @@
 import "./globals.css";
+import { SLOGAN } from "@/utils/constants";
 import localFont from "next/font/local";
 import Script from "next/script";
 
@@ -9,10 +10,10 @@ const myFont = localFont({
 
 export const metadata = {
   title: "초코조요!",
-  description: "소중한 사람에게 초콜릿을 선물해요",
+  description: SLOGAN,
   // icons: {
-	// 	icon: "/favicon.png",
-	// },
+  // 	icon: "/favicon.png",
+  // },
 };
 
 export const viewport = {
@@ -22,11 +23,9 @@ export const viewport = {
   userScalable: false,
 };
 
-
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      
       <body className={myFont.className}>
         <Script src="https://developers.kakao.com/sdk/js/kakao.js" strategy="afterInteractive" />
         {children}
