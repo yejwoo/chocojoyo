@@ -4,9 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import KakaoShareButton from "@/components/KakaoShareButton";
 import { chocoBox, chocoPng, chocoWithCard, shareLink } from "@/public/icons/share";
-import Button from "@/components/Button";
 import Modal from "@/components/Modal";
-import { useRouter } from "next/navigation";
 import { copyToClipboard } from "@/utils/copyToClipboard";
 import { DOMAIN } from "@/constants";
 import html2canvas from "html2canvas";
@@ -20,7 +18,6 @@ export default function ShareLayout() {
   const [cardData, setCardData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("");
-  const router = useRouter();
   const cardLayoutRef = useRef(null);
   const btnSytle =
     "transform transition-all duration-150 ease-in-out hover:brightness-90 focus:brightness-90 focus:scale-95 active:brightness-75 active:scale-95";
@@ -131,7 +128,7 @@ export default function ShareLayout() {
   if (!cardData) return <CustomLoading />;
 
   return (
-    <main className="max-w-[400px] max-h-[800px] absolute w-full h-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-between">
+    <>
       <CardLayout chocolateInfo={cardData} mode="share" id={searchParams.get("id")} onOpen={handleOpenModal} ref={cardLayoutRef} />
 
       {/* 모달 */}
@@ -178,10 +175,6 @@ export default function ShareLayout() {
           )}
         </Modal>
       )}
-
-      <div className="absolute right-6 bottom-6 max-h-sm:bottom-2">
-        <Button type="replay" shape="circle" color="brand" onClick={() => router.push("/")} />
-      </div>
-    </main>
+    </>
   );
 }

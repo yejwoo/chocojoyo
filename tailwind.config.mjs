@@ -3,7 +3,7 @@ export default {
   content: ["./pages/**/*.{js,ts,jsx,tsx,mdx}", "./components/**/*.{js,ts,jsx,tsx,mdx}", "./app/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
     screens: {
-      xs: "400px",
+      xs: "420px",
       "max-h-sm": { raw: "(max-height: 660px)" },
     },
     extend: {
