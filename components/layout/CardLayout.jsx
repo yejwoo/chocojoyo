@@ -103,13 +103,21 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
                         {/* 🍓 토핑 (가운데 정렬) */}
                         {topping && (
                           <div
-                            className="absolute z-30"
+                            className="absolute z-30 flex items-center justify-center"
                             style={{
-                              background: `url(/images/stage5/toppings/topping-${topping}.svg) no-repeat center/cover`,
-                              width: "32px",
-                              height: "32px",
+                              width: "100%", // 부모 요소의 크기만큼 확장
+                              height: "100%", // 부모 요소의 크기만큼 확장
+                              top: 0,
+                              left: 0,
                             }}
-                          />
+                          >
+                            <Image
+                              src={`/images/stage5/toppings/topping-${topping}.svg`}
+                              alt={`topping-${topping}`}
+                              width={32}
+                              height={32}
+                            />
+                          </div>
                         )}
                       </div>
                     ) : null;
