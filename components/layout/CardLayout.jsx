@@ -126,6 +126,7 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
                   onChange={handleInputChange}
                   className="w-[280px] mx-auto h-[108px] text-left text-2xl leading-9 flex"
                   placeholder="편지는 세 줄까지 쓸 수 있어요."
+                  maxLength={MAX_LENTH}
                 />
                 <div className="mt-2 relative text-center border-b border-gray-warm-100">
                   <span className="text-lg">from. </span>
