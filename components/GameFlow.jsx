@@ -238,6 +238,7 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
     // UI 상태 초기화
     setUIState((prev) => ({
       ...prev,
+      isClicked: false,
       isTalkBubbleShow: false,
       isShowModal: false,
       isShowItems: false,

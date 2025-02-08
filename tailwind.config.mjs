@@ -8,6 +8,16 @@ export default {
     },
     extend: {
       keyframes: {
+        "float-y-center": {
+          "0%": { transform: "translate(-50%, 0px)" },
+          "50%": { transform: "translate(-50%, -10px)" },
+          "100%": { transform: "translate(-50%, 0px)" },
+        },
+        "float-y": {
+          "0%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-10px)" },
+          "100%": { transform: "translateY(0px)" },
+        },
         "bounce-up-middle": {
           "0%, 100%": {
             transform: "translate(-50%, -10%)",
@@ -78,6 +88,8 @@ export default {
         "cloud-right-left": "cloud-right-left 10s ease-in-out infinite",
         "choco-left-right": "choco-left-right 3s ease-in-out infinite",
         "choco-right-left": "choco-right-left 3s ease-in-out infinite",
+        "float-y": "float-y 1s ease-in-out infinite alternate",
+        "float-y-center": "float-y-center 1s ease-in-out infinite alternate",
       },
       colors: {
         main: "#FFE4EA",
@@ -164,7 +176,6 @@ export default {
           100: "#894E00",
           200: "#4C2F08",
         },
-       
       },
     },
   },

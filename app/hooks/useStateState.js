@@ -24,7 +24,8 @@ export function useStageState() {
     isClearCanvas: false,
     isOnboarding: false,
     isResetBtnClicked: false,
-    isCardLoading: false
+    isCardLoading: false,
+    isClicked: false
   });
 
   // 💝 현재 선택 관련 상태

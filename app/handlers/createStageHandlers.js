@@ -23,8 +23,8 @@ export const createStageHandlers = (store) => {
       handleToolClick(setToolState);
     },
 
-    3: (type, _, __, e, ref) => {
-      handleStir(e, type, ref, gameState, setGameState, setUIState, setToolState);
+    3: (e, _, __, ref) => {
+      handleStir(e, ref, gameState, setGameState, setUIState, setToolState);
     },
 
     4: (type, _, index) => {

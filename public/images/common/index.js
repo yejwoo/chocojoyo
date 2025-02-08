@@ -20,4 +20,6 @@ export { default as talkBubbleTail } from "./talk-bubble-tail.svg";
 export { default as talkBubble } from "./talk-bubble.svg";
 export { default as heart } from "./heart.svg"
 export { default as loading } from "./loading.gif"
+export { default as arrowDown } from "./arrow-down.svg"
+export { default as arrowUp } from "./arrow-up.svg"
 

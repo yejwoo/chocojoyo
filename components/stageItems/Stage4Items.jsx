@@ -5,6 +5,7 @@ import { PastryBag } from "@/public/images/stage4";
 import { useEffect } from "react";
 import { updatePastryBagPosition, updatePastryBagVisibility } from "@/app/handlers/stageHandlers/stage4Handlers";
 import { chocolateColors } from "@/utils/constants";
+import { arrowDown, arrowUp } from "@/public/images/common";
 
 export default function Stage4Items({
   currentData,
@@ -17,7 +18,6 @@ export default function Stage4Items({
   handleEvent,
   chocolateInfo,
 }) {
-
   // ✅ 짤주머니 숨김 처리 로직
   useEffect(() => {
     updatePastryBagVisibility(chocolateInfo, setUIState);
@@ -28,9 +28,24 @@ export default function Stage4Items({
     updatePastryBagPosition(selectionState, chocolateInfo, currentData, setSelectionState, setToolState, setUIState);
   }, [chocolateInfo.sizes, selectionState.currentChocolateIndex]);
 
+  const handleItemClick = (e) => {
+    if (!uiState.isClicked) {
+      setUIState((prev) => ({ ...prev, isClicked: true }));
+    }
+    handleEvent("click", null, selectionState.currentChocolateIndex);
+  };
+
   return (
     <>
       <div className="relative w-[280px] h-[182px]">
+        {!uiState.isClicked && (
+          <Image
+            src={arrowUp}
+            alt="화살표"
+            className="absolute z-10 bottom-16  left-8 animate-float-y transition-opacity duration-300"
+            style={{ width: "48px", height: "48px" }}
+          />
+        )}
         <Image
           src={mold}
           alt="초콜릿 틀"
@@ -88,8 +103,8 @@ export default function Stage4Items({
                     onDragStart={(e) => e.preventDefault()}
                     width={(64 * (chocolateInfo.sizes[index] || 0)) / 100}
                     height={(56 * (chocolateInfo.sizes[index] || 0)) / 100}
-                    fillColor={chocolateColors[color]?.[100] || '#894E00'}
-                    strokeColor={chocolateColors[color]?.[200] || '#894E00'}
+                    fillColor={chocolateColors[color]?.[100] || "#894E00"}
+                    strokeColor={chocolateColors[color]?.[200] || "#894E00"}
                   />
                 </div>
               </div>
@@ -115,7 +130,7 @@ export default function Stage4Items({
             pointerEvents: "auto",
             userSelect: "none",
           }}
-          onClick={() => handleEvent("click", null, selectionState.currentChocolateIndex)}
+          onClick={handleItemClick}
           onMouseDown={() => handleEvent("press", null, selectionState.currentChocolateIndex)}
           onTouchStart={() => handleEvent("press", null, selectionState.currentChocolateIndex)}
           draggable={false}
