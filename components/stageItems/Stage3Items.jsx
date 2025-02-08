@@ -1,5 +1,4 @@
 import Image from "next/image";
-import ProgressBar from "../ProgressBar";
 import { useRef } from "react";
 
 export default function Stage3Items({ currentData, gameState, handleEvent, toolState }) {
@@ -30,25 +29,22 @@ export default function Stage3Items({ currentData, gameState, handleEvent, toolS
         </div>
       </div>
       {/* 스패츌라  */}
-      <div id="tool-container" className="w-full h-72 absolute bottom-0">
-        <Image
-          style={{
-            position: "absolute",
-            cursor: "grab",
-            left: `${toolState.position.x}px`,
-            top: `${toolState.position.y}px`,
-            WebkitTouchCallout: "none",
-            touchAction: "none",
-          }}
-          className="w-24 cursor-pointer"
-          onMouseDown={(e) => handleEvent("stirStart", null, null, e, rotationRef)}
-          onTouchStart={(e) => handleEvent("stirStart", null, null, e, rotationRef)}
-          onDragStart={(e) => e.preventDefault()}
-          draggable={false}
-          src={tool.imgSrc}
-          alt={tool.alt}
-        />
-      </div>
+      <Image
+        style={{
+          position: "absolute",
+          cursor: "grab",
+          left: `${toolState.position.x}px`,
+          top: `${toolState.position.y}px`,
+          touchAction: "none",
+        }}
+        className="w-24 cursor-pointer"
+        onMouseDown={(e) => handleEvent("stirStart", null, null, e, rotationRef)}
+        onTouchStart={(e) => handleEvent("stirStart", null, null, e, rotationRef)}
+        onDragStart={(e) => e.preventDefault()}
+        draggable={false}
+        src={tool.imgSrc}
+        alt={tool.alt}
+      />
     </div>
   );
 }

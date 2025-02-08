@@ -95,6 +95,13 @@ button {
   font-size: 1rem;
 }
 
+img {
+  outline: none;
+  border: none;
+  -webkit-tap-highlight-color: transparent;  
+  -webkit-touch-callout: none;               
+}
+
 .overflow-scroll {
   overflow: auto;
   touch-action: pan-x pan-y;

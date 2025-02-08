@@ -41,7 +41,6 @@ export default function Stage4Items({
           draggable={false}
           style={{
             pointerEvents: "none",
-            WebkitTouchCallout: "none",
             TouchAction: "none",
           }}
         />

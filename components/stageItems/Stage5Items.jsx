@@ -21,7 +21,6 @@ export default function Stage5Items({ chocolateInfo, selectionState, uiState, se
           draggable={false}
           style={{
             pointerEvents: "none",
-            WebkitTouchCallout: "none",
             TouchAction: "none",
           }}
         />

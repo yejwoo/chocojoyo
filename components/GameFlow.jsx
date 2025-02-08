@@ -312,7 +312,7 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
             </div>
 
             {/* 얀토 */}
-            <div className="absolute left-1 w-[40%] max-h-sm:w-[35%] cursor-pointer ">
+            <div className="absolute left-1 w-[40%] max-h-sm:w-[35%] cursor-pointer">
               <Image className="" src={currentData?.imgSrc} alt="얀토" draggable={false} />
             </div>
           </div>
