@@ -1,9 +1,4 @@
 export const handleSaveDrawing = (imageData, setChocolateInfo, currentChocolateIndex) => {
-  if (typeof setChocolateInfo !== "function") {
-    console.error("❌ setChocolateInfo가 함수가 아님!", setChocolateInfo);
-    return;
-  }
-
   setChocolateInfo((prev) => ({
     ...prev,
     drawings: {
@@ -49,4 +44,37 @@ export const handleReset = (setChocolateInfo, setUIState) => {
     isClearCanvas: true,
     isResetBtnClicked: !prev.isResetBtnClicked,
   }));
+};
+
+export const handleBack = (gameState, setChocolateInfo, selectionState, setUIState) => {
+  console.log("현재 선택된 초콜릿 인덱스:", selectionState.currentChocolateIndex); // 인덱스 확인
+
+  if (gameState.historyIndex >= 0) {
+    setChocolateInfo((prev) => {
+      const strokes = JSON.parse(JSON.stringify(prev.strokes[selectionState.currentChocolateIndex] || []));
+
+      console.log("현재 strokes 상태:", strokes); // 삭제 전 strokes 상태 확인
+
+      if (strokes.length > 0) {
+        const updatedStrokes = strokes.slice(0, -1);
+
+        console.log("업데이트된 strokes 상태:", updatedStrokes); // 삭제 후 strokes 상태 확인
+
+        return {
+          ...prev,
+          strokes: {
+            ...prev.strokes,
+            [selectionState.currentChocolateIndex]: updatedStrokes,
+          },
+        };
+      }
+
+      return prev;
+    });
+
+    setUIState((prev) => ({
+      ...prev,
+      isBackBtnClicked: true,
+    }));
+  }
 };

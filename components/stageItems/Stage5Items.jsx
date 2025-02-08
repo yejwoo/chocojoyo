@@ -3,8 +3,19 @@ import box from "@/public/images/stage5/box.svg";
 import { Shapes } from "@/public/icons/shapes";
 import Canvas from "../Canvas";
 import { chocolateColors } from "@/utils/constants";
+import { toppingIcons } from "@/public/images/stage5";
 
-export default function Stage5Items({ chocolateInfo, selectionState, uiState, setUIState, handleEvent }) {
+export default function Stage5Items({
+  chocolateInfo,
+  selectionState,
+  gameState,
+  uiState,
+  setUIState,
+  setGameState,
+  setSelectionState,
+  setChocolateInfo,
+  handleEvent,
+}) {
   const isToppingMode = selectionState.currentTabIndex === 1;
   const isZoomMode = uiState.isZoomMode;
 
@@ -45,7 +56,9 @@ export default function Stage5Items({ chocolateInfo, selectionState, uiState, se
                 }}
                 onDragOver={(e) => e.preventDefault()}
                 onMouseOver={() => {
-                  if (!uiState.isResetPopupOpen) handleEvent("mouseOver", "_", index);
+                  if (!uiState.isResetPopupOpen && !uiState.isDrawing) {
+                    handleEvent("mouseOver", setSelectionState, index);
+                  }
                 }}
                 onDragStart={(e) => e.preventDefault()}
                 draggable={false}
@@ -84,7 +97,12 @@ export default function Stage5Items({ chocolateInfo, selectionState, uiState, se
                   strokeColor={selectionState.currentColor}
                   onSave={(imageData) => handleEvent("saveDrawing", imageData, index)}
                   uiState={uiState}
+                  gameState={gameState}
+                  selectionState={selectionState}
+                  chocolateInfo={chocolateInfo}
                   setUIState={setUIState}
+                  setGameState={setGameState}
+                  setChocolateInfo={setChocolateInfo}
                 />
                 {/* 토핑 렌더링 */}
                 {chocolateInfo.toppings[index] && (
@@ -92,7 +110,7 @@ export default function Stage5Items({ chocolateInfo, selectionState, uiState, se
                     className={`absolute left-6 top-[22px] ${
                       isZoomMode && isSelected && !uiState.isResetPopupOpen ? "scale-[2.2] transition duration-200 ease-in-out z-40" : "z-30"
                     }`}
-                    src={`/images/stage5/toppings/topping-${chocolateInfo.toppings[index]}.svg`}
+                    src={toppingIcons[chocolateInfo.toppings[index]]}
                     alt="토핑"
                     width={32}
                     height={32}

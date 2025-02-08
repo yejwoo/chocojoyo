@@ -9,6 +9,7 @@ import {
   handleDragEndTopping,
   handleDragStartTopping,
   handleToppingPlacement,
+  handleBack,
 } from "./stageHandlers/stage5Handlers";
 
 export const createStageHandlers = (store) => {
@@ -47,11 +48,10 @@ export const createStageHandlers = (store) => {
         mouseLeave: () => handleMouseLeave(setSelectionState, null),
         saveDrawing: (imageData) => {
           // console.log("🖼 saveDrawing 실행됨! imageData:", imageData, "index:", index);
-
           const validImageData = imageData || "data:image/png;base64,"; // 기본값 설정
-
           handleSaveDrawing(validImageData, setChocolateInfo, index);
         },
+        goBack: () => handleBack(gameState, setChocolateInfo),
         clickTopping: () => handleToppingPlacement(setChocolateInfo, selectionState.currentTopping, index),
       };
 

@@ -72,45 +72,9 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
     console.log("Stage Info: ", stage);
   }, [stage]);
 
-  useEffect(() => {
-    console.log("💝 chocolateInfo", chocolateInfo);
+  useEffect(() => { console.log("💝 chocolateInfo", chocolateInfo);
   }, [chocolateInfo]);
 
-  // 온보딩
-  // useEffect(() => {
-  //   if (stage.main === 5 && stage.sub === "init") {
-  //     setUIState((prev) => ({ ...prev, isCompleteEvent: true }));
-  //     const runOnboarding = async () => {
-  //       await delay(5000);
-  //       setUIState((prev) => ({
-  //         ...prev,
-  //         isOnboarding: true,
-  //         highlightedElement: "item0",
-  //       }));
-  //       await delay(3000);
-
-  //       setUIState((prev) => ({
-  //         ...prev,
-  //         highlightedElement: "item1",
-  //       }));
-  //       await delay(3000);
-
-  //       setUIState((prev) => ({
-  //         ...prev,
-  //         highlightedElement: "item2",
-  //       }));
-  //       await delay(3000);
-
-  //       setUIState((prev) => ({
-  //         ...prev,
-  //         isOnboarding: false,
-  //         highlightedElement: null,
-  //       }));
-  //     };
-
-  //     runOnboarding();
-  //   }
-  // }, [stage]);
 
   // 카드 작성 페이지로 넘어갈 때 로딩 추가
   useEffect(() => {
@@ -184,10 +148,6 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
       currentItemIndex: 0,
     }));
   };
-
-  useEffect(() => {
-    console.log("Button Config:", buttonConfig);
-  }, [buttonConfig]);
 
   const handleNextMainStage = () => {
     const { main } = stage;
@@ -264,9 +224,6 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
       {uiState.isCardLoading && <CustomLoading />}
       {currentStep === "stage" && (
         <StageLayout>
-          {/* 온보딩 오버레이 */}
-          {uiState.isOnboarding && <div className="absolute inset-0 bg-black bg-opacity-60 z-40"></div>}
-
           {uiState.isResetPopupOpen && (
             <Modal
               type="confirm"
@@ -345,6 +302,8 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
               selectionState={selectionState}
               setSelectionState={setSelectionState}
               uiState={uiState}
+              gameState={gameState}
+              setGameState={setGameState}
               setUIState={setUIState}
               setChocolateInfo={setChocolateInfo}
             />

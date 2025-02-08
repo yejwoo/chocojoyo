@@ -1,10 +1,34 @@
-export { default as toppingAlmond } from './toppings/topping-almond.svg';
-export { default as toppingBlueberries } from './toppings/topping-blueberries.svg';
-export { default as toppingCoffeeBean } from './toppings/topping-coffeebean.svg';
-export { default as toppingHeart } from './toppings/topping-heart.svg';
-export { default as toppingSprinkle } from './toppings/topping-sprinkle.svg';
-export { default as toppingStrawberry } from './toppings/topping-strawberry.svg';
-export { default as magnifierDefault } from './magnifier-default.svg';
-export { default as magnifierActive } from './magnifier-active.svg';
-export { default as resetActive } from './reset-active.svg';
-export { default as resetDefault } from './reset-default.svg';
+import almond from "./toppings/topping-almond.svg";
+import blueberries from "./toppings/topping-blueberries.svg";
+import coffeebean from "./toppings/topping-coffeebean.svg";
+import heart from "./toppings/topping-heart.svg";
+import sprinkle from "./toppings/topping-sprinkle.svg";
+import strawberry from "./toppings/topping-strawberry.svg";
+import magnifierDefault from "./magnifier-default.svg";
+import magnifierActive from "./magnifier-active.svg";
+import resetActive from "./reset-active.svg";
+import resetDefault from "./reset-default.svg";
+import backDefault from "./back-default.svg";
+import backActive from "./back-active.svg";
+import frontActive from "./front-active.svg";
+import frontDefault from "./front-default.svg";
+
+export const toppingIcons = {
+  almond,
+  blueberries,
+  coffeebean,
+  heart,
+  sprinkle,
+  strawberry,
+};
+
+export const bottomNaviIcons = {
+  magnifierDefault,
+  magnifierActive,
+  resetActive,
+  resetDefault,
+  backDefault,
+  backActive,
+  frontActive,
+  frontDefault
+};

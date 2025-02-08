@@ -2,12 +2,11 @@ import { bottomNaviConfig } from "@/data/Stage";
 import Image from "next/image";
 import { useEffect, useMemo } from "react";
 import { handleTabClick, handleColorSelection, handleToppingSelection } from "@/app/handlers/generalHandlers";
-import { handleZoomMode } from "@/app/handlers/stageHandlers/stage5Handlers";
-import { magnifierActive, magnifierDefault, resetActive, resetDefault } from "@/public/images/stage5";
+import { handleBack, handleZoomMode } from "@/app/handlers/stageHandlers/stage5Handlers";
 import { chocoepnIcons, pastryBagIcons } from "@/public/images/common/bottom-navi";
-import arrow from "@/public/icons/arrow.svg";
+import { bottomNaviIcons } from "@/public/images/stage5";
 
-export const BottomNaviItem = ({ naviData, stage, uiState, selectionState, setSelectionState, setUIState, currentTabIndex }) => {
+export const BottomNaviItem = ({ naviData, stage, uiState, gameState, selectionState, setSelectionState, setUIState, currentTabIndex }) => {
   useEffect(() => {
     if (stage.main === 5 && stage.sub === "init" && uiState.highlightedElement === "item1") {
       setSelectionState((prev) => ({ ...prev, currentTabIndex: 1 }));
@@ -31,9 +30,9 @@ export const BottomNaviItem = ({ naviData, stage, uiState, selectionState, setSe
           key={`${naviData.type}-${colorName}-${subIndex}`}
           src={stage.main === 5 ? chocoepnIcons[colorName] : pastryBagIcons[colorName]}
           alt={`${colorName} color`}
-          className={`cursor-pointer flex-shrink-0 rounded-full w-9 h-9 bg-gray-warm-50 ${selectionState.currentColor === colorName ? "ring-4 ring-brand-200" : ""} ${
-            currentTabIndex === naviData.index ? "opacity-100 visible" : "opacity-0 invisible absolute"
-          }`}
+          className={`cursor-pointer flex-shrink-0 rounded-full w-9 h-9 bg-gray-warm-50 ${
+            selectionState.currentColor === colorName ? "ring-4 ring-brand-200" : ""
+          } ${currentTabIndex === naviData.index ? "opacity-100 visible" : "opacity-0 invisible absolute"}`}
           onClick={() => handleColorSelection(colorName, setSelectionState)}
         />
       ));
@@ -64,7 +63,7 @@ export const BottomNaviItem = ({ naviData, stage, uiState, selectionState, setSe
   return null;
 };
 
-export const BottomNavi = ({ stage, selectionState, setSelectionState, setChocolateInfo, uiState, setUIState }) => {
+export const BottomNavi = ({ stage, selectionState, setSelectionState, setChocolateInfo, uiState, gameState, setGameState, setUIState }) => {
   const naviData = bottomNaviConfig[stage.main];
 
   const naviItems = useMemo(() => {
@@ -74,9 +73,11 @@ export const BottomNavi = ({ stage, selectionState, setSelectionState, setChocol
         naviData={{ ...naviItem, index }}
         stage={stage}
         uiState={uiState}
+        gameState={gameState}
         selectionState={selectionState}
         setSelectionState={setSelectionState}
         setUIState={setUIState}
+        setGameState={setGameState}
         // setChocolateInfo={setChocolateInfo}
         currentTabIndex={selectionState.currentTabIndex}
       />
@@ -84,34 +85,10 @@ export const BottomNavi = ({ stage, selectionState, setSelectionState, setChocol
   }, [stage, selectionState]);
 
   return (
-    <div className={`fixed overflow-hidden h-[132px] bottom-0 left-0 right-0 ${uiState.isOnboarding ? "z-[999] pointer-events-none" : ""}`}>
+    <div className="fixed overflow-hidden h-[132px] bottom-0 left-0 right-0">
       {/* ✅ 탭 UI (2개 이상일 때만 표시) */}
       {naviData.length > 1 && (
         <>
-          {/* 온보딩 관련 */}
-          {/* {stage.main === 5 && stage.sub === "init" && uiState.isOnboarding && (
-            <>
-              {["left-5", "left-[100px]", "left-[188px]"].map((position, index) => (
-                <Image
-                  key={index}
-                  src={arrow}
-                  width={40}
-                  height={40}
-                  alt="화살표"
-                  className={`absolute ${position} top-[-32px] animate-bounce-up-fast 
-              ${uiState.highlightedElement === `item${index}` ? "opacity-100" : "opacity-0"}`}
-                />
-              ))}
-              <div className="top-[-88px] left-1/2 -translate-x-1/2 w-[343px] text-xl text-center bg-popup-100 px-3 py-2 rounded-md shadow-md absolute">
-                {uiState.highlightedElement === "item0"
-                  ? "다양한 색깔로 초콜릿을 꾸며보세요!"
-                  : uiState.highlightedElement === "item1"
-                  ? "그림 위에 토핑을 얹을 수 있어요."
-                  : "확대해서 섬세하게 꾸미고, 실수하면 리셋하세요!"}
-              </div>
-            </>
-          )} */}
-
           {/* ✅ 탭 + 버튼 컨테이너 */}
           <div className="absolute left-[-8px] bottom-[60px] max-h-sm:bottom-[52px] flex w-full z-10">
             {/* ✅ 탭을 좌측 정렬 */}
@@ -142,13 +119,24 @@ export const BottomNavi = ({ stage, selectionState, setSelectionState, setChocol
               ))}
             </div>
 
-            {/* ✅ 돋보기 & 리셋 버튼 */}
+            {/* ✅ 액션 (돋보기 / 뒤로가기 / 앞으로가기 / 리셋) */}
             <div className={`${stage.main === 5 ? "opacity-100 visible" : "opacity-0 invisible"} flex items-center justify-center pl-2 mb-1`} id="actions">
               <button className="px-1 flex justify-center items-center" onClick={() => handleZoomMode(setUIState)}>
-                <Image width={40} height={40} src={uiState.isZoomMode && !uiState.isResetPopupOpen ? magnifierActive : magnifierDefault} alt="돋보기" />
+                <Image
+                  width={36}
+                  height={36}
+                  src={uiState.isZoomMode && !uiState.isResetPopupOpen ? bottomNaviIcons.magnifierActive : bottomNaviIcons.magnifierDefault}
+                  alt="돋보기"
+                />
+              </button>
+              <button className="px-1" onClick={() => handleBack(gameState, setChocolateInfo, selectionState, setUIState)}>
+                <Image width={36} height={36} src={bottomNaviIcons.backDefault} alt="뒤로가기" />
+              </button>
+              <button className="px-1" onClick={() => setUIState((prev) => ({ ...prev, isFrontBtnClicked: true }))}>
+                <Image width={36} height={36} src={bottomNaviIcons.frontDefault} alt="앞으로" />
               </button>
               <button className="px-1" onClick={() => setUIState((prev) => ({ ...prev, isResetPopupOpen: true, isResetBtnClicked: !prev.isResetBtnClicked }))}>
-                <Image width={40} height={40} src={uiState.isResetBtnClicked ? resetActive : resetDefault} alt="돋보기" />
+                <Image width={36} height={36} src={uiState.isResetBtnClicked ? bottomNaviIcons.resetActive : bottomNaviIcons.resetDefault} alt="돋보기" />
               </button>
             </div>
           </div>

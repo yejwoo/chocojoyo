@@ -2,7 +2,7 @@ import { chocoepnIcons, pastryBagIcons } from "@/public/images/common/bottom-nav
 import { yantoGif } from "@/public/images/common/yanto";
 import { chocolate1, chocolate2, chocolate3, chocolate4, chocolate5, chocolate6, chocolate7, chocolate8, knife } from "@/public/images/stage2";
 import { doubleBoiler, meltedChocolate1, meltedChocolate2, meltedChocolate3, spatula } from "@/public/images/stage3";
-import { toppingAlmond, toppingBlueberries, toppingCoffeeBean, toppingHeart, toppingSprinkle, toppingStrawberry } from "@/public/images/stage5";
+import { toppingIcons } from "@/public/images/stage5";
 
 const commonConfig = {
   sequence: [{ type: "delay", value: 1000 }, { type: "showItems" }],
@@ -200,56 +200,38 @@ export const bottomNaviConfig = {
       type: "image",
       data: [
         {
-          imgSrc: toppingSprinkle,
+          imgSrc: toppingIcons.sprinkle,
           name: "sprinkle",
           alt: "스프링클 토핑",
         },
         {
-          imgSrc: toppingHeart,
+          imgSrc: toppingIcons.heart,
           name: "heart",
           alt: "하트 토핑",
         },
 
         {
-          imgSrc: toppingCoffeeBean,
+          imgSrc: toppingIcons.coffeebean,
           name: "coffeebean",
           alt: "커피콩 토핑",
         },
         {
-          imgSrc: toppingAlmond,
+          imgSrc: toppingIcons.almond,
           name: "almond",
           alt: "아몬드 토핑",
         },
         {
-          imgSrc: toppingBlueberries,
+          imgSrc: toppingIcons.blueberries,
           name: "blueberries",
           alt: "블루베리 토핑",
         },
         {
-          imgSrc: toppingStrawberry,
+          imgSrc: toppingIcons.strawberry,
           name: "strawberry",
           alt: "딸기 토핑",
         },
       ],
       title: "토핑",
-    },
-  ],
-  6: [
-    {
-      type: "image",
-      title: "박스",
-      data: [
-        {
-          imgSrc: toppingSprinkle,
-          name: "sprinkle",
-          alt: "스프링클 토핑",
-        },
-        {
-          imgSrc: toppingHeart,
-          name: "heart",
-          alt: "하트 토핑",
-        },
-      ],
     },
   ],
 };

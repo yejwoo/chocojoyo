@@ -1,9 +1,10 @@
 import { useState, useRef } from "react";
 import { stageData } from "@/data/Stage";
+import { isTestMode } from "@/utils/constants";
 
 export function useStageState() {
   // 💝 현재 스테이지 상태
-  const [stage, setStage] = useState({ main: 1, sub: "init" });
+  const [stage, setStage] = useState({ main: 5, sub: "init" });
 
   // 현재 스테이지 데이터
   const currentData = stageData[stage.main][stage.sub];
@@ -25,7 +26,10 @@ export function useStageState() {
     isOnboarding: false,
     isResetBtnClicked: false,
     isCardLoading: false,
-    isClicked: false
+    isClicked: false,
+    isBackBtnClicked: false,
+    isFrontBtnClicked: false,
+    isDrawing: false
   });
 
   // 💝 현재 선택 관련 상태
@@ -45,12 +49,11 @@ export function useStageState() {
 
   // 💝 초콜릿 정보
   const [chocolateInfo, setChocolateInfo] = useState({
-    // shapes: ["heart", "heart", "heart", "heart", "heart", "heart"],
-    shapes: [],
+    shapes: isTestMode ? ["heart", "heart", "heart", "heart", "heart", "heart"] : [],
     colors: [],
-    sizes: Array(6).fill(0),
-    // sizes: Array(6).fill(100),
+    sizes: isTestMode ? Array(6).fill(100): Array(6).fill(0),
     drawings: {},
+    strokes: {},
     toppings: [],
   });
 
@@ -58,7 +61,11 @@ export function useStageState() {
   const [gameState, setGameState] = useState({
     currentItemIndex: 0,
     completedStages: [],
+    // stage3
     stirCount: 0,
+    // stage5
+    history: [],
+    historyIndex: -1
   });
 
   // 💝 Ref (인터벌 관리)

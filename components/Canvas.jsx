@@ -1,12 +1,25 @@
 import { bottomNaviConfig } from "@/data/Stage";
-import { chocopenColors } from "@/utils/constants";
+import { MAX_HISTORY_LENGTH, chocopenColors } from "@/utils/constants";
 import React, { useRef, useEffect, useState } from "react";
 
-const Canvas = ({ isToppingMode, isSelected, isZoomMode, strokeColor = "vanilla", onSave, uiState, className, setUIState }) => {
+const Canvas = ({
+  isToppingMode,
+  isSelected,
+  isZoomMode,
+  strokeColor = "vanilla",
+  onSave,
+  uiState,
+  gameState,
+  selectionState,
+  chocolateInfo,
+  className,
+  setUIState,
+  setGameState,
+  setChocolateInfo,
+}) => {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
-  const [isDrawing, setIsDrawing] = useState(false);
-
+  const debounceTimer = useRef(null);
 
   if (contextRef.current && uiState.isClearCanvas) {
     contextRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
@@ -14,10 +27,11 @@ const Canvas = ({ isToppingMode, isSelected, isZoomMode, strokeColor = "vanilla"
 
   useEffect(() => {
     if (!uiState.isResetPopupOpen) {
-      setUIState((prev) => ({ ...prev, isClearCanvas: false })); 
+      setUIState((prev) => ({ ...prev, isClearCanvas: false }));
     }
   }, [uiState.isResetPopupOpen]);
 
+  // 캔바스 초기화
   useEffect(() => {
     if (!canvasRef.current) return;
 
@@ -30,16 +44,40 @@ const Canvas = ({ isToppingMode, isSelected, isZoomMode, strokeColor = "vanilla"
     ctx.lineJoin = "round";
     ctx.lineWidth = 2;
     contextRef.current = ctx;
-
-    // console.log(ctx)
   }, []);
 
+  // 초코펜 컬러 변경
   useEffect(() => {
     if (contextRef.current) {
       contextRef.current.strokeStyle = chocopenColors[strokeColor]?.[100] || "#fff";
     }
   }, [strokeColor]);
 
+  // 뒤로가기, 앞으로가기
+  useEffect(() => {
+    if (contextRef.current && uiState.isBackBtnClicked) {
+      contextRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+
+      const currentIndex = selectionState.currentChocolateIndex;
+      const strokes = chocolateInfo.strokes[currentIndex] || [];
+
+      strokes.forEach((stroke) => {
+        contextRef.current.beginPath();
+        stroke.forEach((point, index) => {
+          if (index === 0) {
+            contextRef.current.moveTo(point.x, point.y);
+          } else {
+            contextRef.current.lineTo(point.x, point.y);
+          }
+        });
+        contextRef.current.stroke();
+      });
+
+      setUIState((prev) => ({ ...prev, isBackBtnClicked: false }));
+    }
+  }, [uiState.isBackBtnClicked, JSON.stringify(chocolateInfo.strokes[selectionState.currentChocolateIndex]), selectionState.currentChocolateIndex]);
+
+  // 캔바스 그림 위치 조정
   const getCoordinates = (e) => {
     if (!canvasRef.current) return { x: 0, y: 0 };
 
@@ -69,17 +107,45 @@ const Canvas = ({ isToppingMode, isSelected, isZoomMode, strokeColor = "vanilla"
     const { x, y } = getCoordinates(e);
     contextRef.current.beginPath();
     contextRef.current.moveTo(x, y);
-    setIsDrawing(true);
+    setUIState((prev) => ({...prev, isDrawing: true}))
+
+    // 새로운 획 시작 시 데이터 초기화
+    setChocolateInfo((prev) => ({
+      ...prev,
+      strokes: {
+        ...prev.strokes,
+        [selectionState.currentChocolateIndex]: [...(prev.strokes[selectionState.currentChocolateIndex] || []), [{ x, y }]],
+      },
+    }));
   };
 
   const draw = (e) => {
-    if (!isDrawing) return;
+    if (!uiState.isDrawing) return;
     e.preventDefault();
+
     const { x, y } = getCoordinates(e);
     contextRef.current.lineTo(x, y);
     contextRef.current.stroke();
-  };
 
+    // 디바운싱 적용: 일정 시간 동안 이벤트가 발생하지 않을 때만 상태 업데이트
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current);
+    }
+
+    debounceTimer.current = setTimeout(() => {
+      setChocolateInfo((prev) => {
+        const currentStrokes = prev.strokes[selectionState.currentChocolateIndex] || [];
+        currentStrokes[currentStrokes.length - 1].push({ x, y });
+        return {
+          ...prev,
+          strokes: {
+            ...prev.strokes,
+            [selectionState.currentChocolateIndex]: currentStrokes,
+          },
+        };
+      });
+    }, 100); // 100ms 동안 추가 이벤트가 없으면 저장
+  };
 
   const isCanvasEmpty = () => {
     if (!canvasRef.current || !contextRef.current) return true;
@@ -88,20 +154,40 @@ const Canvas = ({ isToppingMode, isSelected, isZoomMode, strokeColor = "vanilla"
     const { width, height } = canvasRef.current;
     const imageData = ctx.getImageData(0, 0, width, height).data;
 
-    return !imageData.some((pixel) => pixel !== 0); 
+    return !imageData.some((pixel) => pixel !== 0);
   };
 
   const stopDrawing = () => {
-    setIsDrawing(false);
+    setUIState((prev) => ({...prev, isDrawing: false}))
     contextRef.current.closePath();
 
+    let imageData;
+
     if (canvasRef.current && !isCanvasEmpty()) {
-      const imageData = canvasRef.current.toDataURL();
+      imageData = canvasRef.current.toDataURL();
       if (onSave) {
         onSave(imageData);
       } else {
         console.error("❌ onSave 함수가 정의되지 않음!");
       }
+    }
+
+    // 뒤로가기, 앞으로가기를 위해 그림 히스토리 저장
+    if (imageData) {
+      const currentIndex = selectionState.currentChocolateIndex;
+      const newDrawings = { ...chocolateInfo.drawings, [currentIndex]: imageData };
+      let newHistory = [...gameState.history.slice(0, gameState.historyIndex + 1), { drawings: newDrawings }];
+
+      // 히스토리 최대 길이 초과 시 오래된 항목 삭제
+      if (newHistory.length > MAX_HISTORY_LENGTH) {
+        newHistory = newHistory.slice(newHistory.length - MAX_HISTORY_LENGTH);
+      }
+
+      setGameState((prev) => ({
+        ...prev,
+        history: newHistory,
+        historyIndex: newHistory.length - 1,
+      }));
     }
   };
 
