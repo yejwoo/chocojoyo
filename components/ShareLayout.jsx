@@ -3,10 +3,10 @@ import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import KakaoShareButton from "@/components/KakaoShareButton";
-import { chocoBox, chocoPng, chocoWithCard, shareLink } from "@/public/icons/share";
+import { chocoBox, chocoPng, chocoWithCard, shareLink, tooltip } from "@/public/icons/share";
 import Modal from "@/components/Modal";
 import { copyToClipboard } from "@/utils/copyToClipboard";
-import { DOMAIN, chocolateColors } from "@/utils/constants";
+import { DOMAIN } from "@/utils/constants";
 import html2canvas from "html2canvas";
 import CustomLoading from "./CustomLoading";
 import CardLayout from "./layout/CardLayout";
@@ -19,6 +19,7 @@ export default function ShareLayout() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("");
   const cardLayoutRef = useRef(null);
+  const [isTooltipVisible, setIsTooltipVisible] = useState(false);
   const btnSytle =
     "transform transition-all duration-150 ease-in-out hover:brightness-90 focus:brightness-90 focus:scale-95 active:brightness-75 active:scale-95";
 
@@ -46,18 +47,18 @@ export default function ShareLayout() {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setModalType("");
+    setIsTooltipVisible(false); // 모달 닫을 때 툴팁도 닫기
   };
 
   const downloadImage = async (element, filename) => {
     const canvas = await html2canvas(element, {
-      backgroundColor: "#FFF",  
+      backgroundColor: null,
       useCORS: true,
       allowTaint: true,
       ignoreElements: (el) => el.classList.contains("no-capture"),
     });
 
-    // 타임스탬프 추가
-    const timestamp = new Date().getTime(); 
+    const timestamp = new Date().getTime();
     const fullFilename = `${filename}_${timestamp}.png`;
 
     const link = document.createElement("a");
@@ -80,7 +81,6 @@ export default function ShareLayout() {
     const chocoElements = cardLayoutRef.current?.getChocoElements();
     if (!chocoElements) return;
 
-    // 배경 숨기기
     chocoElements.forEach((ref) => {
       if (ref) {
         const bgElement = ref.querySelector(".choco-bg");
@@ -90,7 +90,6 @@ export default function ShareLayout() {
       }
     });
 
-    // 저장을 위한 컨테이너 생성
     const chocoContainer = document.createElement("div");
     chocoContainer.style.position = "fixed";
     chocoContainer.style.top = "100vh";
@@ -105,7 +104,6 @@ export default function ShareLayout() {
     chocoContainer.style.backgroundColor = "transparent";
     chocoContainer.style.padding = "20px";
 
-    // 초콜릿 요소 복제 및 추가
     chocoElements.forEach((ref) => {
       if (ref) {
         const clone = ref.cloneNode(true);
@@ -119,7 +117,6 @@ export default function ShareLayout() {
     await downloadImage(chocoContainer, "individual_chocos");
     document.body.removeChild(chocoContainer);
 
-    // 저장 후 배경 다시 표시
     chocoElements.forEach((ref) => {
       if (ref) {
         const bgElement = ref.querySelector(".choco-bg");
@@ -134,52 +131,76 @@ export default function ShareLayout() {
 
   return (
     <>
-      <CardLayout chocolateInfo={cardData} mode="share" id={searchParams.get("id")} onOpen={handleOpenModal} ref={cardLayoutRef} />
-
-      {/* 모달 */}
-      {isModalOpen && (
-        <Modal title={modalType === "share" ? "공유하기" : "사진 저장"} onCancel={handleCloseModal} type={modalType}>
-          {modalType === "share" && (
-            <div className="flex gap-8 w-full justify-center">
-              <KakaoShareButton />
-              <button
-                className={`text-sm flex flex-col gap-2 items-center ${btnSytle}`}
-                type="button"
-                onClick={() => {
-                  copyToClipboard(url);
-                }}
-              >
-                <div className="w-12 h-12 bg-gray-warm-50 rounded-full flex justify-center items-center">
-                  <Image className="" src={shareLink} alt="링크 복사" />
+      <div onClick={() => setIsTooltipVisible(false)}>
+        {" "}
+        {/* 다른 곳 클릭 시 툴팁 닫기 */}
+        <CardLayout chocolateInfo={cardData} mode="share" id={searchParams.get("id")} onOpen={handleOpenModal} ref={cardLayoutRef} />
+        {isModalOpen && (
+          <Modal title={modalType === "share" ? "공유하기" : "사진 저장"} onCancel={handleCloseModal} type={modalType}>
+            {modalType === "share" && (
+              <div className="flex gap-8 w-full justify-center">
+                <KakaoShareButton />
+                <button
+                  className={`text-sm flex flex-col gap-2 items-center ${btnSytle}`}
+                  type="button"
+                  onClick={() => {
+                    copyToClipboard(url);
+                  }}
+                >
+                  <div className="w-12 h-12 bg-gray-warm-50 rounded-full flex justify-center items-center">
+                    <Image src={shareLink} alt="링크 복사" />
+                  </div>
+                  <span>링크 복사</span>
+                </button>
+              </div>
+            )}
+            {modalType === "download" && (
+              <div className="flex gap-2 w-full justify-center">
+                <button className="rounded-md text-sm flex flex-col gap-2 items-center w-[80px]" type="button" onClick={handleDownloadCard}>
+                  <div className={`w-12 h-12 bg-gray-warm-50 rounded-full flex justify-center items-center ${btnSytle}`}>
+                    <Image src={chocoWithCard} alt="편지 저장" />
+                  </div>
+                  <span>편지</span>
+                </button>
+                <button className="rounded-md text-sm flex flex-col gap-2 items-center w-[80px]" type="button" onClick={handleDownloadBox}>
+                  <div className={`w-12 h-12 bg-gray-warm-50 rounded-full flex justify-center items-center ${btnSytle}`}>
+                    <Image src={chocoBox} alt="초콜릿 저장" />
+                  </div>
+                  <span>박스</span>
+                </button>
+                <div
+                  className="relative w-[80px]"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDownloadIndividualChoco();
+                  }}
+                >
+                  <button className="rounded-md text-sm flex flex-col gap-2 items-center w-full" type="button">
+                    <div className={`w-12 h-12 bg-gray-warm-50 rounded-full flex justify-center items-center ${btnSytle}`}>
+                      <Image src={chocoPng} alt="초콜릿 저장" />
+                    </div>
+                    <span>스티커</span>
+                    <Image
+                      className="w-4 h-auto absolute right-2"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsTooltipVisible(true);
+                      }}
+                      src={tooltip}
+                      alt="초콜릿 저장"
+                    />
+                  </button>
                 </div>
-                <span>링크 복사</span>
-              </button>
-            </div>
-          )}
-          {modalType === "download" && (
-            <div className="flex gap-2 w-full justify-center">
-              <button className="p-2 rounded-md text-sm flex flex-col gap-2 items-center " type="button" onClick={handleDownloadCard}>
-                <div className={`w-12 h-12 bg-gray-warm-50 rounded-full flex justify-center items-center ${btnSytle}`}>
-                  <Image className="" src={chocoWithCard} alt="편지 저장" />
-                </div>
-                <span>초콜릿 + 편지</span>
-              </button>
-              <button className="p-2 rounded-md text-sm flex flex-col gap-2 items-center " type="button" onClick={handleDownloadBox}>
-                <div className={`w-12 h-12 bg-gray-warm-50 rounded-full flex justify-center items-center ${btnSytle}`}>
-                  <Image className="" src={chocoBox} alt="초콜릿 저장" />
-                </div>
-                <span>초콜릿 박스</span>
-              </button>
-              <button className="p-2 rounded-md text-sm flex flex-col gap-2 items-center " type="button" onClick={handleDownloadIndividualChoco}>
-                <div className={`w-12 h-12 bg-gray-warm-50 rounded-full flex justify-center items-center ${btnSytle}`}>
-                  <Image className="" src={chocoPng} alt="초콜릿 저장" />
-                </div>
-                <span>개별 초콜릿</span>
-              </button>
-            </div>
-          )}
-        </Modal>
-      )}
+              </div>
+            )}
+            {isTooltipVisible && (
+              <div className="w-40 absolute top-5 right-8 bg-white border border-gray-warm-300 shadow-md rounded-lg p-2 text-sm">
+                앨범에서 꾹 눌러 스티커로 사용해보세요!
+              </div>
+            )}
+          </Modal>
+        )}
+      </div>
     </>
   );
 }
