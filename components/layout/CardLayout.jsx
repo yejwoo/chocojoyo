@@ -7,7 +7,7 @@ import { bottomNaviConfig } from "@/data/Stage";
 import { bgBrown } from "@/public/images/common";
 import { supabase } from "@/lib/supabaseClient";
 
-const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id, onOpen }, ref) => {
+const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id, onOpen, onComplete }, ref) => {
   const cardRef = useRef(null);
   const boxRef = useRef(null);
   const chocoRefs = useRef([]);
@@ -26,13 +26,13 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
     setIsCompleted(formData.message.length > 0 && formData.name.length > 0);
   }, [formData]);
 
-  const handleInputChange = (e, type) => {
-    const value = e.target.value;
-    if (type === "message") {
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "message") {
       const lines = value.split("\n");
       if (lines.length > 3) return;
       setFormData({ ...formData, message: value.slice(0, MAX_LENTH) });
-    } else {
+    } else if (name === "name") {
       setFormData({ ...formData, name: value });
     }
   };
@@ -71,11 +71,11 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
             <div ref={boxRef} className="relative z-10 w-[280px] h-[182px] flex justify-center items-center mx-auto">
               <Image src={box} alt="초콜릿 틀" width={280} height={280} className="absolute bottom-0" draggable={false} />
               <div className="w-full flex justify-center items-center flex-wrap gap-x-2 gap-y-2">
-                {formData.shapes.map((shape, index) => {
+                {chocolateInfo?.shapes.map((shape, index) => {
                   const ShapeComponent = Shapes[shape.charAt(0).toUpperCase() + shape.slice(1)];
-                  const drawing = formData.drawings[index];
-                  const topping = formData.toppings[index];
-                  const color = formData.colors[index];
+                  const drawing = chocolateInfo.drawings[index];
+                  const topping = chocolateInfo.toppings[index];
+                  const color = chocolateInfo.colors[index];
 
                   return ShapeComponent ? (
                     <div
@@ -121,27 +121,22 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
               <textarea
                 name="message"
                 value={formData.message}
-                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                onChange={handleInputChange}
                 className="w-[280px] mx-auto h-[108px] text-left text-2xl leading-9 flex"
                 placeholder="편지는 세 줄까지 쓸 수 있어요."
               />
               <div className="mt-2 relative text-center border-b border-gray-warm-100">
                 <span className="text-lg">from. </span>
-                <input
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="text-left"
-                  type="text"
-                  placeholder="이름은 열 글자까지"
-                  maxLength={10}
-                />
+                <input name="name" onChange={handleInputChange} className="text-left w-[130px]" type="text" placeholder="이름은 열 글자까지" maxLength={10} />
               </div>
             </div>
           ) : (
             <div className="w-full flex flex-col justify-center items-center pb-4">
               <p className="w-[280px] mx-auto h-[108px] text-left text-2xl leading-9 flex whitespace-pre-line">{formData.message}</p>
-              <div className="mt-2 relative text-center border-b border-gray-warm-100">
-                <span className="text-lg">from. </span>
-                <span>{formData.name}</span>
+              <div className="mt-2 relative text-center">
+                <div className="border-b border-gray-warm-100 no-capture absolute inset-0 pointer-events-none" />
+                <span className="text-lg relative z-10">from. </span>
+                <span className="relative z-10">{formData.name}</span>
               </div>
             </div>
           )}

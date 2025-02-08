@@ -1,9 +1,6 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import box from "@/public/images/stage5/box.svg";
-import { Shapes } from "@/public/icons/shapes";
-import { bgPatterns } from "@/public/images/card";
 import { supabase } from "@/lib/supabaseClient";
 import KakaoShareButton from "@/components/KakaoShareButton";
 import { chocoBox, chocoPng, chocoWithCard, shareLink } from "@/public/icons/share";
@@ -135,7 +132,7 @@ export default function ShareLayout() {
 
   return (
     <main className="max-w-[400px] max-h-[800px] fixed w-full h-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-between">
-      <CardLayout mode="share" id={searchParams.get("id")} onOpen={handleOpenModal} ref={cardLayoutRef} />
+      <CardLayout chocolateInfo={cardData} mode="share" id={searchParams.get("id")} onOpen={handleOpenModal} ref={cardLayoutRef} />
 
       {/* 모달 */}
       {isModalOpen && (
