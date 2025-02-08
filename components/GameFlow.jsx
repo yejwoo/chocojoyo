@@ -49,7 +49,7 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
       const { main, sub } = stage;
       const sequence = stageData[main][sub]?.sequence;
 
-      if (stage.main === 1 && stage.sub === "description") {
+      if (stage.main === 1 && stage.sub === "task") {
         setUIState((prev) => ({
           ...prev,
           isShowNavi: true,
@@ -332,14 +332,13 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
             <Navi uiState={uiState} currentStage={stage.main} completedStages={gameState.completedStages} />
             {stage.main >= 2 && stage.main <= 4 && (
               <div className="absolute top-[72px] max-h-sm:top-12 left-1/2 -translate-x-1/2 z-10">
-                <ProgressBar chocolateInfo={chocolateInfo} gameState={gameState} totalItems={currentData.items.length - 1} stageId={stage.main} />
+                <ProgressBar chocolateInfo={chocolateInfo} gameState={gameState} stageId={stage.main} />
               </div>
             )}
           </>
 
           {/* 하단 네비게이션 */}
-          {/* && stage.sub === "description" -> 이 조건은 대사 다 정하고 추가 */}
-          {uiState.isShowItems && stage.main >= 4 && (
+          {stage.sub === "task" && uiState.isShowItems && stage.main >= 4 && (
             <BottomNavi
               stage={stage}
               selectionState={selectionState}

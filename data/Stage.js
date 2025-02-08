@@ -1,5 +1,5 @@
+import { yantoGif } from "@/public/images/common/yanto";
 import tailwindConfig from "../tailwind.config.mjs";
-import { yantoBlink, yantoHello, yantoEat, yantoSwing, yantoThumb } from "@/public/images/common";
 import { chocolate1, chocolate2, chocolate3, chocolate4, chocolate5, chocolate6, chocolate7, chocolate8, knife } from "@/public/images/stage2";
 import { doubleBoiler, meltedChocolate1, meltedChocolate2, meltedChocolate3, spatula } from "@/public/images/stage3";
 import { toppingAlmond, toppingBlueberries, toppingCoffeeBean, toppingHeart, toppingSprinkle, toppingStrawberry } from "@/public/images/stage5";
@@ -25,21 +25,20 @@ export const stageData = [
   null,
   {
     init: {
-      imgSrc: yantoHello,
-      dialogue: "안녕하세요!<br/> 저는 얀토예요.",
-      // { type: "delay", value: 1500 },
-      sequence: [{ type: "nextSubStage" }],
-      nextSubStage: "description",
+      imgSrc: yantoGif.hello,
+      dialogue: "안녕하세요!<br/>얀토라고 해요.",
+      sequence: [{ type: "delay", value: 1500 }, { type: "nextSubStage" }],
+      nextSubStage: "message",
     },
-    // message: {
-    //   imgSrc: yantoThumb,
-    //   dialogue: "달콤한 초콜릿을<br/> 만들러 가볼까요?",
-    //   sequence: [{ type: "delay", value: 2000 }, { type: "nextSubStage" }],
-    //   nextSubStage: "description",
-    // },
-    description: {
-      imgSrc: yantoBlink,
-      dialogue: "초콜릿 모양을<br/>선택해주세요.",
+    message: {
+      imgSrc: yantoGif.thumb,
+      dialogue: "여러분의 초콜릿을<br/>함께 만들러 왔어요!",
+      sequence: [{ type: "delay", value: 1500 }, { type: "nextSubStage" }],
+      nextSubStage: "task",
+    },
+    task: {
+      imgSrc: yantoGif.blink,
+      dialogue: "먼저, 초콜릿 모양을<br/>선택해볼까요?",
       ...commonConfig,
       items: [
         {
@@ -77,7 +76,13 @@ export const stageData = [
   },
   {
     init: {
-      imgSrc: yantoBlink,
+      imgSrc: yantoGif.thumb,
+      dialogue: "우와, 멋진 모양이에요!<br/>",
+      sequence: [{ type: "delay", value: 1200 }, { type: "nextSubStage" }],
+      nextSubStage: "task",
+    },
+    task: {
+      imgSrc: yantoGif.blink,
       dialogue: "이제 칼을 눌러서<br/> 초콜릿을 썰어주세요.",
       ...commonConfig,
       items: [
@@ -95,8 +100,14 @@ export const stageData = [
   },
   {
     init: {
-      imgSrc: yantoBlink,
-      dialogue: "초콜릿을 저어주세요.",
+      imgSrc: yantoGif.thumb,
+      dialogue: "칼 솜씨가<br/>제법인데요?",
+      sequence: [{ type: "delay", value: 1200 }, { type: "nextSubStage" }],
+      nextSubStage: "task",
+    },
+    task: {
+      imgSrc: yantoGif.blink,
+      dialogue: "초콜릿을 부드럽게<br/>녹여주세요.",
       ...commonConfig,
       items: [
         {
@@ -130,8 +141,14 @@ export const stageData = [
   },
   {
     init: {
-      imgSrc: yantoSwing,
-      dialogue: "짤주머니를 꾹 눌러<br/>초콜릿을 채워주세요.",
+      imgSrc: yantoGif.clap,
+      dialogue: "우와~ 정말<br/>금손이시네요!",
+      sequence: [{ type: "delay", value: 1200 }, { type: "nextSubStage" }],
+      nextSubStage: "task",
+    },
+    task: {
+      imgSrc: yantoGif.swing,
+      dialogue: "색을 골라 짤주머니로<br/>초콜릿을 채워주세요.",
       items: [
         {
           position: { x: 24, y: 12 },
@@ -157,15 +174,21 @@ export const stageData = [
   },
   {
     init: {
-      imgSrc: yantoSwing,
-      dialogue: "거의 다 왔어요. 초콜릿을 꾸며주세요.",
+      imgSrc: yantoGif.shy,
+      dialogue: "이제 거의 다 됐어요!",
+      sequence: [{ type: "delay", value: 1200 }, { type: "nextSubStage" }],
+      nextSubStage: "task",
+    },
+    task: {
+      imgSrc: yantoGif.swing,
+      dialogue: "초콜릿을 마음껏<br/>꾸며보세요!",
       ...commonConfig,
     },
   },
   {
     init: {
-      imgSrc: yantoSwing,
-      dialogue: `마지막이에요!<br/>편지를 써주세요.`,
+      imgSrc: yantoGif.swing,
+      dialogue: `마지막 단계예요!<br/>편지를 써볼까요?`,
       ...commonConfig,
     },
   },

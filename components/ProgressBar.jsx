@@ -2,7 +2,7 @@ import { heart } from "@/public/images/common";
 import Image from "next/image";
 import { useRef, useState, useEffect } from "react";
 
-export default function ProgressBar({ chocolateInfo, gameState, totalItems, stageId }) {
+export default function ProgressBar({ chocolateInfo, gameState, totalItems = 8, stageId }) {
   const progressBarRef = useRef(null);
   const heartRef = useRef(null);
   const [progressBarWidth, setProgressBarWidth] = useState(0);
@@ -28,8 +28,6 @@ export default function ProgressBar({ chocolateInfo, gameState, totalItems, stag
     progressRatio = Math.min((currentTotalSize / maxTotalSize) * 100, 100);
   }
 
-  // const progressBarWidth = document.getElementById('progress-bar').getBoundingClientRect().width;
-  // const heartSize = document.getElementById('progress-heart').getBoundingClientRect().width;
   const heartPositionX = (progressRatio / 100) * (progressBarWidth - heartSize);
 
   return (
