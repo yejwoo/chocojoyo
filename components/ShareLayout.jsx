@@ -53,23 +53,28 @@ export default function ShareLayout() {
       backgroundColor: null,
       scale: 2,
       useCORS: true,
-      allowTaint: true, // 크로스 도메인 이미지 문제 해결
-      ignoreElements: (el) => el.classList.contains("no-capture"), // 이 클래스는 캡처에서 제외
+      allowTaint: true,
+      ignoreElements: (el) => el.classList.contains("no-capture"),
     });
+
+    // 타임스탬프 추가
+    const timestamp = new Date().getTime(); 
+    const fullFilename = `${filename}_${timestamp}.png`;
+
     const link = document.createElement("a");
     link.href = canvas.toDataURL("image/png");
-    link.download = filename;
+    link.download = fullFilename;
     link.click();
   };
 
   const handleDownloadCard = () => {
     const cardElement = cardLayoutRef.current?.getCardElement();
-    if (cardElement) downloadImage(cardElement, "card_with_choco.png");
+    if (cardElement) downloadImage(cardElement, "card_with_choco");
   };
 
   const handleDownloadBox = () => {
     const boxElement = cardLayoutRef.current?.getBoxElement();
-    if (boxElement) downloadImage(boxElement, "choco_box.png");
+    if (boxElement) downloadImage(boxElement, "choco_box");
   };
 
   const handleDownloadIndividualChoco = async () => {
@@ -112,7 +117,7 @@ export default function ShareLayout() {
     });
 
     document.body.appendChild(chocoContainer);
-    await downloadImage(chocoContainer, "individual_chocos.png");
+    await downloadImage(chocoContainer, "individual_chocos");
     document.body.removeChild(chocoContainer);
 
     // 저장 후 배경 다시 표시
