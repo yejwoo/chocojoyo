@@ -3,11 +3,11 @@ import box from "@/public/images/stage5/box.svg";
 import { Shapes } from "@/public/icons/shapes";
 import Button from "../Button";
 import Image from "next/image";
-import { bottomNaviConfig } from "@/data/Stage";
 import { bgBrown } from "@/public/images/common";
 import { supabase } from "@/lib/supabaseClient";
 import Container from "./Container";
 import { useRouter } from "next/navigation";
+import { chocolateColors } from "@/utils/constants";
 
 const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id, onOpen, onComplete }, ref) => {
   const cardRef = useRef(null);
@@ -19,7 +19,6 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
   const [isCompleted, setIsCompleted] = useState(false);
   const chocolateInfoRef = useRef(chocolateInfo);
   const MAX_LENTH = 60;
-  const chocolateColors = bottomNaviConfig[4][0].data;
 
   useEffect(() => {
     chocolateInfoRef.current = chocolateInfo;
@@ -91,8 +90,8 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
                         <ShapeComponent
                           width={64}
                           height={56}
-                          fillColor={chocolateColors[color]?.fill}
-                          strokeColor={chocolateColors[color]?.border}
+                          fillColor={chocolateColors[color]?.[100] || '#894E00'}
+                          strokeColor={chocolateColors[color]?.[200] || '#894E00'}
                           className="relative z-10"
                         />
 

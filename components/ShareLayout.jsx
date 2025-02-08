@@ -6,7 +6,7 @@ import KakaoShareButton from "@/components/KakaoShareButton";
 import { chocoBox, chocoPng, chocoWithCard, shareLink } from "@/public/icons/share";
 import Modal from "@/components/Modal";
 import { copyToClipboard } from "@/utils/copyToClipboard";
-import { DOMAIN } from "@/constants";
+import { DOMAIN, chocolateColors } from "@/utils/constants";
 import html2canvas from "html2canvas";
 import CustomLoading from "./CustomLoading";
 import CardLayout from "./layout/CardLayout";

@@ -1,11 +1,12 @@
 import { bottomNaviConfig } from "@/data/Stage";
+import { chocopenColors } from "@/utils/constants";
 import React, { useRef, useEffect, useState } from "react";
 
 const Canvas = ({ isToppingMode, isSelected, isZoomMode, strokeColor = "vanilla", onSave, uiState, className, setUIState }) => {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
-  const chocoPenColors = bottomNaviConfig[5][0].data;
+
 
   if (contextRef.current && uiState.isClearCanvas) {
     contextRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
@@ -35,7 +36,7 @@ const Canvas = ({ isToppingMode, isSelected, isZoomMode, strokeColor = "vanilla"
 
   useEffect(() => {
     if (contextRef.current) {
-      contextRef.current.strokeStyle = chocoPenColors[strokeColor]?.fill || "#fff";
+      contextRef.current.strokeStyle = chocopenColors[strokeColor]?.[100] || "#fff";
     }
   }, [strokeColor]);
 

@@ -4,6 +4,7 @@ import { useEffect, useMemo } from "react";
 import { handleTabClick, handleColorSelection, handleToppingSelection } from "@/app/handlers/generalHandlers";
 import { handleZoomMode } from "@/app/handlers/stageHandlers/stage5Handlers";
 import { magnifierActive, magnifierDefault, resetActive, resetDefault } from "@/public/images/stage5";
+import { chocoepnIcons, pastryBagIcons } from "@/public/images/common/bottom-navi";
 import arrow from "@/public/icons/arrow.svg";
 
 export const BottomNaviItem = ({ naviData, stage, uiState, selectionState, setSelectionState, setUIState, currentTabIndex }) => {
@@ -22,32 +23,31 @@ export const BottomNaviItem = ({ naviData, stage, uiState, selectionState, setSe
     }
   }, [uiState.isResetPopupOpen]);
 
-  if (naviData.type === "color") {
+  const renderColorOptions = () => {
     return Object.keys(naviData.data)
-      .filter((item) => item !== "default")
-      .map((item, subIndex) => (
-        <div
-          key={`${naviData.type}-${item}-${subIndex}`}
-          onClick={() => handleColorSelection(item, setSelectionState)}
-          className={`cursor-pointer flex-shrink-0 rounded-full border-2 w-8 h-8 ${selectionState.currentColor === item ? "ring-4 ring-brand-200" : ""} 
-          ${currentTabIndex === naviData.index ? "opacity-100 visible" : "opacity-0 invisible absolute"}`}
-          style={{
-            backgroundColor: naviData.data[item].fill,
-            borderColor: naviData.data[item].border,
-          }}
-        ></div>
+      .filter((colorName) => colorName !== "default")
+      .map((colorName, subIndex) => (
+        <Image
+          key={`${naviData.type}-${colorName}-${subIndex}`}
+          src={stage.main === 5 ? chocoepnIcons[colorName] : pastryBagIcons[colorName]}
+          alt={`${colorName} color`}
+          className={`cursor-pointer flex-shrink-0 rounded-full w-9 h-9 bg-gray-warm-50 ${selectionState.currentColor === colorName ? "ring-4 ring-brand-200" : ""} ${
+            currentTabIndex === naviData.index ? "opacity-100 visible" : "opacity-0 invisible absolute"
+          }`}
+          onClick={() => handleColorSelection(colorName, setSelectionState)}
+        />
       ));
-  }
+  };
 
-  if (naviData.type === "image") {
+  const renderImageOptions = () => {
     return (
       <div className={`flex gap-7 ${currentTabIndex === naviData.index ? "opacity-100 visible" : "opacity-0 invisible absolute"}`}>
         {naviData.data.map((item, subIndex) => (
           <Image
             key={`${naviData.type}-${subIndex}-${item.imgSrc}`}
             src={item.imgSrc}
-            alt={item.alt || "토핑 이미지"}
-            className={`w-8 h-8 cursor-pointer rounded-sm ${selectionState.currentTopping === item.name ? "ring-4 ring-brand-200" : ""}`}
+            alt={item.alt || "이미지"}
+            className={`w-9 h- cursor-pointer rounded-sm ${selectionState.currentTopping === item.name ? "ring-4 ring-brand-200" : ""}`}
             draggable={false}
             onClick={() => {
               handleToppingSelection(item.name, setSelectionState);
@@ -56,7 +56,10 @@ export const BottomNaviItem = ({ naviData, stage, uiState, selectionState, setSe
         ))}
       </div>
     );
-  }
+  };
+
+  if (naviData.type === "color") return renderColorOptions();
+  if (naviData.type === "image") return renderImageOptions();
 
   return null;
 };
@@ -86,7 +89,7 @@ export const BottomNavi = ({ stage, selectionState, setSelectionState, setChocol
       {naviData.length > 1 && (
         <>
           {/* 온보딩 관련 */}
-          {stage.main === 5 && stage.sub === "init" && uiState.isOnboarding && (
+          {/* {stage.main === 5 && stage.sub === "init" && uiState.isOnboarding && (
             <>
               {["left-5", "left-[100px]", "left-[188px]"].map((position, index) => (
                 <Image
@@ -107,7 +110,7 @@ export const BottomNavi = ({ stage, selectionState, setSelectionState, setChocol
                   : "확대해서 섬세하게 꾸미고, 실수하면 리셋하세요!"}
               </div>
             </>
-          )}
+          )} */}
 
           {/* ✅ 탭 + 버튼 컨테이너 */}
           <div className="absolute left-[-8px] bottom-[60px] max-h-sm:bottom-[52px] flex w-full z-10">
@@ -117,9 +120,8 @@ export const BottomNavi = ({ stage, selectionState, setSelectionState, setChocol
                 <div key={`${item.type}-${index}-tab`}>
                   <div
                     key={`${index}-bottom-line`}
-                    className={`${
-                      selectionState.currentTabIndex === index ? "opacity-100 visible" : "opacity-0 invisible"}
-                      ${selectionState.currentTabIndex === 0 ? "w-[80px] left-0 " : "left-[88px] w-[76px]" }
+                    className={`${selectionState.currentTabIndex === index ? "opacity-100 visible" : "opacity-0 invisible"}
+                      ${selectionState.currentTabIndex === 0 ? "w-[80px] left-0 " : "left-[88px] w-[76px]"}
                      bg-popup-100 h-1 absolute top-[44px]`}
                   ></div>
                   <div
@@ -154,7 +156,9 @@ export const BottomNavi = ({ stage, selectionState, setSelectionState, setChocol
       )}
 
       {/* ✅ 네비 데이터 (색깔 선택 부분) */}
-      <div className="absolute bg-popup-100 left-0 right-0 h-16 max-h-sm:h-14 bottom-0 flex gap-7 justify-center items-center border-t-4 border-default">{naviItems}</div>
+      <div className="absolute bg-popup-100 left-0 right-0 h-16 max-h-sm:h-14 bottom-0 flex gap-7 justify-center items-center border-t-4 border-default">
+        {naviItems}
+      </div>
     </div>
   );
 };

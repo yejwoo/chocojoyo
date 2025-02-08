@@ -1,24 +1,12 @@
+import { chocoepnIcons, pastryBagIcons } from "@/public/images/common/bottom-navi";
 import { yantoGif } from "@/public/images/common/yanto";
-import tailwindConfig from "../tailwind.config.mjs";
 import { chocolate1, chocolate2, chocolate3, chocolate4, chocolate5, chocolate6, chocolate7, chocolate8, knife } from "@/public/images/stage2";
 import { doubleBoiler, meltedChocolate1, meltedChocolate2, meltedChocolate3, spatula } from "@/public/images/stage3";
 import { toppingAlmond, toppingBlueberries, toppingCoffeeBean, toppingHeart, toppingSprinkle, toppingStrawberry } from "@/public/images/stage5";
-const chocolateColorsConfig = tailwindConfig.theme.extend.colors.chocolates;
-const chocopenColorsConfig = tailwindConfig.theme.extend.colors.chocopens;
 
 const commonConfig = {
-  sequence: [
-    { type: "delay", value: 1000 },
-    { type: "showItems" },
-  ],
+  sequence: [{ type: "delay", value: 1000 }, { type: "showItems" }],
   isFinal: true,
-};
-
-const createColorConfig = (colors) => {
-  return Object.keys(colors).reduce((acc, key) => {
-    acc[key] = { fill: colors[key][100], border: colors[key][200] };
-    return acc;
-  }, {});
 };
 
 export const stageData = [
@@ -198,14 +186,14 @@ export const bottomNaviConfig = {
   4: [
     {
       type: "color",
-      data: createColorConfig(chocolateColorsConfig),
+      data: pastryBagIcons,
       title: null,
     },
   ],
   5: [
     {
       type: "color",
-      data: createColorConfig(chocopenColorsConfig),
+      data: chocoepnIcons,
       title: "초코펜",
     },
     {

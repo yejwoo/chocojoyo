@@ -1,11 +1,10 @@
 import Image from "next/image";
 import box from "@/public/images/stage5/box.svg";
 import { Shapes } from "@/public/icons/shapes";
-import { bottomNaviConfig } from "@/data/Stage";
 import Canvas from "../Canvas";
+import { chocolateColors } from "@/utils/constants";
 
 export default function Stage5Items({ chocolateInfo, selectionState, uiState, setUIState, handleEvent }) {
-  const chocolateColors = bottomNaviConfig[4][0].data;
   const isToppingMode = selectionState.currentTabIndex === 1;
   const isZoomMode = uiState.isZoomMode;
 
@@ -34,7 +33,7 @@ export default function Stage5Items({ chocolateInfo, selectionState, uiState, se
             const color = chocolateInfo.colors[index];
             const isSelected = selectionState.currentChocolateIndex === index;
             const cursorImage = !isToppingMode
-              ? `/images/stage5/cursors/cursor-chocopen-${selectionState.currentColor}.png`
+              ? `/images/stage5/cursors/cursor-chocopen-${selectionState.currentColor}.svg`
               : `/images/stage5/cursors/cursor-topping-${selectionState.currentTopping}.svg`;
 
             return ShapeComponent ? (
@@ -69,8 +68,8 @@ export default function Stage5Items({ chocolateInfo, selectionState, uiState, se
                     className={isZoomMode && isSelected && !uiState.isResetPopupOpen ? "scale-[2.2] transition duration-200 ease-in-out" : ""}
                     width={(64 * (chocolateInfo.sizes[index] || 0)) / 100}
                     height={(56 * (chocolateInfo.sizes[index] || 0)) / 100}
-                    fillColor={chocolateColors[color]?.fill}
-                    strokeColor={chocolateColors[color]?.border}
+                    fillColor={chocolateColors[color]?.[100] || '#894E00'}
+                    strokeColor={chocolateColors[color]?.[200] || '#894E00'}
                   />
                 </div>
                 <Canvas

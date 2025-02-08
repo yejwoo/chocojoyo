@@ -1,10 +1,10 @@
 import Image from "next/image";
 import mold from "@/public/images/stage4/chocolate-mold.svg";
 import { Shapes } from "@/public/icons/shapes";
-import { bottomNaviConfig } from "@/data/Stage";
 import { PastryBag } from "@/public/images/stage4";
 import { useEffect } from "react";
 import { updatePastryBagPosition, updatePastryBagVisibility } from "@/app/handlers/stageHandlers/stage4Handlers";
+import { chocolateColors } from "@/utils/constants";
 
 export default function Stage4Items({
   currentData,
@@ -17,7 +17,6 @@ export default function Stage4Items({
   handleEvent,
   chocolateInfo,
 }) {
-  const chocolateColors = bottomNaviConfig[4][0].data;
 
   // ✅ 짤주머니 숨김 처리 로직
   useEffect(() => {
@@ -90,8 +89,8 @@ export default function Stage4Items({
                     onDragStart={(e) => e.preventDefault()}
                     width={(64 * (chocolateInfo.sizes[index] || 0)) / 100}
                     height={(56 * (chocolateInfo.sizes[index] || 0)) / 100}
-                    fillColor={chocolateColors[color]?.fill}
-                    strokeColor={chocolateColors[color]?.border}
+                    fillColor={chocolateColors[color]?.[100] || '#894E00'}
+                    strokeColor={chocolateColors[color]?.[200] || '#894E00'}
                   />
                 </div>
               </div>
@@ -105,7 +104,7 @@ export default function Stage4Items({
       {/* ✅ 짤주머니 렌더링 및 위치 업데이트 */}
       <div className={`${uiState.isPastryBagHidden ? "hidden" : ""} w-[280px] h-[332px] bottom-0 pastry-bag-area absolute pointer-events-none`}>
         <PastryBag
-          fillColor={chocolateColors[selectionState.currentColor]?.fill}
+          fillColor={selectionState.currentColor}
           className={`${uiState.isPastryBagHidden ? "hidden" : ""}`}
           style={{
             position: "absolute",
