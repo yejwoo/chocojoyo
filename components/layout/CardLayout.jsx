@@ -62,7 +62,7 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
   return (
     <main
       ref={cardRef}
-      className="max-w-[400px] max-h-[800px] fixed w-full h-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-between"
+      className="max-w-[400px] max-h-[800px] absolute w-full h-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-between"
     >
       <Image src={bgBrown} alt="배경화면" className="absolute bottom-0" draggable={false} />
       <div className="absolute top-1/2 -translate-y-1/2 flex flex-col gap-3 w-[320px] max-h-sm:top-5 max-h-sm:translate-y-0">
