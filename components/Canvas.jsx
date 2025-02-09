@@ -34,15 +34,20 @@ const Canvas = ({ isToppingMode, strokeColor = "vanilla", onSave, uiState, class
 
   // 저장된 그린 그림 불러오기
   useEffect(() => {
-    if (showDrawing && drawingData && contextRef.current) {
+    // canvasRef.current가 존재할 때만 실행
+    if (showDrawing && drawingData && contextRef.current && canvasRef.current) {
       const img = new Image();
       img.src = drawingData;
       img.onload = () => {
-        contextRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-        contextRef.current.drawImage(img, 0, 0, canvasRef.current.width, canvasRef.current.height);
+        // canvasRef.current가 여전히 존재하는지 재확인
+        if (canvasRef.current && contextRef.current) {
+          contextRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+          contextRef.current.drawImage(img, 0, 0, canvasRef.current.width, canvasRef.current.height);
+        }
       };
     }
   }, [showDrawing, drawingData, contextRef]);
+  
 
   useEffect(() => {
     if (contextRef.current) {
