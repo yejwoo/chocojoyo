@@ -5,7 +5,7 @@ import { PastryBag } from "@/public/images/stage4";
 import { useEffect } from "react";
 import { updatePastryBagPosition, updatePastryBagVisibility } from "@/app/handlers/stageHandlers/stage4Handlers";
 import { chocolateColors } from "@/utils/constants";
-import { arrowDown, arrowUp } from "@/public/images/common";
+import { arrowLeft } from "@/public/images/common";
 
 export default function Stage4Items({
   currentData,
@@ -38,12 +38,12 @@ export default function Stage4Items({
 
   return (
     <>
-      <div className="relative w-[280px] h-[182px]">
+      <div className="relative w-[280px] h-[182px] max-h-sm:bottom-10">
         {!uiState.isClicked && (
           <Image
-            src={arrowUp}
+            src={arrowLeft}
             alt="화살표"
-            className="absolute z-10 bottom-16  left-8 animate-float-y transition-opacity duration-300"
+            className="absolute z-10 -top-4 left-24 animate-float-y transition-opacity duration-300"
             style={{ width: "48px", height: "48px" }}
           />
         )}

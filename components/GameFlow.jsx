@@ -331,7 +331,7 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
           {/* 상단 네비게이션 */}
           <>
             <Navi uiState={uiState} currentStage={stage.main} completedStages={gameState.completedStages} />
-            {stage.main >= 2 && stage.main <= 4 && (
+            {stage.main >= 2 && stage.main <= 4 && uiState.isShowItems && (
               <div className="absolute top-[72px] max-h-sm:top-12 left-1/2 -translate-x-1/2 z-10">
                 <ProgressBar chocolateInfo={chocolateInfo} gameState={gameState} stageId={stage.main} />
               </div>

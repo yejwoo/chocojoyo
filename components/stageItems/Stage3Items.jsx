@@ -19,16 +19,16 @@ export default function Stage3Items({ currentData, gameState, handleEvent, toolS
     <div className="relative w-60 h-72">
       {!uiState.isClicked && (
         <>
-          <Image
+          {/* <Image
             src={arrow}
             alt="화살표"
-            className="absolute z-10 top-12 left-1/2 -translate-x-1/2 transition-opacity duration-300 pointer-events-none"
-            style={{ width: "180px", height: "180px" }}
-          />
+            className="absolute z-10 -top-[24px] left-[124px] transition-opacity duration-300 pointer-events-none"
+            style={{ width: "96px", height: "96px" }}
+          /> */}
           <Image
             src={finger}
             alt="손가락"
-            className="absolute z-10 bottom-4 right-[54px] animate-float-y-center transition-opacity duration-300"
+            className="absolute z-10 bottom-10 right-[54px] animate-float-y-center transition-opacity duration-300"
             style={{ width: "72px", height: "72px" }}
           />
         </>
