@@ -39,6 +39,9 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
 
   useEffect(() => {
     const handlers = createActionHandlers({ setUIState, handleNextSubStage, handleNextMainStage });
+    if (stage.main === 6 && stage.sub === "init") {
+      setUIState((prev) => ({ ...prev, isCompleteEvent: false }));
+    }
 
     const runSequence = async () => {
       await delay(1200);
@@ -68,9 +71,7 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
         }
       }
 
-      // 마지막 스텝에서 버튼 숨김처리 하고 대사 보여준 다음 카드로 넘어가기
       if (stage.main === 6 && stage.sub === "init") {
-        setUIState((prev) => ({ ...prev, isCompleteEvent: false }));
         await delay(3500);
         setCurrentStep("card");
       }
