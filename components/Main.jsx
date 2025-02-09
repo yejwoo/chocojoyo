@@ -5,13 +5,24 @@ import Container from "./layout/Container";
 import { useAudio } from "@/app/context/AudioContext";
 import { Volume2, VolumeX } from "lucide-react";
 import { songPath } from "@/utils/constants";
+import Modal from "./Modal";
+import { useState } from "react";
 
 export default function Main({ onStart }) {
   const { isPlaying, togglePlay, changeTrack } = useAudio();
+  const [isShowModal, setIsShowModal] = useState(false);
 
   const handleStart = async () => {
     await onStart();
     changeTrack(songPath + "play-theme.mp3");
+  };
+
+  const handleModal = () => {
+    setIsShowModal(!isShowModal);
+  };
+
+  const handleCloseModal = () => {
+    setIsShowModal(!isShowModal);
   };
 
   return (
@@ -73,9 +84,23 @@ export default function Main({ onStart }) {
             {isPlaying ? <Volume2 size={24} /> : <VolumeX size={24} />}
           </button>
         </div>
-
-        <a href="mailto:yejinwoo.me@gmail.com" className="absolute bottom-2 w-full text-center text-gray-warm-200 text-xs font-sans">contact: yejinwoo.me@gmail.com</a>
+        <div className="absolute bottom-0 w-full flex justify-center items-center gap-2 h-8 font-sans text-center text-gray-warm-200 text-xs">
+          <span className="cursor-pointer" onClick={() => handleModal("privacy")}>
+            개인정보처리방침
+          </span>
+          <span>|</span>
+          <span className="cursor-poiner"><a target="_blank" href="https://www.notion.so/yjwoo/195bdcdde583807985f5d4894f6626c0?pvs=4">이용약관</a></span>
+          <span>|</span>
+          <a href="mailto:yejinwoo.me@gmail.com">Contact</a>
+        </div>
       </div>
+      {isShowModal && (
+        <Modal title="개인정보 처리방침" onCancel={handleCloseModal}>
+          본 서비스는 사용자의 이름과 편지 내용을 수집합니다. 
+          이 정보는 공유 링크 생성 및 서비스 제공을 위해 사용되며, 제3자에게 제공되지 않습니다.<br/><br/>
+          수집된 정보는 사용자가 삭제를 요청하거나 서비스 종료 시 안전하게 삭제됩니다.
+        </Modal>
+      )}
     </Container>
   );
 }
