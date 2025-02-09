@@ -175,9 +175,8 @@ export const stageData = [
   },
   {
     init: {
-      imgSrc: yantoGif.swing,
-      dialogue: `마지막 단계예요!<br/>편지를 써볼까요?`,
-      ...commonConfig,
+      imgSrc: yantoGif.clap,
+      dialogue: "초콜릿을 완성했어요!<br/>마음을 담아 편지를<br/>쓰러 가볼까요?",
     },
   },
 ];

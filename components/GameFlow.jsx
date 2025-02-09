@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import CustomLoading from "./CustomLoading";
 import Image from "next/image";
 import { bgCounterTop } from "@/public/images/common";
+import { isTestMode } from "@/utils/constants";
 
 export default function GameFlow({ currentStep, setCurrentStep }) {
   const { state, setState, intervalRef } = useStageState();
@@ -66,13 +67,22 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
           }
         }
       }
+
+      // 마지막 스텝에서 버튼 숨김처리 하고 대사 보여준 다음 카드로 넘어가기
+      if (stage.main === 6 && stage.sub === "init") {
+        setUIState((prev) => ({ ...prev, isCompleteEvent: false }));
+        await delay(3500);
+        setCurrentStep("card");
+      }
     };
 
     runSequence();
+    if (!isTestMode) return;
     console.log("Stage Info: ", stage);
   }, [stage]);
 
   useEffect(() => {
+    if (!isTestMode) return;
     console.log("💝 chocolateInfo", chocolateInfo);
   }, [chocolateInfo]);
 
@@ -194,10 +204,10 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
       return;
     }
 
-    if (stage.main === 5) {
-      setCurrentStep("card");
-      return;
-    }
+    // if (stage.main === 5) {
+    //   setCurrentStep("card");
+    //   return;
+    // }
 
     setGameState((prev) => ({
       ...prev,
@@ -286,7 +296,6 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
 
           {/* 얀토 & 말풍선 */}
           <div className="w-full h-[228px] bottom-[286px] max-h-sm:top-[20%] absolute">
-            
             {/* @@@@@말풍선 & 버튼 @@@@@ */}
             <div className="absolute w-[214px] h-[164px] right-0 flex flex-col justify-end items-end">
               {/* 말풍선 */}
