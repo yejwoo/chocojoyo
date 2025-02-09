@@ -4,15 +4,18 @@
 
 @font-face {
   font-family: "Cafe24Ssurround";
-  src: url("/fonts/Cafe24Ssurround.otf");
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24Ssurround.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
 }
 
 html,
 body {
   height: 100%;
+  font-family: "Cafe24Ssurround", sans-serif;
   margin: 0;
   padding: 0;
-  font-size: 16px;
+  font-size: 1rem;
   color: #3d2505;
   /* background: #FFF8E7; */
   background: linear-gradient(to bottom, #ffe4e1, #ffc1cc);
@@ -92,14 +95,13 @@ hr {
 
 button {
   font-family: "Cafe24Ssurround";
-  font-size: 1rem;
 }
 
 img {
   outline: none;
   border: none;
-  -webkit-tap-highlight-color: transparent;  
-  -webkit-touch-callout: none;               
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
 }
 
 .overflow-scroll {

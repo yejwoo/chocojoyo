@@ -55,6 +55,8 @@ export default function ShareLayout() {
       backgroundColor: null,
       useCORS: true,
       allowTaint: true,
+      letterRendering: true,
+      foreignObjectRendering: true,
       ignoreElements: (el) => el.classList.contains("no-capture"),
     });
 
@@ -155,21 +157,21 @@ export default function ShareLayout() {
               </div>
             )}
             {modalType === "download" && (
-              <div className="flex gap-2 w-full justify-center">
-                <button className="rounded-md text-sm flex flex-col gap-2 items-center w-[80px]" type="button" onClick={handleDownloadCard}>
+              <div className="flex gap-3 w-full justify-center">
+                <button className="rounded-md text-sm flex flex-col gap-2 items-center w-[72px]" type="button" onClick={handleDownloadCard}>
                   <div className={`w-12 h-12 bg-gray-warm-50 rounded-full flex justify-center items-center ${btnSytle}`}>
                     <Image src={chocoWithCard} alt="편지 저장" />
                   </div>
                   <span>편지</span>
                 </button>
-                <button className="rounded-md text-sm flex flex-col gap-2 items-center w-[80px]" type="button" onClick={handleDownloadBox}>
+                <button className="rounded-md text-sm flex flex-col gap-2 items-center w-[72px]" type="button" onClick={handleDownloadBox}>
                   <div className={`w-12 h-12 bg-gray-warm-50 rounded-full flex justify-center items-center ${btnSytle}`}>
                     <Image src={chocoBox} alt="초콜릿 저장" />
                   </div>
                   <span>박스</span>
                 </button>
                 <div
-                  className="relative w-[80px]"
+                  className="relative w-[72px]"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleDownloadIndividualChoco();
@@ -194,7 +196,7 @@ export default function ShareLayout() {
               </div>
             )}
             {isTooltipVisible && (
-              <div className="w-40 absolute top-5 right-8 bg-white border border-gray-warm-300 shadow-md rounded-lg p-2 text-sm">
+              <div className="w-40 absolute top-5 right-8 bg-white border border-gray-warm-300 shadow-md rounded-lg p-2 ">
                 앨범에서 꾹 눌러 스티커로 사용해보세요!
               </div>
             )}
