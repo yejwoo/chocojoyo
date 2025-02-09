@@ -25,6 +25,16 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      {/* 구글 애널리틱스 */}
+      <Script src="https://www.googletagmanager.com/gtag/js?id=G-QPVPRGKLDR" strategy="afterInteractive" />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-QPVPRGKLDR');
+        `}
+      </Script>
       <body className={myFont.className}>
         <Script src="https://developers.kakao.com/sdk/js/kakao.js" strategy="afterInteractive" />
         {children}
