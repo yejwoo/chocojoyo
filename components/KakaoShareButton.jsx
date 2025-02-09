@@ -25,7 +25,7 @@ const KakaoShareButton = () => {
       content: {
         title: "초코조요!",
         description: `나만의 초콜릿으로 달콤한 마음을 전해줘요`,
-        imageUrl: "https://imgur.com/udyP5Ge",
+        imageUrl: "https://i.imgur.com/udyP5Ge.png",
         link: {
           mobileWebUrl: shareUrl,
           webUrl: shareUrl,
