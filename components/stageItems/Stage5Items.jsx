@@ -24,7 +24,7 @@ export default function Stage5Items(props) {
           }}
         />
         <div className="w-full flex justify-center items-center flex-wrap gap-x-2 gap-y-2">
-          <Chocolates {...props} isToppingMode={isToppingMode} isZoomMode={isZoomMode} />
+          <Chocolates {...props} isToppingMode={isToppingMode} isZoomMode={isZoomMode} changeCursor={true}/>
         </div>
       </div>
     </>

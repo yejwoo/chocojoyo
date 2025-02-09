@@ -1,13 +1,13 @@
 import { useState, useRef } from "react";
 import { stageData } from "@/data/Stage";
+import { isTestMode } from "@/utils/constants";
 
 export function useStageState() {
   // 💝 현재 스테이지 상태
-  const [stage, setStage] = useState({ main: 5, sub: "init" });
+  const [stage, setStage] = useState({ main: 1, sub: "init" });
 
   // 현재 스테이지 데이터
   const currentData = stageData[stage.main][stage.sub];
-
 
   // 💝 UI 상태
   const [uiState, setUIState] = useState({
@@ -25,7 +25,7 @@ export function useStageState() {
     isOnboarding: false,
     isResetBtnClicked: false,
     isCardLoading: false,
-    isClicked: false
+    isClicked: false,
   });
 
   // 💝 현재 선택 관련 상태
@@ -45,11 +45,9 @@ export function useStageState() {
 
   // 💝 초콜릿 정보
   const [chocolateInfo, setChocolateInfo] = useState({
-    shapes: ["heart", "heart", "heart", "heart", "heart", "heart"],
-    // shapes: [],
+    shapes: isTestMode ? Array(6).fill("heart") : [],
     colors: [],
-    // sizes: Array(6).fill(0),
-    sizes: Array(6).fill(100),
+    sizes: Array(6).fill(isTestMode ? 0 : 100),
     drawings: {},
     toppings: [],
   });
