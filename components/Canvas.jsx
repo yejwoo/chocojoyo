@@ -1,12 +1,10 @@
-import { bottomNaviConfig } from "@/data/Stage";
-import { chocopenColors } from "@/utils/constants";
 import React, { useRef, useEffect, useState } from "react";
+import { chocopenColors } from "@/utils/constants";
 
-const Canvas = ({ isToppingMode, isSelected, isZoomMode, strokeColor = "vanilla", onSave, uiState, className, setUIState,  }) => {
+const Canvas = ({ isToppingMode, strokeColor = "vanilla", onSave, uiState, className, setUIState, showDrawing, drawingData }) => {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
-  const isZoommed = isSelected && isZoomMode && !uiState.isResetPopupOpen;
 
   if (contextRef.current && uiState.isClearCanvas) {
     contextRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
@@ -33,6 +31,18 @@ const Canvas = ({ isToppingMode, isSelected, isZoomMode, strokeColor = "vanilla"
 
     // console.log(ctx)
   }, []);
+
+  // 저장된 그린 그림 불러오기
+  useEffect(() => {
+    if (showDrawing && drawingData && contextRef.current) {
+      const img = new Image();
+      img.src = drawingData;
+      img.onload = () => {
+        contextRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+        contextRef.current.drawImage(img, 0, 0, canvasRef.current.width, canvasRef.current.height);
+      };
+    }
+  }, [showDrawing, drawingData, contextRef]);
 
   useEffect(() => {
     if (contextRef.current) {
