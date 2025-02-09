@@ -34,6 +34,7 @@ export function useStageState() {
     currentTabIndex: 0,
     currentColor: "milk",
     currentTopping: "sprinkle",
+    tempSize: 0
   });
 
   // 💝 툴 관련 상태
@@ -46,8 +47,8 @@ export function useStageState() {
   // 💝 초콜릿 정보
   const [chocolateInfo, setChocolateInfo] = useState({
     shapes: isTestMode ? Array(6).fill("heart") : [],
-    colors: [],
-    sizes: Array(6).fill(isTestMode ? 0 : 100),
+    colors: isTestMode ? Array(6).fill("milk") : [],
+    sizes: isTestMode ? Array(6).fill(100) : Array(6).fill(0),
     drawings: {},
     toppings: [],
   });
