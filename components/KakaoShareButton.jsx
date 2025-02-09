@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
 import Image from "next/image";
 import kakaoLogo from "@/public/icons/share/share-kakao.svg";
-import { SLOGAN } from "@/utils/constants";
 
-const KakaoShareButton = () => {
+const KakaoShareButton = ({name}) => {
   const shareUrl = typeof window !== "undefined" ? window.location.href : "";
 
   useEffect(() => {
@@ -18,13 +17,15 @@ const KakaoShareButton = () => {
 
   const handleShare = () => {
     const { Kakao } = window;
-    // console.log(Kakao);
+    const trimmedName = name?.trim();
+    const description = trimmedName ? `${trimmedName}님이 달콤한 선물을 준비했어요!` : "달콤한 선물이 도착했어요!";
+    // const description = `${displayName}이 달콤한 선물을 준비했어요!`;
 
     Kakao.Share.sendDefault({
       objectType: "feed",
       content: {
         title: "초코조요!",
-        description: `나만의 초콜릿으로 달콤한 마음을 전해줘요`,
+        description: description,
         imageUrl: "https://i.imgur.com/udyP5Ge.png",
         link: {
           mobileWebUrl: shareUrl,
@@ -33,6 +34,7 @@ const KakaoShareButton = () => {
       },
     });
   };
+
 
   return (
     <button

@@ -1,8 +1,10 @@
-import { arrow, close, replay } from "@/public/icons/buttons";
+import { buttonIcons } from "@/public/icons/buttons";
 import Image from "next/image";
 
 export default function Button({ shape = "rectangle", message, color = "main", type = "arrow", size = "default", onClick, disabled = false }) {
-  const buttonShape = shape === "circle" ? "w-16 h-16 rounded-full" : "rounded-lg overflow-hidden";
+  const buttonShape = shape === "circle" ? (size === "md" ? "w-12 h-12 rounded-full" : "w-16 h-16 rounded-full") : "rounded-lg overflow-hidden";
+  const buttonIconSize = size === "md" ? 24 : 32
+
   const buttonSizeClass =
     {
       half: "w-1/2",
@@ -29,10 +31,12 @@ export default function Button({ shape = "rectangle", message, color = "main", t
     }[color] || "bg-button-200";
 
   const buttonIcon = {
-    arrow: <Image src={arrow} width={32} height={32} alt="다음" />,
-    close: <Image src={close} width={32} height={32} alt="닫기" />,
-    replay: <Image src={replay} width={32} height={32} alt="다시 시작" />,
-  }[type] || <Image src={arrow} width={32} height={32} alt="다음" />;
+    arrow: <Image src={buttonIcons.arrow} width={buttonIconSize} height={buttonIconSize} alt="다음" />,
+    close: <Image src={buttonIcons.close} width={buttonIconSize} height={buttonIconSize} alt="닫기" />,
+    replay: <Image src={buttonIcons.replay} width={buttonIconSize} height={buttonIconSize} alt="다시 시작" />,
+    soundOn: <Image src={buttonIcons.soundOn} width={buttonIconSize} height={buttonIconSize} alt="음악 재생" />,
+    soundOff: <Image src={buttonIcons.soundOn} width={buttonIconSize} height={buttonIconSize} alt="음악 끄기" />,
+  }[type] || <Image src={buttonIcons.arrow} width={buttonIconSize} height={buttonIconSize} alt="다음" />;
 
   const shadowOverlayClass = "absolute bottom-0 h-[40%] w-full bg-black bg-opacity-10 rounded-b-sm";
 
@@ -52,12 +56,11 @@ export default function Button({ shape = "rectangle", message, color = "main", t
         transition-all duration-150 ease-in-out
         transform
         hover:brightness-90 hover:scale-95
-        focus:brightness-90 focus:scale-95
         active:brightness-75 active:scale-95
       `}
     >
       {shape === "circle" ? (
-        <div className="h-14 flex-shrink-0 flex justify-center items-center">{buttonIcon}</div>
+        <div className="flex-shrink-0 flex justify-center items-center">{buttonIcon}</div>
       ) : (
         <>
           {!disabled && <div className={shadowOverlayClass}></div>}

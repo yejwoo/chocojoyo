@@ -1,6 +1,6 @@
 "use client";
 import StageLayout from "./layout/StageLayout";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Button from "./Button";
 import Modal from "./Modal";
 import Navi from "./Navi";
@@ -23,7 +23,7 @@ import { bgCounterTop } from "@/public/images/common";
 
 export default function GameFlow({ currentStep, setCurrentStep }) {
   const { state, setState, intervalRef } = useStageState();
-  const { buttonConfig, stage, currentData, selectionState, toolState, chocolateInfo, gameState, uiState } = state;
+  const { stage, currentData, selectionState, toolState, chocolateInfo, gameState, uiState } = state;
   const { setStage, setUIState, setToolState, setSelectionState, setGameState, setChocolateInfo } = setState;
   const router = useRouter();
 
@@ -184,10 +184,6 @@ export default function GameFlow({ currentStep, setCurrentStep }) {
       currentItemIndex: 0,
     }));
   };
-
-  useEffect(() => {
-    console.log("Button Config:", buttonConfig);
-  }, [buttonConfig]);
 
   const handleNextMainStage = () => {
     const { main } = stage;
