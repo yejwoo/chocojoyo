@@ -53,10 +53,7 @@ export default function ShareLayout() {
   const downloadImage = async (element, filename) => {
     const canvas = await html2canvas(element, {
       backgroundColor: null,
-      useCORS: true,
-      allowTaint: true,
       letterRendering: true,
-      foreignObjectRendering: true,
       ignoreElements: (el) => el.classList.contains("no-capture"),
     });
 
@@ -141,7 +138,7 @@ export default function ShareLayout() {
           <Modal title={modalType === "share" ? "공유하기" : "사진 저장"} onCancel={handleCloseModal} type={modalType}>
             {modalType === "share" && (
               <div className="flex gap-8 w-full justify-center">
-                <KakaoShareButton />
+                <KakaoShareButton name={cardData.name}/>
                 <button
                   className={`text-sm flex flex-col gap-2 items-center ${btnSytle}`}
                   type="button"
