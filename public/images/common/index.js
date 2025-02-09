@@ -23,4 +23,5 @@ export { default as loading } from "./loading.gif"
 export { default as arrowDown } from "./arrow-down.svg"
 export { default as arrowUp } from "./arrow-up.svg"
 export { default as arrowLeft } from "./arrow-left.svg"
+export { default as notFound } from "./not-found.png"
 

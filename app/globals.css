@@ -116,3 +116,7 @@ img {
 canvas {
   touch-action: none;
 }
+
+.cafe24-surround {
+  font-family: 'Cafe24Ssurround';
+}
