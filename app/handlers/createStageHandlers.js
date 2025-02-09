@@ -6,9 +6,10 @@ import {
   handleMouseLeave,
   handleMouseOver,
   handleSaveDrawing,
-  handleDragEndTopping,
-  handleDragStartTopping,
   handleToppingPlacement,
+  handleTouchStart,
+  handleTouchMove,
+  handleTouchEnd,
 } from "./stageHandlers/stage5Handlers";
 
 export const createStageHandlers = (store) => {
@@ -39,35 +40,22 @@ export const createStageHandlers = (store) => {
       updatePastryBagPosition(selectionState, chocolateInfo, currentData, setSelectionState, setToolState, setUIState);
     },
 
-    5: (type, imageData, index, x, y) => {
-      // console.log("🔥 `createStageHandlers` 실행됨! type:", type, "imageData:", imageData, "index:", index);
-
+    5: (type, event, index) => {
       const handlers = {
         mouseOver: () => handleMouseOver(setSelectionState, index),
         mouseLeave: () => handleMouseLeave(setSelectionState, null),
-        saveDrawing: (imageData) => {
-          // console.log("🖼 saveDrawing 실행됨! imageData:", imageData, "index:", index);
-
-          const validImageData = imageData || "data:image/png;base64,"; // 기본값 설정
-
-          handleSaveDrawing(validImageData, setChocolateInfo, index);
-        },
+        saveDrawing: (imageData) => handleSaveDrawing(imageData, setChocolateInfo, index),
         clickTopping: () => handleToppingPlacement(setChocolateInfo, selectionState.currentTopping, index),
+        touchStart: (e) => handleTouchStart(e, index),
+        touchMove: (e) => handleTouchMove(e, index),
+        touchEnd: (e) => handleTouchEnd(e, index, setChocolateInfo),
       };
 
       if (handlers[type]) {
-        // console.log("✅ 핸들러 실행: ", type);
-      
-        if (type === "saveDrawing" && !imageData) {
-          console.error("❌ saveDrawing 실행 전에 imageData가 undefined입니다!");
-          return;
-        }
-      
-        handlers[type](imageData);
+        handlers[type](event);
       } else {
         console.error(`❌ 이벤트 핸들러 없음! type: ${type}`);
       }
-      
     },
   };
 };

@@ -12,7 +12,6 @@
 html,
 body {
   height: 100%;
-  font-family: "Cafe24Ssurround", sans-serif;
   margin: 0;
   padding: 0;
   font-size: 1rem;
@@ -112,4 +111,8 @@ img {
 
 .text-shadow {
   text-shadow: -2px 0 #3d2505, 0 2px #3d2505, 2px 0 #3d2505, 0 -2px #3d2505;
+}
+
+canvas {
+  touch-action: none;
 }

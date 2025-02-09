@@ -8,6 +8,7 @@ import { supabase } from "@/lib/supabaseClient";
 import Container from "./Container";
 import { useRouter } from "next/navigation";
 import { chocolateColors } from "@/utils/constants";
+import Chocolates from "../Chocolates";
 
 const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id, onOpen, onComplete }, ref) => {
   const cardRef = useRef(null);
@@ -71,61 +72,7 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
               <div ref={boxRef} className="relative z-10 w-[280px] h-[182px] flex justify-center items-center mx-auto">
                 <Image src={box} alt="초콜릿 틀" width={280} height={280} className="absolute bottom-0" draggable={false} />
                 <div className="w-full flex justify-center items-center flex-wrap gap-x-2 gap-y-2">
-                  {chocolateInfo?.shapes.map((shape, index) => {
-                    const ShapeComponent = Shapes[shape.charAt(0).toUpperCase() + shape.slice(1)];
-                    const drawing = chocolateInfo.drawings[index];
-                    const topping = chocolateInfo.toppings[index];
-                    const color = chocolateInfo.colors[index];
-
-                    return ShapeComponent ? (
-                      <div
-                        key={index}
-                        ref={(el) => (chocoRefs.current[index] = el)}
-                        className="relative w-[80px] h-[76px] rounded-xl flex items-center justify-center"
-                      >
-                        {/* 저장 시 숨길 배경 */}
-                        <div className="choco-bg absolute inset-0 bg-gray-warm-300 rounded-xl z-0" />
-
-                        {/* 초콜릿 기본 형태 */}
-                        <ShapeComponent
-                          width={64}
-                          height={56}
-                          fillColor={chocolateColors[color]?.[100] || "#894E00"}
-                          strokeColor={chocolateColors[color]?.[200] || "#894E00"}
-                          className="relative z-10"
-                        />
-
-                        {/* 🖌️ 드로잉 */}
-                        {drawing && (
-                          <canvas className="absolute z-20" width={64} height={56} style={{ background: `url(${drawing}) no-repeat center/cover` }} />
-                        )}
-
-                        {/* 🍓 토핑 (가운데 정렬) */}
-                        {topping && (
-                          <div
-                            className="absolute inset-0 flex items-center justify-center z-30 overflow-hidden"
-                            style={{
-                              width: "100%", 
-                              height: "100%",
-                            }}
-                          >
-                            <img
-                              src={`/images/stage5/toppings/topping-${topping}.png`}
-                              alt={`topping-${topping}`}
-                              className="object-contain"
-                              style={{
-                                width: "32px", 
-                                height: "32px",
-                                maxWidth: "100%",
-                                maxHeight: "100%",
-                              }}
-                              draggable={false}
-                            />
-                          </div>
-                        )}
-                      </div>
-                    ) : null;
-                  })}
+                  <Chocolates chocolateInfo={chocolateInfo}/>
                 </div>
               </div>
             </div>

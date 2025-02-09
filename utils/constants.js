@@ -7,4 +7,5 @@ export const songPath = "/sound/song/"
 export const effectPath = "/sound/effect/"
 export const chocolateColors = tailwindConfig.theme.extend.colors.chocolates;
 export const chocopenColors = tailwindConfig.theme.extend.colors.chocopens;
-export const isTestMode = false;
+export const isTestMode = true;
+export const isMobile = typeof window !== "undefined" && window.innerWidth <= 768;

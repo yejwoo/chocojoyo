@@ -2,11 +2,11 @@ import { bottomNaviConfig } from "@/data/Stage";
 import { chocopenColors } from "@/utils/constants";
 import React, { useRef, useEffect, useState } from "react";
 
-const Canvas = ({ isToppingMode, isSelected, isZoomMode, strokeColor = "vanilla", onSave, uiState, className, setUIState }) => {
+const Canvas = ({ isToppingMode, isSelected, isZoomMode, strokeColor = "vanilla", onSave, uiState, className, setUIState,  }) => {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
-
+  const isZoommed = isSelected && isZoomMode && !uiState.isResetPopupOpen;
 
   if (contextRef.current && uiState.isClearCanvas) {
     contextRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
@@ -14,7 +14,7 @@ const Canvas = ({ isToppingMode, isSelected, isZoomMode, strokeColor = "vanilla"
 
   useEffect(() => {
     if (!uiState.isResetPopupOpen) {
-      setUIState((prev) => ({ ...prev, isClearCanvas: false })); 
+      setUIState((prev) => ({ ...prev, isClearCanvas: false }));
     }
   }, [uiState.isResetPopupOpen]);
 
@@ -64,8 +64,7 @@ const Canvas = ({ isToppingMode, isSelected, isZoomMode, strokeColor = "vanilla"
 
   const startDrawing = (e) => {
     if (isToppingMode) return;
-
-    e.preventDefault();
+    // e.preventDefault();
     const { x, y } = getCoordinates(e);
     contextRef.current.beginPath();
     contextRef.current.moveTo(x, y);
@@ -74,12 +73,11 @@ const Canvas = ({ isToppingMode, isSelected, isZoomMode, strokeColor = "vanilla"
 
   const draw = (e) => {
     if (!isDrawing) return;
-    e.preventDefault();
+    // e.preventDefault();
     const { x, y } = getCoordinates(e);
     contextRef.current.lineTo(x, y);
     contextRef.current.stroke();
   };
-
 
   const isCanvasEmpty = () => {
     if (!canvasRef.current || !contextRef.current) return true;
@@ -88,7 +86,7 @@ const Canvas = ({ isToppingMode, isSelected, isZoomMode, strokeColor = "vanilla"
     const { width, height } = canvasRef.current;
     const imageData = ctx.getImageData(0, 0, width, height).data;
 
-    return !imageData.some((pixel) => pixel !== 0); 
+    return !imageData.some((pixel) => pixel !== 0);
   };
 
   const stopDrawing = () => {
@@ -108,9 +106,7 @@ const Canvas = ({ isToppingMode, isSelected, isZoomMode, strokeColor = "vanilla"
   return (
     <canvas
       ref={canvasRef}
-      className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ${className} ${
-        isSelected && isZoomMode && !uiState.isResetPopupOpen ? "scale-[2.2] transition duration-200 ease-in-out z-30" : "z-20"
-      }`}
+      className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ${className}`}
       width={64}
       height={56}
       onTouchStart={startDrawing}
