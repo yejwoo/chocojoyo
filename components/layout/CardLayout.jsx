@@ -1,13 +1,11 @@
 import { useEffect, useImperativeHandle, useRef, useState, forwardRef } from "react";
 import box from "@/public/images/stage5/box.svg";
-import { Shapes } from "@/public/icons/shapes";
 import Button from "../Button";
 import Image from "next/image";
 import { bgBrown } from "@/public/images/common";
 import { supabase } from "@/lib/supabaseClient";
 import Container from "./Container";
 import { useRouter } from "next/navigation";
-import { chocolateColors } from "@/utils/constants";
 import Chocolates from "../Chocolates";
 
 const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id, onOpen, onComplete }, ref) => {
@@ -65,14 +63,14 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
   return (
     <Container>
       <div ref={cardRef} className="w-full h-full relative flex flex-col items-center justify-between">
-        <Image src={bgBrown} alt="배경화면" className="absolute bottom-0" draggable={false} />
+        <Image src={bgBrown} alt="배경화면" className="absolute bottom-0 choco-bg" draggable={false} />
         <div className="absolute top-1/2 -translate-y-1/2 flex flex-col gap-3 w-[320px] max-h-sm:top-5 max-h-sm:translate-y-0">
           <div className="shadow-lg bg-white rounded-lg">
             <div className="w-full py-5">
               <div ref={boxRef} className="relative z-10 w-[280px] h-[182px] flex justify-center items-center mx-auto">
                 <Image src={box} alt="초콜릿 틀" width={280} height={280} className="absolute bottom-0" draggable={false} />
                 <div className="w-full flex justify-center items-center flex-wrap gap-x-2 gap-y-2">
-                  <Chocolates chocolateInfo={chocolateInfo}/>
+                  <Chocolates chocolateInfo={chocolateInfo} showDrawings={true} chocoRefs={chocoRefs}/>
                 </div>
               </div>
             </div>

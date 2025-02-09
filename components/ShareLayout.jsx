@@ -53,7 +53,7 @@ export default function ShareLayout() {
   const downloadImage = async (element, filename) => {
     const canvas = await html2canvas(element, {
       backgroundColor: null,
-      letterRendering: true,
+      // letterRendering: true,
       ignoreElements: (el) => el.classList.contains("no-capture"),
     });
 
@@ -80,6 +80,7 @@ export default function ShareLayout() {
     const chocoElements = cardLayoutRef.current?.getChocoElements();
     if (!chocoElements) return;
 
+    // 배경 숨기기
     chocoElements.forEach((ref) => {
       if (ref) {
         const bgElement = ref.querySelector(".choco-bg");
@@ -89,25 +90,30 @@ export default function ShareLayout() {
       }
     });
 
+    // 새로운 컨테이너 생성
     const chocoContainer = document.createElement("div");
     chocoContainer.style.position = "fixed";
     chocoContainer.style.top = "100vh";
     chocoContainer.style.left = "100vw";
-    chocoContainer.style.display = "flex";
-    chocoContainer.style.flexWrap = "wrap";
-    chocoContainer.style.justifyContent = "center";
-    chocoContainer.style.alignItems = "center";
-    chocoContainer.style.gap = "4px";
+    chocoContainer.style.display = "block"; // flex 제거
     chocoContainer.style.width = "640px";
     chocoContainer.style.height = "440px";
     chocoContainer.style.backgroundColor = "transparent";
     chocoContainer.style.padding = "20px";
 
+    // 초콜릿 클론 및 스타일 유지
     chocoElements.forEach((ref) => {
       if (ref) {
         const clone = ref.cloneNode(true);
-        clone.style.width = "160px";
-        clone.style.height = "152px";
+        const computedStyle = window.getComputedStyle(ref);
+
+        clone.style.position = computedStyle.position;
+        clone.style.transform = computedStyle.transform;
+        clone.style.left = computedStyle.left;
+        clone.style.top = computedStyle.top;
+        clone.style.width = computedStyle.width;
+        clone.style.height = computedStyle.height;
+
         chocoContainer.appendChild(clone);
       }
     });
@@ -116,6 +122,7 @@ export default function ShareLayout() {
     await downloadImage(chocoContainer, "individual_chocos");
     document.body.removeChild(chocoContainer);
 
+    // 원래 배경 복원
     chocoElements.forEach((ref) => {
       if (ref) {
         const bgElement = ref.querySelector(".choco-bg");
@@ -131,14 +138,13 @@ export default function ShareLayout() {
   return (
     <>
       <div onClick={() => setIsTooltipVisible(false)}>
-        {" "}
         {/* 다른 곳 클릭 시 툴팁 닫기 */}
         <CardLayout chocolateInfo={cardData} mode="share" id={searchParams.get("id")} onOpen={handleOpenModal} ref={cardLayoutRef} />
         {isModalOpen && (
           <Modal title={modalType === "share" ? "공유하기" : "사진 저장"} onCancel={handleCloseModal} type={modalType}>
             {modalType === "share" && (
               <div className="flex gap-8 w-full justify-center">
-                <KakaoShareButton name={cardData.name}/>
+                <KakaoShareButton name={cardData.name} />
                 <button
                   className={`text-sm flex flex-col gap-2 items-center ${btnSytle}`}
                   type="button"
@@ -154,20 +160,21 @@ export default function ShareLayout() {
               </div>
             )}
             {modalType === "download" && (
-              <div className="flex gap-3 w-full justify-center">
-                <button className="rounded-md text-sm flex flex-col gap-2 items-center w-[72px]" type="button" onClick={handleDownloadCard}>
+              <div className="flex gap-5 w-full justify-center">
+                <button className="rounded-md text-sm flex flex-col gap-2 items-center w-[80px]" type="button" onClick={handleDownloadCard}>
                   <div className={`w-12 h-12 bg-gray-warm-50 rounded-full flex justify-center items-center ${btnSytle}`}>
                     <Image src={chocoWithCard} alt="편지 저장" />
                   </div>
-                  <span>편지</span>
+                  <span>초콜릿+편지</span>
                 </button>
-                <button className="rounded-md text-sm flex flex-col gap-2 items-center w-[72px]" type="button" onClick={handleDownloadBox}>
+                <button className="rounded-md text-sm flex flex-col gap-2 items-center w-[80px]" type="button" onClick={handleDownloadBox}>
                   <div className={`w-12 h-12 bg-gray-warm-50 rounded-full flex justify-center items-center ${btnSytle}`}>
                     <Image src={chocoBox} alt="초콜릿 저장" />
                   </div>
-                  <span>박스</span>
+                  <span>초콜릿 박스</span>
                 </button>
-                <div
+                {/* 스티커 보류..ㅎ */}
+                {/* <div
                   className="relative w-[72px]"
                   onClick={(e) => {
                     e.stopPropagation();
@@ -189,7 +196,7 @@ export default function ShareLayout() {
                       alt="초콜릿 저장"
                     />
                   </button>
-                </div>
+                </div> */}
               </div>
             )}
             {isTooltipVisible && (

@@ -1,3 +1,5 @@
+import { ZOOM_SCALE } from "@/utils/constants";
+
 export const handleSaveDrawing = (imageData, setChocolateInfo, currentChocolateIndex) => {
   if (typeof setChocolateInfo !== "function") {
     console.error("❌ setChocolateInfo가 함수가 아님!", setChocolateInfo);
@@ -62,49 +64,54 @@ export const handleTouchStart = (e, index) => {
   // console.log(`터치 시작 - 인덱스: ${index}, 위치: (${touch.clientX}, ${touch.clientY})`);
 };
 
-export const handleTouchMove = (e, index) => {
+export const handleTouchMove = (e, index, isZoomMode = false) => {
   const touch = e.touches[0];
   const toppingElement = e.target;
 
-  // 캔버스 요소 찾기
-  const canvasElement = toppingElement.previousSibling;
-  const canvasRect = canvasElement.getBoundingClientRect();
+  // 부모 컨테이너 찾기 (확대된 경우에도 포함)
+  const parentContainer = toppingElement.parentElement;
+  const parentRect = parentContainer.getBoundingClientRect();
 
-  // 터치 위치 계산 (캔버스 기준)
-  let offsetX = touch.clientX - canvasRect.left;
-  let offsetY = touch.clientY - canvasRect.top;
+  // 확대 비율 고려
+  const scale = isZoomMode ? ZOOM_SCALE : 1;
+
+  // 터치 위치 계산 (확대된 부모 컨테이너 기준)
+  let offsetX = (touch.clientX - parentRect.left) / scale;
+  let offsetY = (touch.clientY - parentRect.top) / scale;
 
   const toppingWidth = toppingElement.offsetWidth / 2;
   const toppingHeight = toppingElement.offsetHeight / 2;
 
-  // **캔버스 경계 내로 제한**
-  offsetX = Math.max(toppingWidth, Math.min(offsetX, canvasRect.width - toppingWidth));
-  offsetY = Math.max(toppingHeight, Math.min(offsetY, canvasRect.height - toppingHeight));
+  // **부모 컨테이너 경계 내로 제한**
+  offsetX = Math.max(toppingWidth, Math.min(offsetX, 64 - toppingWidth));
+  offsetY = Math.max(toppingHeight, Math.min(offsetY, 56 - toppingHeight));
 
   // **스타일로 위치만 변경 (데이터는 업데이트 X)**
   toppingElement.style.left = `${offsetX}px`;
   toppingElement.style.top = `${offsetY}px`;
 };
 
-export const handleTouchEnd = (e, index, setChocolateInfo) => {
+export const handleTouchEnd = (e, index, setChocolateInfo, isZoomMode = false) => {
   const touch = e.changedTouches[0];
   const toppingElement = e.target;
-  const chocolateBox = toppingElement.parentElement;
 
-  const boxRect = chocolateBox.getBoundingClientRect();
+  // 부모 컨테이너 찾기 (확대된 경우에도 포함)
+  const parentContainer = toppingElement.parentElement;
+  const parentRect = parentContainer.getBoundingClientRect();
 
-  // 터치 종료 시 위치 계산
-  let offsetX = touch.clientX - boxRect.left;
-  let offsetY = touch.clientY - boxRect.top;
+  // 확대 비율 고려
+  const scale = isZoomMode ? ZOOM_SCALE : 1;
+
+  // 터치 종료 시 위치 계산 (확대된 부모 컨테이너 기준)
+  let offsetX = (touch.clientX - parentRect.left) / scale;
+  let offsetY = (touch.clientY - parentRect.top) / scale;
 
   const toppingWidth = toppingElement.offsetWidth / 2;
   const toppingHeight = toppingElement.offsetHeight / 2;
 
-  // **박스 경계 내로 제한**
-  offsetX = Math.max(toppingWidth, Math.min(offsetX, boxRect.width - toppingWidth));
-  offsetY = Math.max(toppingHeight, Math.min(offsetY, boxRect.height - toppingHeight));
-
-  // console.log(`터치 끝 - 인덱스: ${index}, 위치: (${offsetX}, ${offsetY})`);
+  // **부모 컨테이너 경계 내로 제한**
+  offsetX = Math.max(toppingWidth, Math.min(offsetX, 64 - toppingWidth));
+  offsetY = Math.max(toppingHeight, Math.min(offsetY, 56 - toppingHeight));
 
   // 터치 종료 후 위치 저장
   setChocolateInfo((prev) => {

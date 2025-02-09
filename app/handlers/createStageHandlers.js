@@ -40,15 +40,15 @@ export const createStageHandlers = (store) => {
       updatePastryBagPosition(selectionState, chocolateInfo, currentData, setSelectionState, setToolState, setUIState);
     },
 
-    5: (type, event, index) => {
+    5: (type, event, index, isZoomMode) => {
       const handlers = {
         mouseOver: () => handleMouseOver(setSelectionState, index),
         mouseLeave: () => handleMouseLeave(setSelectionState, null),
         saveDrawing: (imageData) => handleSaveDrawing(imageData, setChocolateInfo, index),
         clickTopping: () => handleToppingPlacement(setChocolateInfo, selectionState.currentTopping, index),
         touchStart: (e) => handleTouchStart(e, index),
-        touchMove: (e) => handleTouchMove(e, index),
-        touchEnd: (e) => handleTouchEnd(e, index, setChocolateInfo),
+        touchMove: (e) => handleTouchMove(e, index, isZoomMode),
+        touchEnd: (e) => handleTouchEnd(e, index, setChocolateInfo, isZoomMode),
       };
 
       if (handlers[type]) {
