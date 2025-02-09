@@ -74,7 +74,7 @@ export default function Main({ onStart }) {
           </button>
         </div>
 
-        <p className="absolute bottom-1 w-full text-center text-gray-warm-200 text-xs font-sans">Contact: yejinwoo.me@gmail.com</p>
+        <a href="mailto:yejinwoo.me@gmail.com" className="absolute bottom-2 w-full text-center text-gray-warm-200 text-xs font-sans">contact: yejinwoo.me@gmail.com</a>
       </div>
     </Container>
   );
