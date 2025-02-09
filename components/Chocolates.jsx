@@ -33,7 +33,7 @@ export default function Chocolates({
         key={index}
         ref={(el) => (chocoRefs[index] = el)}
         onClick={() => {
-          if (isToppingMode && !isZoomMode) {
+          if (isToppingMode) {
             handleEvent("clickTopping", "_", index);
           }
         }}
