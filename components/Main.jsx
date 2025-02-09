@@ -4,13 +4,14 @@ import { logo, yanto, heart, choco1, choco2, choco3, cloud1, cloud2 } from "@/pu
 import Container from "./layout/Container";
 import { useAudio } from "@/app/context/AudioContext";
 import { Volume2, VolumeX } from "lucide-react";
+import { songPath } from "@/utils/constants";
 
 export default function Main({ onStart }) {
   const { isPlaying, togglePlay, changeTrack } = useAudio();
 
   const handleStart = async () => {
     await onStart();
-    changeTrack("/music/song/play-theme.mp3");
+    changeTrack(songPath + "play-theme.mp3");
   };
 
   return (

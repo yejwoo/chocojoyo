@@ -1,6 +1,7 @@
 // context/AudioContext.js
 "use client";
 
+import { songPath } from "@/utils/constants";
 import React, { createContext, useContext, useState, useRef, useEffect } from "react";
 
 const AudioContext = createContext();
@@ -9,12 +10,13 @@ export const useAudio = () => useContext(AudioContext);
 
 export const AudioProvider = ({ children }) => {
   const audioRef = useRef(null);
-  const [currentTrack, setCurrentTrack] = useState("/music/song/main-theme.mp3");
+  const [currentTrack, setCurrentTrack] = useState(songPath + "main-theme.mp3");
   const [isPlaying, setIsPlaying] = useState(false);
   const [isManualChange, setIsManualChange] = useState(false);
 
   // 트랙 변경 및 재생 함수 (0.5초 지연 후 트랙 변경)
   const changeTrack = (newTrack, withFade = false) => {
+    if (!isPlaying) return;
     if (withFade) {
       fadeOut(() => {
         setTimeout(() => {
@@ -36,6 +38,7 @@ export const AudioProvider = ({ children }) => {
 
   // 트랙이나 재생 상태 변경 시 오디오 동기화
   useEffect(() => {
+    // console.log(isPlaying);
     const audio = audioRef.current;
     if (audio) {
       audio.load();
