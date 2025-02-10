@@ -37,6 +37,7 @@ const Canvas = ({ isToppingMode, strokeColor = "vanilla", onSave, uiState, class
     // canvasRef.current가 존재할 때만 실행
     if (showDrawing && drawingData && contextRef.current && canvasRef.current) {
       const img = new Image();
+      img.crossOrigin = "anonymous";  
       img.src = drawingData;
       img.onload = () => {
         // canvasRef.current가 여전히 존재하는지 재확인

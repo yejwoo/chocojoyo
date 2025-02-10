@@ -54,6 +54,8 @@ export default function ShareLayout() {
     const canvas = await html2canvas(element, {
       backgroundColor: null,
       // letterRendering: true,
+      useCORS: true, // 외부 리소스에 대한 CORS 허용
+      allowTaint: false, // 오염된 캔버스를 방지
       ignoreElements: (el) => el.classList.contains("no-capture"),
     });
 
