@@ -7,6 +7,7 @@ import { Volume2, VolumeX } from "lucide-react";
 import { songPath } from "@/utils/constants";
 import Modal from "./Modal";
 import { useState } from "react";
+import { copyToClipboard } from "@/utils/copyToClipboard";
 
 export default function Main({ onStart }) {
   const { isPlaying, togglePlay, changeTrack } = useAudio();
@@ -81,7 +82,7 @@ export default function Main({ onStart }) {
               isPlaying ? "bg-brand-100" : "bg-chocolates-milk-100"
             } border-4 border-default text-white transition-all duration-150 ease-in-out transform hover:brightness-90 hover:scale-95 active:brightness-75 active:scale-95`}
           >
-            {isPlaying ? <Volume2 size={24} /> : <VolumeX size={24} />}
+            {isPlaying ? <Volume2 size={20} /> : <VolumeX size={20} />}
           </button>
         </div>
         <div className="absolute bottom-0 w-full flex justify-center items-center gap-2 h-8 font-sans text-center text-gray-warm-200 text-xs">
@@ -89,15 +90,20 @@ export default function Main({ onStart }) {
             개인정보처리방침
           </span>
           <span>|</span>
-          <span className="cursor-poiner"><a target="_blank" href="https://www.notion.so/yjwoo/195bdcdde583807985f5d4894f6626c0?pvs=4">이용약관</a></span>
+          <span className="cursor-poiner">
+            <a target="_blank" href="https://www.notion.so/yjwoo/195bdcdde583807985f5d4894f6626c0?pvs=4">
+              이용약관
+            </a>
+          </span>
           <span>|</span>
-          <a href="mailto:yejinwoo.me@gmail.com">Contact</a>
+          <span className="cursor-pointer" onClick={() => copyToClipboard("yejinwoo.me@gmail.com", 'email')}>연락처</span>
         </div>
       </div>
       {isShowModal && (
         <Modal title="개인정보 처리방침" onCancel={handleCloseModal}>
-          본 서비스는 사용자의 이름과 편지 내용을 수집합니다. 
-          이 정보는 공유 링크 생성 및 서비스 제공을 위해 사용되며, 제3자에게 제공되지 않습니다.<br/><br/>
+          본 서비스는 사용자의 이름과 편지 내용을 수집합니다. 이 정보는 공유 링크 생성 및 서비스 제공을 위해 사용되며, 제3자에게 제공되지 않습니다.
+          <br />
+          <br />
           수집된 정보는 사용자가 삭제를 요청하거나 서비스 종료 시 안전하게 삭제됩니다.
         </Modal>
       )}
