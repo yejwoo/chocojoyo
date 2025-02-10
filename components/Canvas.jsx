@@ -1,7 +1,8 @@
 import React, { useRef, useEffect, useState } from "react";
 import { chocopenColors } from "@/utils/constants";
 
-const Canvas = ({ isToppingMode, strokeColor = "vanilla", onSave, uiState, className, setUIState, showDrawing, drawingData }) => {
+const Canvas = ({ isToppingMode, strokeColor = "vanilla", onSave, uiState, className, setUIState, showDrawing, drawingData, mode = '' }) => {
+  // console.log(mode);
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -79,7 +80,7 @@ const Canvas = ({ isToppingMode, strokeColor = "vanilla", onSave, uiState, class
   };
 
   const startDrawing = (e) => {
-    if (isToppingMode) return;
+    if (isToppingMode || mode !== '') return;
     // e.preventDefault();
     const { x, y } = getCoordinates(e);
     contextRef.current.beginPath();
@@ -88,7 +89,7 @@ const Canvas = ({ isToppingMode, strokeColor = "vanilla", onSave, uiState, class
   };
 
   const draw = (e) => {
-    if (!isDrawing) return;
+    if (!isDrawing ||  mode !== '') return;
     // e.preventDefault();
     const { x, y } = getCoordinates(e);
     contextRef.current.lineTo(x, y);

@@ -7,6 +7,10 @@ export default {
       "max-h-sm": { raw: "(max-height: 660px)" },
     },
     extend: {
+      boxShadow: {
+        'deep-brown': '0 4px 6px rgba(60, 30, 10, 0.3)',  
+        'deep-brown-lg': '0 10px 15px rgba(60, 30, 10, 0.3)',
+      },
       keyframes: {
         "float-y-center": {
           "0%": { transform: "translate(-50%, 0px)" },

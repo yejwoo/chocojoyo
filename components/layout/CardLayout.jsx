@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import Chocolates from "../Chocolates";
 import CustomLoading from "../CustomLoading";
 
-const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id, onOpen, onComplete }, ref) => {
+const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id, onOpen, onComplete, isReceiver }, ref) => {
   const cardRef = useRef(null);
   const boxRef = useRef(null);
   const chocoRefs = useRef([]);
@@ -77,13 +77,13 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
         <>
           <div ref={cardRef} className="w-full h-full relative flex flex-col items-center justify-between">
             <Image src={bgBrown} alt="배경화면" className="absolute bottom-0 choco-bg" draggable={false} />
-            <div className="absolute top-1/2 -translate-y-1/2 flex flex-col gap-3 w-[320px] max-h-sm:top-5 max-h-sm:translate-y-0">
-              <div className="shadow-lg bg-white rounded-lg">
-                <div className="w-full pt-5 pb-3">
-                  <div ref={boxRef} className="relative z-10 w-[280px] h-[182px] flex justify-center items-center mx-auto">
+            <div className="absolute top-1/2 -translate-y-1/2 flex flex-col gap-4 w-[320px] max-h-sm:top-5 max-h-sm:translate-y-0">
+              <div className="shadow-deep-brown shadwo-deep-brown-lg bg-white rounded-lg">
+                <div className="w-full pt-5 pb-3 flex justify-center items-center">
+                  <div ref={boxRef} className="relative z-10 w-[280px] h-[182px] flex justify-center items-center">
                     <Image src={box} alt="초콜릿 틀" width={280} height={280} className="absolute bottom-0" draggable={false} />
                     <div className="w-full flex justify-center items-center flex-wrap gap-x-2 gap-y-2">
-                      <Chocolates chocolateInfo={chocolateInfo} showDrawings={true} chocoRefs={chocoRefs} />
+                      <Chocolates chocolateInfo={chocolateInfo} showDrawings={true} chocoRefs={chocoRefs} mode={mode}/>
                     </div>
                   </div>
                 </div>
@@ -125,14 +125,13 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
               {showCompleteButton ? (
                 <Button size="md" onClick={handleSubmit} disabled={!isCompleted} message="완성" />
               ) : (
-                <div className="flex gap-2 justify-ceㅘnter no-capture">
-                  <Button size="half" color="main" message={"공유하기"} onClick={() => onOpen("share")} />
-                  <Button size="half" color="main" message={"사진 저장"} onClick={() => onOpen("download")} />
+                <div className="flex justify-center no-capture">
+                  <Button size="full" color="main" message={isReceiver ? "사진 저장" : "공유하기"} onClick={() => onOpen(isReceiver ? "download" : "share")} />
                 </div>
               )}
             </div>
           </div>
-          {mode === "share" && (
+          {mode === "share" && !isReceiver && (
             <div className="absolute right-6 bottom-6 max-h-sm:bottom-2 no-capture">
               <Button type="replay" shape="circle" color="brand" onClick={() => router.push("/")} />
             </div>
