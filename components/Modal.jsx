@@ -1,6 +1,6 @@
 import Button from "./Button";
 
-export default function Modal({ size = "sm", title, type = "card", onConfirm, onCancel, children }) {
+export default function Modal({ size = "sm", title, type = "info", onConfirm, onCancel, children }) {
   return (
     <div className="fixed inset-0 z-[900] flex items-center justify-center bg-black bg-opacity-50">
       <div className={`fixed ${type !== "card" ? "mt-12" : ""} z-[999] flex flex-col justify-center items-center gap-3`}>
@@ -25,6 +25,9 @@ export default function Modal({ size = "sm", title, type = "card", onConfirm, on
               <div className="flex gap-2 mt-6">{children}</div>
             </div>
           )}
+
+          {/* 기본 모달 */}
+          {type === "info" && <div className="text-xl my-4">{children}</div>}
 
           {/* 그림자 */}
           <div className="w-full bg-popup-200 h-2 absolute left-0 right-0 bottom-0"></div>
