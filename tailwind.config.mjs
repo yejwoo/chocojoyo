@@ -8,10 +8,24 @@ export default {
     },
     extend: {
       boxShadow: {
-        'deep-brown': '0 4px 6px rgba(60, 30, 10, 0.3)',  
-        'deep-brown-lg': '0 10px 15px rgba(60, 30, 10, 0.3)',
+        "deep-brown": "0 4px 2px rgba(60, 30, 10, 0.3)",
+        "deep-brown-lg": "0 10px 15px rgba(60, 30, 10, 0.3)",
       },
       keyframes: {
+        "bounce-open": {
+          "0%": {
+            transform: "scale(0.9)",
+          },
+          "50%": {
+            transform: "scale(1.1) translateY(-20px)",
+          },
+          "70%": {
+            transform: "scale(1) translateY(10px)",
+          },
+          "100%": {
+            transform: "scale(1) translateY(0)",
+          },
+        },
         "float-y-center": {
           "0%": { transform: "translate(-50%, 0px)" },
           "50%": { transform: "translate(-50%, -10px)" },
@@ -50,6 +64,28 @@ export default {
             animationTimingFunction: "cubic-bezier(0, 0, 0.2, 1)",
           },
         },
+        "bounce-up-once-slow": {
+          "0%": {
+            transform: "translate(0, 0%) scale(0.9)",
+            animationTimingFunction: "ease-in",
+          },
+          "30%": {
+            transform: "translate(0, -8%) scale(1.01)",
+            animationTimingFunction: "cubic-bezier(0.8, 0, 1, 1)",
+          },
+          "60%": {
+            transform: "translate(0, 4%) scale(1)",
+            animationTimingFunction: "cubic-bezier(0.4, 0, 0.6, 1)",
+          },
+          "80%": {
+            transform: "translate(0, 0%) scale(1)",
+            animationTimingFunction: "cubic-bezier(0.2, 0, 0.4, 1)",
+          },
+          "100%": {
+            transform: "translate(0, 0%) scale(1)",
+            animationTimingFunction: "cubic-bezier(0.2, 0, 0.4, 1)",
+          },
+        },
         "bounce-down": {
           "0%, 100%": { transform: "translate(-50%, 0)", animationTimingFunction: "cubic-bezier(0.8, 0, 1, 1)" },
           "50%": { transform: "translate(-50%, -10%)", animationTimingFunction: "cubic-bezier(0, 0, 0.2, 1)" },
@@ -57,6 +93,10 @@ export default {
         heartbeat: {
           "0%, 100%": { transform: "scale(1)" },
           "50%": { transform: "scale(1.2)" },
+        },
+        "heartbeat-sm": {
+          "0%, 100%": { transform: "scale(1)" },
+          "60%": { transform: "scale(1.05)" },
         },
         "subtle-move": {
           "0%": { transform: "translateY(0px);" },
@@ -84,8 +124,10 @@ export default {
         "bounce-up": "bounce-up 2.5s linear infinite",
         "bounce-up-middle": "bounce-up-middle 5s linear infinite",
         "bounce-up-once": "bounce-up-once 0.5s linear",
-        "bounce-down": "bounce-down 4s linear infinite",
+        "bounce-up-once-slow": "bounce-up-once-slow 3s linear",
+        "bounce-down": "bounce-down 4s linear alternate",
         heartbeat: "heartbeat 3s ease-in-out infinite",
+        "heartbeat-sm": "heartbeat-sm 2s ease-in-out infinite",
         "heartbeat-fast": "heartbeat 1s ease-in-out infinite",
         "subtle-move": "subtle-move 5s ease-in-out infinite alternate",
         "cloud-left-right": "cloud-left-right 10s ease-in-out infinite",
@@ -94,8 +136,14 @@ export default {
         "choco-right-left": "choco-right-left 3s ease-in-out infinite",
         "float-y": "float-y 1s ease-in-out infinite alternate",
         "float-y-center": "float-y-center 1s ease-in-out infinite alternate",
+        "float-y-center-once": "float-y-center 1s ease-in-out alternate",
+        "bounce-open": "bounce-open 0.6s ease-in-out",
       },
       colors: {
+        box: {
+          100: "#341C03",
+          200: "#221202",
+        },
         main: "#FFE4EA",
         default: "#3D2505",
         brand: {
