@@ -56,6 +56,7 @@ export default function Button({ shape = "rectangle", message, color = "main", t
         transition-all duration-150 ease-in-out
         transform
         hover:brightness-90 hover:scale-95
+        active:brightness-75 active:scale-95
       `}
     >
       {shape === "circle" ? (

@@ -75,21 +75,21 @@ export default function ShareLayout() {
 
   const downloadBoxImage = async (boxElement, filename) => {
     if (!boxElement) return;
-  
+
     try {
       const dataUrl = await toPng(boxElement, {
         // backgroundColor: null,  // 투명 배경
-        cacheBust: true,        // 캐시 문제 방지
+        cacheBust: true, // 캐시 문제 방지
         // pixelRatio: 2,          // 고해상도 캡처
       });
-  
-      const link = document.createElement('a');
+
+      const link = document.createElement("a");
       const timestamp = new Date().getTime();
       link.download = `${filename}_${timestamp}.png`;
       link.href = dataUrl;
       link.click();
     } catch (error) {
-      console.error('html-to-image 캡처 실패:', error);
+      console.error("html-to-image 캡처 실패:", error);
     }
   };
 
@@ -121,7 +121,14 @@ export default function ShareLayout() {
             </p>
             <Image className="mt-8 animate-heartbeat-sm" src={giftBox} alt="링크 복사" />
             <div className="mt-20">
-              <Button onClick={() => setIsBoxOpened(true)} size="md" message="선물 상자 열기" />
+              <Button
+                onClick={(e) => {
+                  e.stopPropagation(); // 이벤트 전파 방지
+                  setIsBoxOpened(true);
+                }}
+                size="md"
+                message="선물 상자 열기"
+              />
             </div>
           </div>
         </div>
@@ -132,6 +139,7 @@ export default function ShareLayout() {
           mode="share"
           id={searchParams.get("id")}
           onOpen={handleOpenModal}
+          onDownload={handleDownloadCard}
           ref={cardLayoutRef}
           isReceiver={receiver}
           isBoxOpened={isBoxOpened}

@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import Chocolates from "../Chocolates";
 import CustomLoading from "../CustomLoading";
 
-const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id, onOpen, onComplete, isReceiver, isBoxOpened }, ref) => {
+const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id, onOpen, onComplete, onDownload, isReceiver, isBoxOpened }, ref) => {
   const cardRef = useRef(null);
   const boxRef = useRef(null);
   const chocoRefs = useRef([]);
@@ -128,7 +128,12 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
                 <Button size="md" onClick={handleSubmit} disabled={!isCompleted} message="완성" />
               ) : (
                 <div className="flex justify-center no-capture">
-                  <Button size="full" color="main" message={isReceiver ? "사진 저장" : "공유하기"} onClick={() => onOpen(isReceiver ? "download" : "share")} />
+                  <Button
+                    size="full"
+                    color="main"
+                    message={isReceiver ? "따뜻한 마음 간직하기" : "공유하기"}
+                    onClick={() => (isReceiver ? onDownload() : onOpen("share"))}
+                  />
                 </div>
               )}
             </div>
