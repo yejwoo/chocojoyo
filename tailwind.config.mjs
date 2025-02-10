@@ -96,7 +96,7 @@ export default {
         },
         "heartbeat-sm": {
           "0%, 100%": { transform: "scale(1)" },
-          "60%": { transform: "scale(1.05)" },
+          "60%": { transform: "scale(1.02)" },
         },
         "subtle-move": {
           "0%": { transform: "translateY(0px);" },

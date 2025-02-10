@@ -11,6 +11,7 @@ import html2canvas from "html2canvas";
 import CustomLoading from "./CustomLoading";
 import CardLayout from "./layout/CardLayout";
 import download from "downloadjs";
+import Button from "./Button";
 
 export default function ShareLayout() {
   const searchParams = useSearchParams();
@@ -88,13 +89,28 @@ export default function ShareLayout() {
       {receiver && !isBoxOpened && (
         <div className={`transition-opacity duration-700 ease-in-out ${receiver && !isBoxOpened ? "opacity-100" : "opacity-0 h-0 overflow-hidden"}`}>
           <div className="flex flex-col items-center justify-center h-screen">
-            <p className="cafe24-surround text-2xl text-center mb-5 text-default font-semibold">선물 박스를 열어보세요!</p>
-            <Image className="mt-3 cursor-pointer animate-heartbeat-sm" onClick={() => setIsBoxOpened(true)} src={giftBox} alt="링크 복사" />
+            <p className="leading-9 cafe24-surround text-2xl text-center mb-5 text-default font-semibold">
+              마음을 담은 선물,
+              <br />
+              지금 확인하세요!
+            </p>
+            <Image className="mt-8 animate-heartbeat-sm" src={giftBox} alt="링크 복사" />
+            <div className="mt-20">
+              <Button onClick={() => setIsBoxOpened(true)} size="md" message="선물 상자 열기" />
+            </div>
           </div>
         </div>
       )}
       <div className={`transition-opacity duration-1000 ease-in-out ${isBoxOpened ? "opacity-100" : "opacity-0 h-0 overflow-hidden pointer-events-none"}`}>
-        <CardLayout chocolateInfo={cardData} mode="share" id={searchParams.get("id")} onOpen={handleOpenModal} ref={cardLayoutRef} isReceiver={receiver} isBoxOpened={isBoxOpened} />
+        <CardLayout
+          chocolateInfo={cardData}
+          mode="share"
+          id={searchParams.get("id")}
+          onOpen={handleOpenModal}
+          ref={cardLayoutRef}
+          isReceiver={receiver}
+          isBoxOpened={isBoxOpened}
+        />
       </div>
       {isModalOpen && (
         <Modal title={modalType === "share" ? "공유하기" : "사진 저장"} onCancel={handleCloseModal} type={modalType}>
