@@ -12,6 +12,7 @@ import CustomLoading from "./CustomLoading";
 import CardLayout from "./layout/CardLayout";
 import download from "downloadjs";
 import Button from "./Button";
+import { toPng } from "html-to-image";
 
 export default function ShareLayout() {
   const searchParams = useSearchParams();
@@ -58,7 +59,7 @@ export default function ShareLayout() {
     try {
       const canvas = await html2canvas(element, {
         backgroundColor: null,
-        useCORS: true,
+        // useCORS: true,
         ignoreElements: (el) => el.classList.contains("no-capture"),
       });
 
@@ -72,6 +73,26 @@ export default function ShareLayout() {
     }
   };
 
+  const downloadBoxImage = async (boxElement, filename) => {
+    if (!boxElement) return;
+  
+    try {
+      const dataUrl = await toPng(boxElement, {
+        // backgroundColor: null,  // 투명 배경
+        cacheBust: true,        // 캐시 문제 방지
+        // pixelRatio: 2,          // 고해상도 캡처
+      });
+  
+      const link = document.createElement('a');
+      const timestamp = new Date().getTime();
+      link.download = `${filename}_${timestamp}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (error) {
+      console.error('html-to-image 캡처 실패:', error);
+    }
+  };
+
   const handleDownloadCard = () => {
     const cardElement = cardLayoutRef.current?.getCardElement();
     if (cardElement) downloadWithHtml2Canvas(cardElement, "card_with_choco");
@@ -79,7 +100,7 @@ export default function ShareLayout() {
 
   const handleDownloadBox = () => {
     const boxElement = cardLayoutRef.current?.getBoxElement();
-    if (boxElement) downloadWithHtml2Canvas(boxElement, "choco_box");
+    if (boxElement) downloadBoxImage(boxElement, "choco_box");
   };
 
   if (!cardData) return <CustomLoading />;
@@ -87,8 +108,12 @@ export default function ShareLayout() {
   return (
     <>
       {receiver && !isBoxOpened && (
-        <div className={`transition-opacity duration-700 ease-in-out ${receiver && !isBoxOpened ? "opacity-100" : "opacity-0 h-0 overflow-hidden"}`}>
-          <div className="flex flex-col items-center justify-center h-screen">
+        <div
+          className={`flex flex-col items-center justify-center h-full transition-opacity duration-700 ease-in-out ${
+            receiver && !isBoxOpened ? "opacity-100" : "opacity-0 h-0 overflow-hidden"
+          }`}
+        >
+          <div className="flex flex-col items-center justify-center">
             <p className="leading-9 cafe24-surround text-2xl text-center mb-5 text-default font-semibold">
               마음을 담은 선물,
               <br />

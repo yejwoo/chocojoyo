@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import Chocolates from "../Chocolates";
 import CustomLoading from "../CustomLoading";
 
-const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id, onOpen, onComplete, isReceiver,isBoxOpened }, ref) => {
+const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id, onOpen, onComplete, isReceiver, isBoxOpened }, ref) => {
   const cardRef = useRef(null);
   const boxRef = useRef(null);
   const chocoRefs = useRef([]);
@@ -78,7 +78,7 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
           <div ref={cardRef} className="w-full h-full relative flex flex-col items-center justify-between">
             <Image src={bgBrown} alt="배경화면" className="absolute bottom-0 choco-bg" draggable={false} />
             <div className="absolute top-1/2 -translate-y-1/2 flex flex-col gap-4 w-[320px] max-h-sm:top-5 max-h-sm:translate-y-0">
-              <div className={` ${isBoxOpened ? 'animate-bounce-up-once-slow' : ''} border-4 border-box-200 bg-box-100 rounded-lg p-3`}>
+              <div className={` ${isBoxOpened ? "animate-bounce-up-once-slow" : ""} border-4 border-box-200 bg-box-100 rounded-lg p-3`}>
                 <div className="w-full flex flex-col py-4 bg-box-100 rounded-lg text-white">
                   {mode === "write" ? (
                     <>
@@ -116,8 +116,8 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
 
                 <div className="w-full pt-4 flex justify-center items-center border-t-2 border-t-box-200">
                   <div ref={boxRef} className="relative z-10 w-[280px] h-[182px] flex justify-center items-center rounded-lg">
-                    <Image src={box} alt="초콜릿 틀" width={280} height={280} className="absolute bottom-0" draggable={false} />
-                    <div className="w-full flex justify-center items-center flex-wrap gap-x-2 gap-y-2">
+                    <Image src={box} alt="초콜릿 틀" width={280} height={182} className="absolute" draggable={false} />
+                    <div className="w-full flex justify-center items-center flex-wrap gap-x-2 gap-y-2 max-w-full max-h-full">
                       <Chocolates chocolateInfo={chocolateInfo} showDrawings={true} chocoRefs={chocoRefs} mode={mode} />
                     </div>
                   </div>
