@@ -133,7 +133,12 @@ export default function ShareLayout() {
           </div>
         </div>
       )}
-      <div className={`transition-opacity duration-1000 ease-in-out ${isBoxOpened ? "opacity-100" : "opacity-0 h-0 overflow-hidden pointer-events-none"}`}>
+      {/* 공유 모드에서 박스열엇을 때. / 리시버 모드(isReceiver) */}
+      <div
+        className={`transition-opacity duration-1000 ease-in-out ${
+          !receiver || (receiver && isBoxOpened) ? "opacity-100" : "opacity-0 h-0 overflow-hidden pointer-events-none"
+        }`}
+      >
         <CardLayout
           chocolateInfo={cardData}
           mode="share"

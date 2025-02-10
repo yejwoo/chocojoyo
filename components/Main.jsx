@@ -96,7 +96,7 @@ export default function Main({ onStart }) {
             </a>
           </span>
           <span>|</span>
-          <span className="cursor-pointer" onClick={() => copyToClipboard("yejinwoo.me@gmail.com", 'email')}>연락처</span>
+          <span className="cursor-pointer" onClick={() => copyToClipboard("yejinwoo.me@gmail.com", 'email')}>문의</span>
         </div>
       </div>
       {isShowModal && (

@@ -86,11 +86,11 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
                         name="message"
                         value={formData.message}
                         onChange={handleInputChange}
-                        className="w-[280px] mx-auto h-[108px] text-left text-2xl leading-9 flex p-2 border-none bg-transparent outline-none resize-none"
-                        placeholder="편지는 세 줄까지 쓸 수 있어요."
+                        className="w-[280px] mx-auto h-[108px] text-2xl leading-9 flex p-2 border-none bg-transparent outline-none resize-none border-b border-gray-warm-100"
+                        placeholder="편지는 3줄까지 쓸 수 있어요."
                         maxLength={60}
                       />
-                      <div className="mt-2 relative text-center border-b border-gray-warm-100">
+                      <div className="mt-2 pl-2 relative">
                         <span className="text-lg">From. </span>
                         <input
                           name="name"
@@ -98,7 +98,7 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
                           onChange={handleInputChange}
                           className="text-left w-[130px] bg-transparent outline-none"
                           type="text"
-                          placeholder="이름은 열 글자까지"
+                          placeholder="최대 10글자"
                           maxLength={10}
                         />
                       </div>
