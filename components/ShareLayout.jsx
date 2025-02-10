@@ -57,7 +57,7 @@ export default function ShareLayout() {
   const downloadWithHtml2Canvas = async (element, filename) => {
     try {
       const canvas = await html2canvas(element, {
-        backgroundColor: "#fff",
+        backgroundColor: null,
         useCORS: true,
         ignoreElements: (el) => el.classList.contains("no-capture"),
       });
