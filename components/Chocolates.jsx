@@ -14,7 +14,7 @@ export default function Chocolates({
   changeCursor = false,
   showDrawings = false,
   chocoRefs = [],
-  mode = "",
+  mode = "stage",
 }) {
   return chocolateInfo.shapes.map((item, index) => {
     const name = item[0].toUpperCase() + item.slice(1);
@@ -97,15 +97,15 @@ export default function Chocolates({
             <div
             className={`absolute ${isZoommed ? "z-50" : "z-30"}`}
             style={{
-              width: "160px",  // 크기를 2배로 늘려 화질 개선
-              height: "160px",
+              width: mode !== "stage" ? "160px" : "32px",  // 크기를 2배로 늘려 화질 개선
+              height: mode !== "stage" ? "160px" : "32px",
               left: `${topping.x}px`,
               top: `${topping.y}px`,
               backgroundImage: `url('/images/stage5/toppings/topping-${topping.name}.svg')`,
               backgroundSize: "100% 100%",  // 이미지를 컨테이너에 꽉 차게 렌더링
               backgroundRepeat: "no-repeat",  // 배경 반복 방지
               backgroundPosition: "center",
-              transform: "translate(-50%, -50%) scale(0.2)",  // 확대된 이미지를 다시 축소하여 고화질 유지
+              transform: `translate(-50%, -50%) ${mode !== "stage" ? "scale(0.2)" : ""}`,  // 모드에 따라 축소 적용
             }}
             onTouchStart={(e) => isMobile && handleEvent("touchStart", e, index)}
             onTouchMove={(e) => isMobile && handleEvent("touchMove", e, index, isZoomMode)}
