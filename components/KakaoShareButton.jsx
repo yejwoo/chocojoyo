@@ -3,7 +3,7 @@ import Image from "next/image";
 import kakaoLogo from "@/public/icons/share/share-kakao.svg";
 
 const KakaoShareButton = ({name}) => {
-  const shareUrl = typeof window !== "undefined" ? window.location.href : "";
+  const shareUrl = typeof window !== "undefined" ? window.location.href + '&receiver=1'  : "";
 
   useEffect(() => {
     if (typeof window !== "undefined") {

@@ -10,10 +10,13 @@ import { DOMAIN } from "@/utils/constants";
 import html2canvas from "html2canvas";
 import CustomLoading from "./CustomLoading";
 import CardLayout from "./layout/CardLayout";
+import * as htmlToImage from "html-to-image";
+import download from "downloadjs";
 
 export default function ShareLayout() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
+  const receiver = searchParams.get("receiver") ? true : false;
   const url = DOMAIN + `/share?id=${id}`;
   const [cardData, setCardData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -50,89 +53,32 @@ export default function ShareLayout() {
     setIsTooltipVisible(false); // 모달 닫을 때 툴팁도 닫기
   };
 
-  const downloadImage = async (element, filename) => {
-    const canvas = await html2canvas(element, {
-      backgroundColor: null,
-      // letterRendering: true,
-      useCORS: true, // 외부 리소스에 대한 CORS 허용
-      allowTaint: false, // 오염된 캔버스를 방지
-      ignoreElements: (el) => el.classList.contains("no-capture"),
-    });
+  
+  const downloadWithHtml2Canvas = async (element, filename) => {
+    try {
+      const canvas = await html2canvas(element, {
+        backgroundColor: "#fff",
+        useCORS: true,
+        ignoreElements: (el) => el.classList.contains("no-capture"),
+      });
 
-    const timestamp = new Date().getTime();
-    const fullFilename = `${filename}_${timestamp}.png`;
+      const dataUrl = canvas.toDataURL("image/png");
+      const timestamp = new Date().getTime();
+      const fullFilename = `${filename}_${timestamp}.png`;
 
-    const link = document.createElement("a");
-    link.href = canvas.toDataURL("image/png");
-    link.download = fullFilename;
-    link.click();
+      download(dataUrl, fullFilename, "image/png");
+    } catch (error) {
+      console.error("html2canvas 실패:", error);
+    }
   };
-
   const handleDownloadCard = () => {
     const cardElement = cardLayoutRef.current?.getCardElement();
-    if (cardElement) downloadImage(cardElement, "card_with_choco");
+    if (cardElement) downloadWithHtml2Canvas(cardElement, "card_with_choco");
   };
 
   const handleDownloadBox = () => {
     const boxElement = cardLayoutRef.current?.getBoxElement();
-    if (boxElement) downloadImage(boxElement, "choco_box");
-  };
-
-  const handleDownloadIndividualChoco = async () => {
-    const chocoElements = cardLayoutRef.current?.getChocoElements();
-    if (!chocoElements) return;
-
-    // 배경 숨기기
-    chocoElements.forEach((ref) => {
-      if (ref) {
-        const bgElement = ref.querySelector(".choco-bg");
-        if (bgElement) {
-          bgElement.style.display = "none";
-        }
-      }
-    });
-
-    // 새로운 컨테이너 생성
-    const chocoContainer = document.createElement("div");
-    chocoContainer.style.position = "fixed";
-    chocoContainer.style.top = "100vh";
-    chocoContainer.style.left = "100vw";
-    chocoContainer.style.display = "block"; // flex 제거
-    chocoContainer.style.width = "640px";
-    chocoContainer.style.height = "440px";
-    chocoContainer.style.backgroundColor = "transparent";
-    chocoContainer.style.padding = "20px";
-
-    // 초콜릿 클론 및 스타일 유지
-    chocoElements.forEach((ref) => {
-      if (ref) {
-        const clone = ref.cloneNode(true);
-        const computedStyle = window.getComputedStyle(ref);
-
-        clone.style.position = computedStyle.position;
-        clone.style.transform = computedStyle.transform;
-        clone.style.left = computedStyle.left;
-        clone.style.top = computedStyle.top;
-        clone.style.width = computedStyle.width;
-        clone.style.height = computedStyle.height;
-
-        chocoContainer.appendChild(clone);
-      }
-    });
-
-    document.body.appendChild(chocoContainer);
-    await downloadImage(chocoContainer, "individual_chocos");
-    document.body.removeChild(chocoContainer);
-
-    // 원래 배경 복원
-    chocoElements.forEach((ref) => {
-      if (ref) {
-        const bgElement = ref.querySelector(".choco-bg");
-        if (bgElement) {
-          bgElement.style.display = "block";
-        }
-      }
-    });
+    if (boxElement) downloadWithHtml2Canvas(boxElement, "choco_box");
   };
 
   if (!cardData) return <CustomLoading />;
@@ -141,7 +87,7 @@ export default function ShareLayout() {
     <>
       <div onClick={() => setIsTooltipVisible(false)}>
         {/* 다른 곳 클릭 시 툴팁 닫기 */}
-        <CardLayout chocolateInfo={cardData} mode="share" id={searchParams.get("id")} onOpen={handleOpenModal} ref={cardLayoutRef} />
+        <CardLayout chocolateInfo={cardData} mode="share" id={searchParams.get("id")} onOpen={handleOpenModal} ref={cardLayoutRef} isReceiver={receiver} />
         {isModalOpen && (
           <Modal title={modalType === "share" ? "공유하기" : "사진 저장"} onCancel={handleCloseModal} type={modalType}>
             {modalType === "share" && (
@@ -164,41 +110,17 @@ export default function ShareLayout() {
             {modalType === "download" && (
               <div className="flex gap-5 w-full justify-center">
                 <button className="rounded-md text-sm flex flex-col gap-2 items-center w-[80px]" type="button" onClick={handleDownloadCard}>
-                  <div className={`w-12 h-12 bg-gray-warm-50 rounded-full flex justify-center items-center ${btnSytle}`}>
+                  <div className={`w-14 h-14 bg-gray-warm-50 rounded-full flex justify-center items-center ${btnSytle}`}>
                     <Image src={chocoWithCard} alt="편지 저장" />
                   </div>
                   <span>초콜릿+편지</span>
                 </button>
                 <button className="rounded-md text-sm flex flex-col gap-2 items-center w-[80px]" type="button" onClick={handleDownloadBox}>
-                  <div className={`w-12 h-12 bg-gray-warm-50 rounded-full flex justify-center items-center ${btnSytle}`}>
+                  <div className={`w-14 h-14 bg-gray-warm-50 rounded-full flex justify-center items-center ${btnSytle}`}>
                     <Image src={chocoBox} alt="초콜릿 저장" />
                   </div>
                   <span>초콜릿 박스</span>
                 </button>
-                {/* 스티커 보류..ㅎ */}
-                {/* <div
-                  className="relative w-[72px]"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDownloadIndividualChoco();
-                  }}
-                >
-                  <button className="rounded-md text-sm flex flex-col gap-2 items-center w-full" type="button">
-                    <div className={`w-12 h-12 bg-gray-warm-50 rounded-full flex justify-center items-center ${btnSytle}`}>
-                      <Image src={chocoPng} alt="초콜릿 저장" />
-                    </div>
-                    <span>스티커</span>
-                    <Image
-                      className="w-4 h-auto absolute right-2"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setIsTooltipVisible(true);
-                      }}
-                      src={tooltip}
-                      alt="초콜릿 저장"
-                    />
-                  </button>
-                </div> */}
               </div>
             )}
             {isTooltipVisible && (
