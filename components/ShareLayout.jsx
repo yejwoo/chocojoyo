@@ -26,6 +26,8 @@ export default function ShareLayout() {
   const [isBoxOpened, setIsBoxOpened] = useState(false);
   const cardLayoutRef = useRef(null);
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
+  let isDownloading = false;
+
   const btnSytle =
     "transform transition-all duration-150 ease-in-out hover:brightness-90 focus:brightness-90 focus:scale-95 active:brightness-75 active:scale-95";
 
@@ -104,8 +106,15 @@ export default function ShareLayout() {
   // };
 
   const handleDownloadCard = () => {
+    if (isDownloading) return;
+    isDownloading = true;
+
     const cardElement = cardLayoutRef.current?.getCardElement();
-    if (cardElement) downloadWithHtml2Canvas(cardElement, "card_with_choco");
+    if (cardElement) {
+      downloadWithHtml2Canvas(cardElement, "card_with_choco").finally(() => {
+        isDownloading = false;
+      });
+    }
   };
 
   // const handleDownloadBox = () => {
