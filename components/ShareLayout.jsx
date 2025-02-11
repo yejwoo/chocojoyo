@@ -60,7 +60,6 @@ export default function ShareLayout() {
     try {
       const canvas = await html2canvas(element, {
         backgroundColor: null,
-        // useCORS: true,
         ignoreElements: (el) => el.classList.contains("no-capture"),
       });
 
@@ -68,7 +67,17 @@ export default function ShareLayout() {
       const timestamp = new Date().getTime();
       const fullFilename = `${filename}_${timestamp}.png`;
 
-      download(dataUrl, fullFilename, "image/png");
+      const link = document.createElement("a");
+      link.href = dataUrl;
+      link.download = fullFilename;
+
+      // 모바일에서는 click 이벤트 대신 직접 링크 열기
+      if (/Mobi|Android/i.test(navigator.userAgent)) {
+        link.target = "_blank";
+        link.click();
+      } else {
+        link.click();
+      }
     } catch (error) {
       console.error("html2canvas 실패:", error);
     }
