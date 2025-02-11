@@ -17,7 +17,8 @@ import { toPng } from "html-to-image";
 export default function ShareLayout() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
-  const receiver = searchParams.get("receiver") ? true : false;
+  const receiver = searchParams.get("receiver");
+  const isReceiver = Number(receiver) === 1;
   const url = DOMAIN + `/share?id=${id}`;
   const [cardData, setCardData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -73,55 +74,52 @@ export default function ShareLayout() {
     }
   };
 
-  const downloadBoxImage = async (boxElement, filename) => {
-    if (!boxElement) return;
+  // const downloadBoxImage = async (boxElement, filename) => {
+  //   if (!boxElement) return;
 
-    try {
-      const dataUrl = await toPng(boxElement, {
-        // backgroundColor: null,  // 투명 배경
-        cacheBust: true, // 캐시 문제 방지
-        // pixelRatio: 2,          // 고해상도 캡처
-      });
+  //   try {
+  //     const dataUrl = await toPng(boxElement, {
+  //       // backgroundColor: null,  // 투명 배경
+  //       cacheBust: true, // 캐시 문제 방지
+  //       // pixelRatio: 2,          // 고해상도 캡처
+  //     });
 
-      const link = document.createElement("a");
-      const timestamp = new Date().getTime();
-      link.download = `${filename}_${timestamp}.png`;
-      link.href = dataUrl;
-      link.click();
-    } catch (error) {
-      console.error("html-to-image 캡처 실패:", error);
-    }
-  };
+  //     const link = document.createElement("a");
+  //     const timestamp = new Date().getTime();
+  //     link.download = `${filename}_${timestamp}.png`;
+  //     link.href = dataUrl;
+  //     link.click();
+  //   } catch (error) {
+  //     console.error("html-to-image 캡처 실패:", error);
+  //   }
+  // };
 
   const handleDownloadCard = () => {
     const cardElement = cardLayoutRef.current?.getCardElement();
     if (cardElement) downloadWithHtml2Canvas(cardElement, "card_with_choco");
   };
 
-  const handleDownloadBox = () => {
-    const boxElement = cardLayoutRef.current?.getBoxElement();
-    if (boxElement) downloadBoxImage(boxElement, "choco_box");
-  };
+  // const handleDownloadBox = () => {
+  //   const boxElement = cardLayoutRef.current?.getBoxElement();
+  //   if (boxElement) downloadBoxImage(boxElement, "choco_box");
+  // };
 
   if (!cardData) return <CustomLoading />;
 
   return (
     <>
-      {receiver && !isBoxOpened && (
+      {isReceiver && !isBoxOpened && (
         <div
           className={`flex flex-col items-center justify-center h-full transition-opacity duration-700 ease-in-out ${
-            receiver && !isBoxOpened ? "opacity-100" : "opacity-0 h-0 overflow-hidden"
+            isReceiver && !isBoxOpened ? "opacity-100" : "opacity-0 h-0 overflow-hidden"
           }`}
         >
           <div className="flex flex-col items-center justify-center">
-            <p className="cafe24-surround text-3xl text-center mb-5 text-default">
-              선물을 열어보세요!
-            </p>
+            <p className="cafe24-surround text-3xl text-center mb-5 text-default">선물을 열어보세요!</p>
             <Image className="mt-8 animate-heartbeat-sm" src={giftBox} alt="링크 복사" />
             <div className="mt-20">
               <Button
-                onClick={(e) => {
-                  e.stopPropagation(); // 이벤트 전파 방지
+                onClick={() => {
                   setIsBoxOpened(true);
                 }}
                 size="md"
@@ -134,7 +132,7 @@ export default function ShareLayout() {
       {/* 공유 모드에서 박스열엇을 때. / 리시버 모드(isReceiver) */}
       <div
         className={`transition-opacity duration-1000 ease-in-out ${
-          !receiver || (receiver && isBoxOpened) ? "opacity-100" : "opacity-0 h-0 overflow-hidden pointer-events-none"
+          !isReceiver || (isReceiver && isBoxOpened) ? "opacity-100" : "opacity-0 h-0 overflow-hidden pointer-events-none"
         }`}
       >
         <CardLayout
@@ -144,7 +142,7 @@ export default function ShareLayout() {
           onOpen={handleOpenModal}
           onDownload={handleDownloadCard}
           ref={cardLayoutRef}
-          isReceiver={receiver}
+          isReceiver={isReceiver}
           isBoxOpened={isBoxOpened}
         />
       </div>

@@ -136,7 +136,16 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
                     size="full"
                     color="main"
                     message={isReceiver ? "달콤한 추억 간직하기" : "공유하기"}
-                    onClick={() => (isReceiver ? onDownload() : onOpen("share"))}
+                    onClick={() => {
+                      // console.log("Button clicked!");
+                      if (isReceiver) {
+                        // console.log("Downloading...");
+                        onDownload();
+                      } else {
+                        // console.log("Opening share modal...");
+                        onOpen("share");
+                      }
+                    }}
                   />
                 </div>
               )}
