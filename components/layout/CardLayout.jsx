@@ -135,7 +135,7 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
                   <Button
                     size="full"
                     color="main"
-                    message={isReceiver ? "따뜻한 마음 간직하기" : "공유하기"}
+                    message={isReceiver ? "달콤한 추억 간직하기" : "공유하기"}
                     onClick={() => (isReceiver ? onDownload() : onOpen("share"))}
                   />
                 </div>
