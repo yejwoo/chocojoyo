@@ -79,7 +79,7 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
             <Image src={bgBrown} alt="배경화면" className="absolute bottom-0 choco-bg" draggable={false} />
             <div className="absolute top-1/2 -translate-y-1/2 flex flex-col gap-4 w-[320px] max-h-sm:top-5 max-h-sm:translate-y-0">
               <div className={` ${isBoxOpened ? "animate-bounce-up-once-slow" : ""} border-4 border-box-200 bg-box-100 rounded-lg p-3`}>
-                <div className="w-full flex flex-col py-4 bg-box-100 rounded-lg text-white">
+                <div className="w-full flex flex-col py-4 bg-box-100 rounded-lg text-white h-[176px]">
                   {mode === "write" ? (
                     <>
                       <textarea
@@ -105,11 +105,15 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
                     </>
                   ) : (
                     <>
-                      <p className="w-[280px] mx-auto h-[108px] text-left text-2xl leading-9 flex text-white whitespace-pre-line">{formData.message}</p>
-                      <div className="mt-2 relative text-center">
-                        <span className="text-lg relative z-10">From. </span>
-                        <span className="relative z-10">{formData.name}</span>
-                      </div>
+                      {formData.message.trim() && (
+                        <p className="w-[280px] mx-auto h-[108px] text-left text-2xl leading-9 flex text-white whitespace-pre-line">{formData.message}</p>
+                      )}
+                      {formData.name.trim() && (
+                        <div className="mt-2 relative">
+                          <span className="text-lg relative z-10 pl-2">From. </span>
+                          <span className="relative z-10">{formData.name}</span>
+                        </div>
+                      )}
                     </>
                   )}
                 </div>

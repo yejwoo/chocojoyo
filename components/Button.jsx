@@ -55,7 +55,8 @@ export default function Button({ shape = "rectangle", message, color = "main", t
         ${disabled ? disabledStyle : "text-white"}
         transition-all duration-150 ease-in-out
         transform
-        hover:brightness-90 hover:scale-95
+        hover:brightness-100
+        sm:hover:brightness-90
         active:brightness-75 active:scale-95
       `}
     >

@@ -74,7 +74,7 @@ export default {
             animationTimingFunction: "cubic-bezier(0.8, 0, 1, 1)",
           },
           "60%": {
-            transform: "translate(0, 4%) scale(1)",
+            transform: "translate(0, 2%) scale(1)",
             animationTimingFunction: "cubic-bezier(0.4, 0, 0.6, 1)",
           },
           "80%": {
