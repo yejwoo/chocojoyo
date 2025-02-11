@@ -13,6 +13,7 @@ import CardLayout from "./layout/CardLayout";
 import download from "downloadjs";
 import Button from "./Button";
 import { toPng } from "html-to-image";
+import { saveAs } from "file-saver";
 
 export default function ShareLayout() {
   const searchParams = useSearchParams();
@@ -65,21 +66,16 @@ export default function ShareLayout() {
         ignoreElements: (el) => el.classList.contains("no-capture"),
       });
 
-      const dataUrl = canvas.toDataURL("image/png");
-      const timestamp = new Date().getTime();
-      const fullFilename = `${filename}_${timestamp}.png`;
+      // 캡처한 이미지를 Blob으로 변환
+      canvas.toBlob((blob) => {
+        if (blob !== null) {
+          const timestamp = new Date().getTime();
+          const fullFilename = `${filename}_${timestamp}.png`;
 
-      const link = document.createElement("a");
-      link.href = dataUrl;
-      link.download = fullFilename;
-
-      // 모바일에서는 click 이벤트 대신 직접 링크 열기
-      if (/Mobi|Android/i.test(navigator.userAgent)) {
-        link.target = "_blank";
-        link.click();
-      } else {
-        link.click();
-      }
+          // file-saver를 사용해서 다운로드
+          saveAs(blob, fullFilename);
+        }
+      }, "image/png"); // Blob 타입 명시
     } catch (error) {
       console.error("html2canvas 실패:", error);
     }
