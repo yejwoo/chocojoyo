@@ -130,18 +130,23 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
               {showCompleteButton ? (
                 <Button size="md" onClick={handleSubmit} message="완성" />
               ) : (
-                !isReceiver && (
-                  <div className="flex justify-center no-capture">
-                    <Button
-                      size="full"
-                      color="main"
-                      message="공유하기"
-                      onClick={() => {
+                <div className="flex justify-center no-capture">
+                  <Button
+                    size="full"
+                    color="main"
+                    message={isReceiver ? "달콤한 추억 간직하기" : "공유하기"}
+                    onClick={() => {
+                      // console.log("Button clicked!");
+                      if (isReceiver) {
+                        // console.log("Downloading...");
+                        onDownload();
+                      } else {
+                        // console.log("Opening share modal...");
                         onOpen("share");
-                      }}
-                    />
-                  </div>
-                )
+                      }
+                    }}
+                  />
+                </div>
               )}
             </div>
           </div>

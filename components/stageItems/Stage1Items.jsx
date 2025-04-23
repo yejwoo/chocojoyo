@@ -12,15 +12,6 @@ export default function Stage1Items({ currentData, handleEvent, chocolateInfo, u
 
   return (
     <div id="stage1-items" className="flex flex-wrap w-72 h-48 justify-between items-center">
-      {/* {!uiState.isClicked && (
-        <Image
-          src={arrowDown}
-          alt="화살표"
-          className="absolute z-10 top-0 left-1/2 animate-float-y-center transition-opacity duration-300"
-          style={{ width: "48px", height: "48px" }}
-        />
-      )} */}
-
       {currentData.items.map((item, index) => {
         const ShapeComponent = Shapes[item.imgKey];
 
