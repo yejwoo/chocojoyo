@@ -176,7 +176,7 @@ export const stageData = [
   {
     init: {
       imgSrc: yantoGif.clap,
-      dialogue: "초콜릿을 완성했어요!<br/>마음을 담아 편지를<br/>쓰러 가볼까요?",
+      dialogue: "초콜릿을 완성했어요!<br/>편지를 쓰러 가볼까요?",
     },
   },
 ];

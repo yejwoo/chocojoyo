@@ -14,6 +14,7 @@ import download from "downloadjs";
 import Button from "./Button";
 import { toPng } from "html-to-image";
 
+
 export default function ShareLayout() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
@@ -109,25 +110,24 @@ export default function ShareLayout() {
     <>
       {receiver && !isBoxOpened && (
         <div
-          className={`flex flex-col items-center justify-center h-full transition-opacity duration-700 ease-in-out ${
+          className={`py-10 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 flex flex-col items-center justify-center max-w-[400px] max-h-[800px] h-full transition-opacity duration-700 ease-in-out ${
             receiver && !isBoxOpened ? "opacity-100" : "opacity-0 h-0 overflow-hidden"
           }`}
         >
-          <div className="flex flex-col items-center justify-center">
-            <p className="cafe24-surround text-3xl text-center mb-5 text-default">
-              선물을 열어보세요!
-            </p>
-            <Image className="mt-8 animate-heartbeat-sm" src={giftBox} alt="링크 복사" />
-            <div className="mt-20">
-              <Button
-                onClick={(e) => {
-                  e.stopPropagation(); // 이벤트 전파 방지
-                  setIsBoxOpened(true);
-                }}
-                size="md"
-                message="선물 상자 열기"
-              />
-            </div>
+          <div className="flex flex-col items-center h-full">
+            {/* <p className="text-xl text-center text-default mt-10 ">친구가 보내준 선물 </p> */}
+            <p className="text-3xl text-center text-default mt-2">달콤한 선물이 도착했어요!</p>
+            <Image className="mt-16 animate-heartbeat-sm" src={giftBox} alt="링크 복사" />
+          </div>
+          <div>
+            <Button
+              onClick={(e) => {
+                e.stopPropagation(); // 이벤트 전파 방지
+                setIsBoxOpened(true);
+              }}
+              size="md"
+              message="선물 상자 열기"
+            />
           </div>
         </div>
       )}

@@ -1,4 +1,4 @@
-import { arrow, finger } from "@/public/images/stage3";
+import { arrowUp } from "@/public/images/common";
 import Image from "next/image";
 import { useRef } from "react";
 
@@ -19,17 +19,11 @@ export default function Stage3Items({ currentData, gameState, handleEvent, toolS
     <div className="relative w-60 h-72">
       {!uiState.isClicked && (
         <>
-          {/* <Image
-            src={arrow}
-            alt="화살표"
-            className="absolute z-10 -top-[24px] left-[124px] transition-opacity duration-300 pointer-events-none"
-            style={{ width: "96px", height: "96px" }}
-          /> */}
           <Image
-            src={finger}
+            src={arrowUp}
             alt="손가락"
-            className="absolute z-10 bottom-10 right-[54px] animate-float-y-center transition-opacity duration-300"
-            style={{ width: "72px", height: "72px" }}
+            className="absolute z-10 bottom-10 right-[72px] animate-float-y-center transition-opacity duration-300"
+            style={{ width: "48px", height: "48px" }}
           />
         </>
       )}

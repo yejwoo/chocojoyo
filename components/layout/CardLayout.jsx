@@ -14,9 +14,8 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
   const boxRef = useRef(null);
   const chocoRefs = useRef([]);
   const router = useRouter();
-
   const [formData, setFormData] = useState(initialData || { message: "", name: "", shapes: [], toppings: [], drawings: [] });
-  const [isCompleted, setIsCompleted] = useState(false);
+  // const [isCompleted, setIsCompleted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const chocolateInfoRef = useRef(chocolateInfo);
   const MAX_LENTH = 60;
@@ -25,9 +24,9 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
     chocolateInfoRef.current = chocolateInfo;
   }, [chocolateInfo]);
 
-  useEffect(() => {
-    setIsCompleted(formData.message.length > 0 && formData.name.length > 0);
-  }, [formData]);
+  // useEffect(() => {
+  //   setIsCompleted(formData.message.length > 0 && formData.name.length > 0);
+  // }, [formData]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -98,7 +97,7 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
                           onChange={handleInputChange}
                           className="text-left w-[130px] bg-transparent outline-none"
                           type="text"
-                          placeholder="최대 10글자"
+                          placeholder="10자 이내"
                           maxLength={10}
                         />
                       </div>
@@ -129,7 +128,7 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
               </div>
 
               {showCompleteButton ? (
-                <Button size="md" onClick={handleSubmit} disabled={!isCompleted} message="완성" />
+                <Button size="md" onClick={handleSubmit} message="완성" />
               ) : (
                 <div className="flex justify-center no-capture">
                   <Button

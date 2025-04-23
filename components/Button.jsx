@@ -36,6 +36,7 @@ export default function Button({ shape = "rectangle", message, color = "main", t
     replay: <Image src={buttonIcons.replay} width={buttonIconSize} height={buttonIconSize} alt="다시 시작" />,
     soundOn: <Image src={buttonIcons.soundOn} width={buttonIconSize} height={buttonIconSize} alt="음악 재생" />,
     soundOff: <Image src={buttonIcons.soundOn} width={buttonIconSize} height={buttonIconSize} alt="음악 끄기" />,
+    HomeIcon: <Image src={buttonIcons.HomeIcon} width={buttonIconSize} height={buttonIconSize} alt="홈" />,
   }[type] || <Image src={buttonIcons.arrow} width={buttonIconSize} height={buttonIconSize} alt="다음" />;
 
   const shadowOverlayClass = "absolute bottom-0 h-[40%] w-full bg-black bg-opacity-10 rounded-b-sm";
@@ -55,8 +56,7 @@ export default function Button({ shape = "rectangle", message, color = "main", t
         ${disabled ? disabledStyle : "text-white"}
         transition-all duration-150 ease-in-out
         transform
-        hover:brightness-100
-        sm:hover:brightness-90
+        hover:brightness-90
         active:brightness-75 active:scale-95
       `}
     >
