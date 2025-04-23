@@ -13,12 +13,13 @@ import CardLayout from "./layout/CardLayout";
 import download from "downloadjs";
 import Button from "./Button";
 import { toPng } from "html-to-image";
-
+import { saveAs } from "file-saver";
 
 export default function ShareLayout() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
-  const receiver = searchParams.get("receiver") ? true : false;
+  const receiver = searchParams.get("receiver");
+  const isReceiver = Number(receiver) === 1;
   const url = DOMAIN + `/share?id=${id}`;
   const [cardData, setCardData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,6 +27,8 @@ export default function ShareLayout() {
   const [isBoxOpened, setIsBoxOpened] = useState(false);
   const cardLayoutRef = useRef(null);
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
+  let isDownloading = false;
+
   const btnSytle =
     "transform transition-all duration-150 ease-in-out hover:brightness-90 focus:brightness-90 focus:scale-95 active:brightness-75 active:scale-95";
 
@@ -60,81 +63,90 @@ export default function ShareLayout() {
     try {
       const canvas = await html2canvas(element, {
         backgroundColor: null,
-        // useCORS: true,
         ignoreElements: (el) => el.classList.contains("no-capture"),
       });
 
-      const dataUrl = canvas.toDataURL("image/png");
-      const timestamp = new Date().getTime();
-      const fullFilename = `${filename}_${timestamp}.png`;
+      // 캡처한 이미지를 Blob으로 변환
+      canvas.toBlob((blob) => {
+        if (blob !== null) {
+          const timestamp = new Date().getTime();
+          const fullFilename = `${filename}_${timestamp}.png`;
 
-      download(dataUrl, fullFilename, "image/png");
+          // file-saver를 사용해서 다운로드
+          saveAs(blob, fullFilename);
+        }
+      }, "image/png"); // Blob 타입 명시
     } catch (error) {
       console.error("html2canvas 실패:", error);
     }
   };
 
-  const downloadBoxImage = async (boxElement, filename) => {
-    if (!boxElement) return;
+  // const downloadBoxImage = async (boxElement, filename) => {
+  //   if (!boxElement) return;
 
-    try {
-      const dataUrl = await toPng(boxElement, {
-        // backgroundColor: null,  // 투명 배경
-        cacheBust: true, // 캐시 문제 방지
-        // pixelRatio: 2,          // 고해상도 캡처
+  //   try {
+  //     const dataUrl = await toPng(boxElement, {
+  //       // backgroundColor: null,  // 투명 배경
+  //       cacheBust: true, // 캐시 문제 방지
+  //       // pixelRatio: 2,          // 고해상도 캡처
+  //     });
+
+  //     const link = document.createElement("a");
+  //     const timestamp = new Date().getTime();
+  //     link.download = `${filename}_${timestamp}.png`;
+  //     link.href = dataUrl;
+  //     link.click();
+  //   } catch (error) {
+  //     console.error("html-to-image 캡처 실패:", error);
+  //   }
+  // };
+
+  const handleDownloadCard = () => {
+    if (isDownloading) return;
+    isDownloading = true;
+
+    const cardElement = cardLayoutRef.current?.getCardElement();
+    if (cardElement) {
+      downloadWithHtml2Canvas(cardElement, "card_with_choco").finally(() => {
+        isDownloading = false;
       });
-
-      const link = document.createElement("a");
-      const timestamp = new Date().getTime();
-      link.download = `${filename}_${timestamp}.png`;
-      link.href = dataUrl;
-      link.click();
-    } catch (error) {
-      console.error("html-to-image 캡처 실패:", error);
     }
   };
 
-  const handleDownloadCard = () => {
-    const cardElement = cardLayoutRef.current?.getCardElement();
-    if (cardElement) downloadWithHtml2Canvas(cardElement, "card_with_choco");
-  };
-
-  const handleDownloadBox = () => {
-    const boxElement = cardLayoutRef.current?.getBoxElement();
-    if (boxElement) downloadBoxImage(boxElement, "choco_box");
-  };
+  // const handleDownloadBox = () => {
+  //   const boxElement = cardLayoutRef.current?.getBoxElement();
+  //   if (boxElement) downloadBoxImage(boxElement, "choco_box");
+  // };
 
   if (!cardData) return <CustomLoading />;
 
   return (
     <>
-      {receiver && !isBoxOpened && (
+      {isReceiver && !isBoxOpened && (
         <div
-          className={`py-10 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 flex flex-col items-center justify-center max-w-[400px] max-h-[800px] h-full transition-opacity duration-700 ease-in-out ${
-            receiver && !isBoxOpened ? "opacity-100" : "opacity-0 h-0 overflow-hidden"
+          className={`flex flex-col items-center justify-center h-full transition-opacity duration-700 ease-in-out ${
+            isReceiver && !isBoxOpened ? "opacity-100" : "opacity-0 h-0 overflow-hidden"
           }`}
         >
-          <div className="flex flex-col items-center h-full">
-            {/* <p className="text-xl text-center text-default mt-10 ">친구가 보내준 선물 </p> */}
-            <p className="text-3xl text-center text-default mt-2">달콤한 선물이 도착했어요!</p>
-            <Image className="mt-16 animate-heartbeat-sm" src={giftBox} alt="링크 복사" />
-          </div>
-          <div>
-            <Button
-              onClick={(e) => {
-                e.stopPropagation(); // 이벤트 전파 방지
-                setIsBoxOpened(true);
-              }}
-              size="md"
-              message="선물 상자 열기"
-            />
+          <div className="flex flex-col items-center justify-center">
+            <p className="cafe24-surround text-3xl text-center mb-5 text-default">선물을 열어보세요!</p>
+            <Image className="mt-8 animate-heartbeat-sm" src={giftBox} alt="링크 복사" />
+            <div className="mt-20">
+              <Button
+                onClick={() => {
+                  setIsBoxOpened(true);
+                }}
+                size="md"
+                message="선물 상자 열기"
+              />
+            </div>
           </div>
         </div>
       )}
       {/* 공유 모드에서 박스열엇을 때. / 리시버 모드(isReceiver) */}
       <div
         className={`transition-opacity duration-1000 ease-in-out ${
-          !receiver || (receiver && isBoxOpened) ? "opacity-100" : "opacity-0 h-0 overflow-hidden pointer-events-none"
+          !isReceiver || (isReceiver && isBoxOpened) ? "opacity-100" : "opacity-0 h-0 overflow-hidden pointer-events-none"
         }`}
       >
         <CardLayout
@@ -144,7 +156,7 @@ export default function ShareLayout() {
           onOpen={handleOpenModal}
           onDownload={handleDownloadCard}
           ref={cardLayoutRef}
-          isReceiver={receiver}
+          isReceiver={isReceiver}
           isBoxOpened={isBoxOpened}
         />
       </div>
