@@ -124,7 +124,7 @@ export default function ShareLayout() {
     <>
       {receiver && !isBoxOpened && (
         <div
-          className={`py-10 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 flex flex-col items-center justify-center max-w-[400px] max-h-[800px] h-full transition-opacity duration-700 ease-in-out ${
+          className={`pb-10 pt-20 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 flex flex-col items-center justify-center max-w-[400px] max-h-[800px] h-full transition-opacity duration-700 ease-in-out ${
             receiver && !isBoxOpened ? "opacity-100" : "opacity-0 h-0 overflow-hidden"
           }`}
         >

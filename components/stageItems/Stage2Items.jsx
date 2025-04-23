@@ -15,11 +15,11 @@ export default function Stage2Items({ currentData, handleEvent, toolState, gameS
     <div className="relative w-72 h-72">
       {!uiState.isClicked && (
         <Image
-            src={arrowUp}
-            alt="손가락"
-            className="absolute z-10 bottom-10 right-[72px] animate-float-y-center transition-opacity duration-300"
-            style={{ width: "48px", height: "48px" }}
-          />
+          src={arrowDown}
+          alt="화살표"
+          className="absolute z-10 top-[-20px] right-[54px] animate-float-y transition-opacity duration-300"
+          style={{ width: "48px", height: "48px" }}
+        />
       )}
       <div className="absolute w-full h-40 top-1/2 -translate-y-1/2">
         {items.map((item, i) => (

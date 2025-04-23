@@ -89,7 +89,7 @@ export const stageData = [
   {
     init: {
       imgSrc: yantoGif.thumb,
-      dialogue: "칼 솜씨가<br/>제법인데요?",
+      dialogue: "칼 솜씨가 좋네요!",
       sequence: [{ type: "delay", value: 1200 }, { type: "nextSubStage" }],
       nextSubStage: "task",
     },
