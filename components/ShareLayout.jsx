@@ -3,16 +3,16 @@ import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import KakaoShareButton from "@/components/KakaoShareButton";
-import { chocoBox, chocoWithCard, giftBox, shareLink } from "@/public/icons/share";
+import { chocoBox, chocoWithCard, giftBox, shareLink, shine } from "@/public/icons/share";
 import Modal from "@/components/Modal";
 import { copyToClipboard } from "@/utils/copyToClipboard";
 import { DOMAIN } from "@/utils/constants";
 import html2canvas from "html2canvas";
 import CustomLoading from "./CustomLoading";
 import CardLayout from "./layout/CardLayout";
-import download from "downloadjs";
+// import download from "downloadjs";
 import Button from "./Button";
-import { toPng } from "html-to-image";
+// import { toPng } from "html-to-image";
 import { saveAs } from "file-saver";
 
 export default function ShareLayout() {
@@ -128,10 +128,12 @@ export default function ShareLayout() {
             receiver && !isBoxOpened ? "opacity-100" : "opacity-0 h-0 overflow-hidden"
           }`}
         >
+          <Image className="mt-20 w-8 absolute top-72 left-10 z-10 animate-heartbeat-fast" src={shine} alt="링크 복사" />
+          <Image className="mt-20 w-6 absolute top-32 right-5 z-10 animate-heartbeat-fast-md" src={shine} alt="링크 복사" />
           <div className="flex flex-col items-center h-full">
             {/* <p className="text-xl text-center text-default mt-10 ">친구가 보내준 선물 </p> */}
             <p className="text-3xl text-center text-default mt-2">달콤한 선물이 도착했어요!</p>
-            <Image className="mt-16 animate-heartbeat-sm" src={giftBox} alt="링크 복사" />
+            <Image className="mt-20 animate-heartbeat-sm w-80" src={giftBox} alt="링크 복사" />
           </div>
           <div>
             <Button

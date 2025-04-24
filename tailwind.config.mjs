@@ -98,6 +98,10 @@ export default {
           "0%, 100%": { transform: "scale(1)" },
           "60%": { transform: "scale(1.02)" },
         },
+        "heartbeat-lg": {
+          "0%, 100%": { transform: "scale(0.9)" },
+          "60%": { transform: "scale(1.15)" },
+        },
         "subtle-move": {
           "0%": { transform: "translateY(0px);" },
           "50%": { transform: "translateY(-2px);" },
@@ -128,7 +132,8 @@ export default {
         "bounce-down": "bounce-down 4s linear alternate",
         heartbeat: "heartbeat 3s ease-in-out infinite",
         "heartbeat-sm": "heartbeat-sm 2s ease-in-out infinite",
-        "heartbeat-fast": "heartbeat 1s ease-in-out infinite",
+        "heartbeat-fast": "heartbeat-lg 1.5s ease-in-out infinite",
+        "heartbeat-fast-md": "heartbeat-lg 2s ease-in-out infinite",
         "subtle-move": "subtle-move 5s ease-in-out infinite alternate",
         "cloud-left-right": "cloud-left-right 10s ease-in-out infinite",
         "cloud-right-left": "cloud-right-left 10s ease-in-out infinite",
