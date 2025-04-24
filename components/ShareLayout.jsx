@@ -128,7 +128,7 @@ export default function ShareLayout() {
             receiver && !isBoxOpened ? "opacity-100" : "opacity-0 h-0 overflow-hidden"
           }`}
         >
-          <Image className="mt-20 w-8 absolute top-72 left-10 z-10 animate-heartbeat-fast" src={shine} alt="링크 복사" />
+          <Image className="mt-20 w-8 absolute top-72 left-0 z-10 animate-heartbeat-fast" src={shine} alt="링크 복사" />
           <Image className="mt-20 w-6 absolute top-32 right-5 z-10 animate-heartbeat-fast-md" src={shine} alt="링크 복사" />
           <div className="flex flex-col items-center h-full">
             {/* <p className="text-xl text-center text-default mt-10 ">친구가 보내준 선물 </p> */}
