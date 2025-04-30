@@ -81,6 +81,14 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
                 <div className="w-full flex flex-col py-4 bg-box-100 rounded-lg text-white h-[176px]">
                   {mode === "write" ? (
                     <>
+                      {mode !== "share" && (
+                          <div className="absolute left-1/2 -translate-x-1/2 w-[264px] h-28 flex pointer-events-none">
+                          <div className="border-b border-[#735C37] absolute w-full h-10"></div>
+                          <div className="border-b border-[#735C37] absolute top-[36px] w-full h-10"></div>
+                          <div className="border-b border-[#735C37] absolute top-[72px] w-full h-10"></div>
+                          <div className="border-b border-[#735C37] absolute top-[108px] w-full h-10"></div>
+                        </div>
+                      )}
                       <textarea
                         name="message"
                         value={formData.message}
@@ -89,7 +97,7 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
                         placeholder="편지는 3줄까지 쓸 수 있어요."
                         maxLength={60}
                       />
-                      <div className="mt-2 pl-2 relative">
+                      <div className="mt-2 pl-4 relative">
                         <span className="text-lg">From. </span>
                         <input
                           name="name"
@@ -150,9 +158,9 @@ const CardLayout = forwardRef(({ chocolateInfo, mode = "write", initialData, id,
               )}
             </div>
           </div>
-          {mode === "share" && !isReceiver && (
+          {mode === "share" && (
             <div className="absolute right-6 bottom-6 max-h-sm:bottom-2 no-capture">
-              <Button type="replay" shape="circle" color="brand" onClick={() => router.push("/")} />
+              <Button type={isReceiver ? "home" : "replay"} shape="circle" color="brand" onClick={() => router.push("/")} />
             </div>
           )}
         </>

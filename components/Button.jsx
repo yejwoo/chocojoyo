@@ -36,7 +36,7 @@ export default function Button({ shape = "rectangle", message, color = "main", t
     replay: <Image src={buttonIcons.replay} width={buttonIconSize} height={buttonIconSize} alt="다시 시작" />,
     soundOn: <Image src={buttonIcons.soundOn} width={buttonIconSize} height={buttonIconSize} alt="음악 재생" />,
     soundOff: <Image src={buttonIcons.soundOn} width={buttonIconSize} height={buttonIconSize} alt="음악 끄기" />,
-    HomeIcon: <Image src={buttonIcons.HomeIcon} width={buttonIconSize} height={buttonIconSize} alt="홈" />,
+    home: <Image src={buttonIcons.home} width={buttonIconSize} height={buttonIconSize} alt="홈" />,
   }[type] || <Image src={buttonIcons.arrow} width={buttonIconSize} height={buttonIconSize} alt="다음" />;
 
   const shadowOverlayClass = "absolute bottom-0 h-[40%] w-full bg-black bg-opacity-10 rounded-b-sm";
